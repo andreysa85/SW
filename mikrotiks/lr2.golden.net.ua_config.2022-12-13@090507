@@ -217,7 +217,7 @@ set www disabled=yes port=82
 set ssh address=185.190.150.4/32
 set api address="185.190.150.5/32,185.190.150.7/32,185.190.150.8/32,185.190.15\
     0.10/32,185.190.150.25/32" port=55055
-set winbox port=8887
+set winbox port=xxx
 set api-ssl address=185.190.150.7/32,185.190.150.8/32,192.168.5.1/32 \
     disabled=yes port=55056
 /ppp secret
@@ -297,7 +297,7 @@ add comment=BackUp dont-require-permissions=no name=backup owner=grin policy=\
     \n:delay 2;\r\
     \n:local smtpserv [:resolve \"smtp.gmail.com\"];\r\
     \n:local Eaccount \"mailgoldennet@gmail.com\";\r\
-    \n:local pass \"golden1306!\";\r\
+    \n:local pass \"xxx\";\r\
     \n:local backupfile (\"\$sysname-backup-\" . \\\r\
     \n[:pick [/system clock get date] 7 11] . [:pick [/system \\\r\
     \nclock get date] 0 3] . [:pick [/system clock get date] 4 6] . \".backup\
@@ -342,4 +342,4 @@ add comment=BackUp dont-require-permissions=no name=backup owner=grin policy=\
     ed.\";\r\
     \n"
 /tool e-mail
-set address=smtp.gmail.com password=golden1306! user=mailgoldennet@gmail.com
+set address=smtp.gmail.com password=xxx user=mailgoldennet@gmail.com

@@ -242,7 +242,7 @@ add comment=BackUp dont-require-permissions=no name=backup owner=grin policy=\
     \n:delay 2;\r\
     \n:local smtpserv [:resolve \"smtp.gmail.com\"];\r\
     \n:local Eaccount \"mailgoldennet@gmail.com\";\r\
-    \n:local pass \"golden1306!\";\r\
+    \n:local pass \"xxx\";\r\
     \n:local backupfile (\"\$sysname-backup-\" . \\\r\
     \n[:pick [/system clock get date] 7 11] . [:pick [/system \\\r\
     \nclock get date] 0 3] . [:pick [/system clock get date] 4 6] . \".backup\
@@ -292,4 +292,4 @@ add dont-require-permissions=no name=MakeStatic owner=grin policy=\
     \n/ip dhcp-server lease make-static [/ip dhcp-server lease find where addr\
     ess=\"172.22.1.\$i\"];}"
 /tool e-mail
-set address=smtp.gmail.com password=golden1306! user=mailgoldennet@gmail.com
+set address=smtp.gmail.com password=xxx user=mailgoldennet@gmail.com

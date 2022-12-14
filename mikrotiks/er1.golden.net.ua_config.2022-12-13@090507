@@ -3146,7 +3146,7 @@ set www address=176.36.86.10/32 port=82
 set ssh address=185.190.150.10/32,185.190.150.4/32,176.36.86.10/32
 set api address="185.190.150.4/32,185.190.150.5/32,185.190.150.7/32,185.190.15\
     0.10/32,185.190.150.25/32,176.36.86.10/32,5.183.200.32/32" port=55055
-set winbox port=8887
+set winbox port=xxxx
 set api-ssl disabled=yes
 /ppp secret
 add local-address=172.16.13.253 name=grin password=grin1306 profile=\
@@ -3271,7 +3271,7 @@ add comment=BackUp dont-require-permissions=no name=backup owner=grin policy=\
     \n:delay 2;\r\
     \n:local smtpserv [:resolve \"smtp.gmail.com\"];\r\
     \n:local Eaccount \"mailgoldennet@gmail.com\";\r\
-    \n:local pass \"golden1306!\";\r\
+    \n:local pass \"xxx\";\r\
     \n:local backupfile (\"\$sysname-backup-\" . \\\r\
     \n[:pick [/system clock get date] 7 11] . [:pick [/system \\\r\
     \nclock get date] 0 3] . [:pick [/system clock get date] 4 6] . \".backup\
@@ -3389,8 +3389,8 @@ add dont-require-permissions=no name=UnknownDHCPServer owner=grin policy=\
     \n:local MsgText [/log get number=\$MsgID message];\r\
     \n\r\
     \n# Send Telegram Message\r\
-    \n:local Token \"752512952:AAHVqyd92lCmkrQ8DtBe0p-MfE5r0nhKAOQ\";\r\
-    \n:local ChatID \"-1001310477129\";\r\
+    \n:local Token \"xxx\";\r\
+    \n:local ChatID \"xxx\";\r\
     \n:local DeviceName [/system identity get name];\r\
     \n:local M \"\\F0\\9F\\94\\B4 <b>\$DeviceName: UNKNOWN DHCP SERVER FOUND! \
     </b> Info: \$CurrentTime \$MsgText\";\r\
@@ -3427,4 +3427,4 @@ add comment=---- dont-require-permissions=no name=MakeStaticBor owner=grin \
     \n/ip dhcp-server lease make-static [/ip dhcp-server lease find where addr\
     ess=\"172.16.76.\$i\"];}"
 /tool e-mail
-set address=smtp.gmail.com password=golden1306! user=mailgoldennet@gmail.com
+set address=smtp.gmail.com password=xxx user=mailgoldennet@gmail.com
