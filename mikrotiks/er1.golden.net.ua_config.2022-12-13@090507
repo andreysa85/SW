@@ -1,0 +1,3430 @@
+# dec/13/2022 11:05:04 by RouterOS 6.47.10
+# software id = FCR0-JIXX
+#
+# model = CCR1036-8G-2S+
+# serial number = D8370CA6AF1E
+/interface ethernet
+set [ find default-name=ether1 ] disabled=yes
+set [ find default-name=ether2 ] disabled=yes
+set [ find default-name=ether5 ] disabled=yes
+set [ find default-name=ether6 ] disabled=yes
+set [ find default-name=ether7 ] disabled=yes
+set [ find default-name=ether8 ] disabled=yes
+set [ find default-name=sfp-sfpplus1 ] name=sfpplus1
+set [ find default-name=sfp-sfpplus2 ] disabled=yes name=sfpplus2
+/interface gre
+add clamp-tcp-mss=no keepalive=40s local-address=185.253.216.1 name=gre-home \
+    remote-address=176.36.86.10
+/interface vlan
+add comment=uplink4 interface=sfpplus1 name=BGNET-BGP-uplink vlan-id=2340
+add interface=sfpplus1 name=Bor560sw vlan-id=560
+add arp=reply-only interface=sfpplus1 name=BorExt360 vlan-id=360
+add interface=sfpplus1 name=ControlPower vlan-id=100
+add arp=reply-only interface=sfpplus1 name=E2ext301 vlan-id=301
+add interface=sfpplus1 name=E2sw501 vlan-id=501
+add interface=sfpplus1 name=EuroCity-LobanV2337 vlan-id=2337
+add interface=sfpplus1 loop-protect=on name=GoldenMng-200 vlan-id=200
+add disabled=yes interface=sfpplus1 name=ITS-BGP-uplink vlan-id=2457
+add arp=reply-only interface=sfpplus1 name=J1ext302 vlan-id=302
+add interface=sfpplus1 name=J1sw502 vlan-id=502
+add interface=sfpplus1 name=KyivLink-BGP-uplink vlan-id=617
+add arp=reply-only interface=sfpplus1 loop-protect=on name=Lu62ext601 \
+    vlan-id=601
+add interface=sfpplus1 name=Lu62sw2354 vlan-id=2354
+add interface=sfpplus1 name=Management vlan-id=201
+add interface=sfpplus1 name=OmoVlan vlan-id=800
+add interface=sfpplus1 name=Schastya1_sw504 vlan-id=504
+add interface=sfpplus1 name=SimNetSw506 vlan-id=506
+add interface=sfpplus1 name=Simnet-BGP-uplink vlan-id=1202
+add interface=sfpplus1 name=olt_ext811 vlan-id=811
+add interface=sfpplus1 loop-protect=on name=shalimova300 vlan-id=300
+add interface=sfpplus1 name=sw503 vlan-id=503
+add disabled=yes interface=sfpplus1 name=vlan1test vlan-id=1
+add interface=sfpplus1 name=vlan555 vlan-id=555
+add comment=uplink1 interface=sfpplus1 name=vlan801_L9_1_corbina vlan-id=801
+add interface=sfpplus1 name=vlan2376 vlan-id=2376
+add interface=sfpplus1 name=vlan2377 vlan-id=2377
+add interface=sfpplus1 name=vlan2378 vlan-id=2378
+add comment=uplink3 interface=sfpplus1 name=vlan2584_L9_3 vlan-id=2584
+add comment=uplink2 interface=sfpplus1 name=vlan2585_L9_2 vlan-id=2585
+add interface=sfpplus1 name=vlan2587 vlan-id=2587
+/interface list
+add name=MNG
+add name=AllowNeighbors
+/ip firewall layer7-protocol
+add comment="Block Torrents" name=block-torrents regexp="^(\\x13bittorrent pro\
+    tocol|azver\\x01\$|get /scrape\\\?info_hash=get /announce\\\?info_hash=|ge\
+    t /client/bitcomet/|GET /data\\\?fid=)|d1:ad2:id20:|\\x08'7P\\)[RP]"
+/ip pool
+add name=E2ext301 ranges=10.31.10.2-10.31.10.254
+add name=BorExt360 ranges=10.36.10.2-10.36.10.254
+add name=Lu62ext601 ranges=10.37.10.2-10.37.10.254
+add name=OmoVlan ranges=172.17.1.2-172.17.1.254
+add name=ControlPower ranges=172.16.254.2-172.16.254.254
+add name=GoldenMng-200 ranges=185.190.150.2-185.190.150.30
+add name=olt_ext811 ranges=10.38.10.2-10.38.10.254
+add name=shalimova300 ranges=10.33.10.2-10.33.10.254
+add name=test1 ranges=10.56.56.2-10.56.56.254
+/ip dhcp-server
+add add-arp=yes address-pool=E2ext301 conflict-detection=no disabled=no \
+    interface=E2ext301 lease-time=15m name=E2ext301 use-radius=yes
+add add-arp=yes address-pool=Lu62ext601 bootp-support=dynamic \
+    conflict-detection=no disabled=no interface=Lu62ext601 lease-time=35m \
+    name=Lu62ext601 use-radius=yes
+add address-pool=OmoVlan disabled=no interface=OmoVlan lease-time=2h name=\
+    OmoVlan
+add address-pool=ControlPower disabled=no interface=ControlPower lease-time=\
+    2h name=ControlPower
+add add-arp=yes address-pool=BorExt360 bootp-support=dynamic \
+    conflict-detection=no disabled=no interface=BorExt360 lease-time=35m \
+    name=BorExt360 use-radius=yes
+add address-pool=GoldenMng-200 interface=GoldenMng-200 name=GoldenMng-200
+add add-arp=yes address-pool=olt_ext811 conflict-detection=no disabled=no \
+    interface=olt_ext811 lease-time=35m name=olt_ext811 use-radius=yes
+add add-arp=yes address-pool=shalimova300 conflict-detection=no disabled=no \
+    interface=shalimova300 lease-time=35m name=shalimova300 use-radius=yes
+add address-pool=test1 interface=vlan1test lease-time=5h10m name=test1
+/ppp profile
+set *FFFFFFFE dns-server=8.8.8.8,1.1.1.1
+/queue simple
+add max-limit=505M/505M name=172.16.9.13 target=172.16.9.13/32
+add max-limit=105M/105M name=172.16.71.13 target=172.16.71.13/32
+add max-limit=105M/105M name=172.16.8.30 target=172.16.8.30/32
+add max-limit=105M/105M name=172.16.9.133 target=172.16.9.133/32
+add comment=10267 max-limit=105M/105M name=172.16.76.125 target=\
+    172.16.76.125/32
+add comment=2673 max-limit=55M/55M name=172.16.71.32 target=172.16.71.32/32
+add comment=1426 max-limit=505M/505M name=172.16.2.2 target=172.16.2.2/32
+add comment=2920 max-limit=35M/35M name=172.16.7.134 target=172.16.7.134/32
+add comment=FAKE disabled=yes max-limit=5M/5M name=10.31.10.0/24 target=\
+    10.31.10.0/24
+add comment=FAKE disabled=yes max-limit=5M/5M name=10.32.10.0/24 target=\
+    10.32.10.0/24
+add comment=FAKE disabled=yes max-limit=5M/5M name=10.33.10.0/24 target=\
+    10.33.10.0/24
+add comment=FAKE disabled=yes max-limit=5M/5M name=10.34.10.0/24 target=\
+    10.34.10.0/24
+add comment=FAKE disabled=yes max-limit=5M/5M name=10.35.10.0/24 target=\
+    10.35.10.0/24
+add comment=FAKE disabled=yes max-limit=5M/5M name=10.36.10.0/24 target=\
+    10.36.10.0/24
+add comment=FAKE disabled=yes max-limit=5M/5M name=10.37.10.0/24 target=\
+    10.37.10.0/24
+add comment=3325 max-limit=35M/35M name=185.190.150.57 target=\
+    185.190.150.57/32
+add comment=3344 max-limit=30M/30M name=172.16.5.48 target=172.16.5.48/32
+add comment=2979 max-limit=55M/55M name=185.190.150.53 target=\
+    185.190.150.53/32
+add comment=2881 max-limit=35M/35M name=172.16.5.72 target=172.16.5.72/32
+add comment=46819 max-limit=50M/50M name=172.16.3.46 target=172.16.3.46/32
+add comment=2264 max-limit=105M/105M name=172.16.8.25 target=172.16.8.25/32
+add comment=1568 max-limit=105M/105M name=172.16.4.7 target=172.16.4.7/32
+add comment=1808 name=172.16.76.17 target=172.16.76.17/32
+add comment=97691 max-limit=105M/105M name=185.190.150.166 target=\
+    185.190.150.166/32
+add comment=2064 max-limit=105M/105M name=172.16.72.42 target=172.16.72.42/32
+add comment=2339 max-limit=500M/500M name=185.190.150.47 target=\
+    185.190.150.47/32
+add comment=96498 max-limit=100M/100M name=172.16.71.35 target=\
+    172.16.71.35/32
+add comment=2359 max-limit=100M/100M name=172.16.8.31 target=172.16.8.31/32
+add comment=53154 max-limit=100M/100M name=172.16.3.14 target=172.16.3.14/32
+add comment=1486 max-limit=100M/100M name=172.16.5.7 target=172.16.5.7/32
+add comment=1987 max-limit=500M/500M name=172.16.3.45 target=172.16.3.45/32
+add comment=1524 max-limit=50M/50M name=172.16.3.10 target=172.16.3.10/32
+add comment=2934 max-limit=100M/100M name=172.16.4.45 target=172.16.4.45/32
+add comment=4082 max-limit=95M/95M name=185.190.150.50 target=\
+    185.190.150.50/32
+add comment=1513 max-limit=100M/100M name=172.16.8.11 target=172.16.8.11/32
+add comment=34647 max-limit=50M/50M name=172.16.9.32 target=172.16.9.32/32
+add comment=1189 max-limit=100M/100M name=185.190.150.55 target=\
+    185.190.150.55/32
+add comment=1196 max-limit=50M/50M name=172.16.5.119 target=172.16.5.119/32
+add comment=95778 name=172.16.71.56 target=172.16.71.56/32
+add comment=2603 max-limit=100M/100M name=172.16.8.40 target=172.16.8.40/32
+add comment=91785 max-limit=100M/100M name=172.16.5.75 target=172.16.5.75/32
+add comment=96847 max-limit=100M/100M name=172.16.71.57 target=\
+    172.16.71.57/32
+add comment=4798 max-limit=500M/500M name=172.16.71.65 target=172.16.71.65/32
+add comment=38214 max-limit=100M/100M name=172.16.6.23 target=172.16.6.23/32
+add comment=2240 max-limit=30M/30M name=172.16.9.46 target=172.16.9.46/32
+add comment=2200 max-limit=100M/100M name=172.16.72.48 target=172.16.72.48/32
+add comment=4891 name=172.16.5.129 target=172.16.5.129/32
+add comment=2314 max-limit=100M/100M name=172.16.5.133 target=172.16.5.133/32
+add comment=66697 max-limit=30M/30M name=172.16.5.134 target=172.16.5.134/32
+add comment=5016 max-limit=30M/30M name=172.16.71.85 target=172.16.71.85/32
+add comment=5032 max-limit=500M/500M name=172.16.71.88 target=172.16.71.88/32
+add comment=5047 max-limit=50M/50M name=172.16.71.90 target=172.16.71.90/32
+add comment=5021 max-limit=30M/30M name=172.16.71.86 target=172.16.71.86/32
+add comment=1220 max-limit=50M/50M name=172.16.71.55 target=172.16.71.55/32
+add comment=2989 max-limit=100M/100M name=172.16.71.38 target=172.16.71.38/32
+add comment=2196 max-limit=100M/100M name=185.190.150.167 target=\
+    185.190.150.167/32
+add comment=1583 max-limit=100M/100M name=172.16.8.13 target=172.16.8.13/32
+add comment=2982 max-limit=30M/30M name=172.16.5.39 target=172.16.5.39/32
+add comment=2162 max-limit=100M/100M name=172.16.72.43 target=172.16.72.43/32
+add comment=1481 max-limit=50M/50M name=172.16.5.5 target=172.16.5.5/32
+add comment=4773 max-limit=50M/50M name=185.190.150.174 target=\
+    185.190.150.174/32
+add comment=96937 max-limit=100M/100M name=172.16.71.59 target=\
+    172.16.71.59/32
+add comment=1684 max-limit=100M/100M name=172.16.9.23 target=172.16.9.23/32
+add comment=2221 max-limit=100M/100M name=172.16.6.30 target=172.16.6.30/32
+add comment=1602 max-limit=30M/30M name=172.16.5.114 target=172.16.5.114/32
+add comment=1577 max-limit=100M/100M name=172.16.5.13 target=172.16.5.13/32
+add comment=4802 max-limit=100M/100M name=172.16.71.66 target=172.16.71.66/32
+add comment=1938 max-limit=100M/100M name=172.16.9.35 target=172.16.9.35/32
+add comment=80985 max-limit=100M/100M name=172.16.9.157 target=\
+    172.16.9.157/32
+add comment=59554 max-limit=100M/100M name=172.16.9.45 target=172.16.9.45/32
+add comment=2217 max-limit=100M/100M name=172.16.6.29 target=172.16.6.29/32
+add comment=61816 max-limit=50M/50M name=172.16.4.39 target=172.16.4.39/32
+add comment=3617 max-limit=30M/30M name=172.16.71.43 target=172.16.71.43/32
+add comment=3651 max-limit=50M/50M name=172.16.71.44 target=172.16.71.44/32
+add comment=4816 max-limit=50M/50M name=172.16.5.124 target=172.16.5.124/32
+add comment=46718 max-limit=50M/50M name=172.16.7.21 target=172.16.7.21/32
+add comment=10089 max-limit=50M/50M name=172.16.72.15 target=172.16.72.15/32
+add comment=57091 max-limit=50M/50M name=172.16.9.38 target=172.16.9.38/32
+add comment=2190 max-limit=30M/30M name=172.16.72.46 target=172.16.72.46/32
+add comment=2568 max-limit=100M/100M name=172.16.72.55 target=172.16.72.55/32
+add comment=101046 max-limit=30M/30M name=172.16.71.11 target=172.16.71.11/32
+add comment=1776 max-limit=50M/50M name=172.16.71.21 target=172.16.71.21/32
+add comment=40734 max-limit=50M/50M name=172.16.5.104 target=172.16.5.104/32
+add comment=3116 max-limit=100M/100M name=172.16.9.78 target=172.16.9.78/32
+add comment=4836 max-limit=100M/100M name=172.16.71.67 target=172.16.71.67/32
+add comment=98850 max-limit=100M/100M name=172.16.72.10 target=\
+    172.16.72.10/32
+add comment=1948 max-limit=100M/100M name=172.16.5.23 target=172.16.5.23/32
+add comment=34771 max-limit=100M/100M name=172.16.8.46 target=172.16.8.46/32
+add comment=4092 max-limit=100M/100M name=172.16.5.111 target=172.16.5.111/32
+add comment=96959 max-limit=100M/100M name=172.16.76.8 target=172.16.76.8/32
+add comment=2004 max-limit=100M/100M name=172.16.2.12 target=172.16.2.12/32
+add comment=5019 max-limit=50M/50M name=172.16.5.142 target=172.16.5.142/32
+add comment=2392 max-limit=50M/50M name=172.16.7.30 target=172.16.7.30/32
+add comment=1311 max-limit=50M/50M name=172.16.5.123 target=172.16.5.123/32
+add comment=2527 max-limit=100M/100M name=172.16.72.54 target=172.16.72.54/32
+add comment=41791 max-limit=100M/100M name=172.16.8.138 target=\
+    172.16.8.138/32
+add comment=3239 max-limit=100M/100M name=172.16.1.24 target=172.16.1.24/32
+add comment=2607 max-limit=50M/50M name=172.16.5.141 target=172.16.5.141/32
+add comment=1910 max-limit=100M/100M name=172.16.9.31 target=172.16.9.31/32
+add comment=90155 max-limit=50M/50M name=172.16.6.25 target=172.16.6.25/32
+add comment=1995 max-limit=100M/100M name=172.16.4.16 target=172.16.4.16/32
+add comment=96049 max-limit=100M/100M name=172.16.72.20 target=\
+    172.16.72.20/32
+add comment=3009 max-limit=500M/500M name=172.16.9.84 target=172.16.9.84/32
+add comment=2410 max-limit=100M/100M name=172.16.5.16 target=172.16.5.16/32
+add comment=2942 max-limit=50M/50M name=172.16.72.58 target=172.16.72.58/32
+add comment=3611 max-limit=50M/50M name=172.16.3.43 target=172.16.3.43/32
+add comment=2431 max-limit=100M/100M name=172.16.9.55 target=172.16.9.55/32
+add comment=1544 max-limit=100M/100M name=172.16.6.11 target=172.16.6.11/32
+add comment=1909 max-limit=100M/100M name=172.16.5.95 target=172.16.5.95/32
+add comment=4971 max-limit=100M/100M name=172.16.5.136 target=172.16.5.136/32
+add comment=3509 max-limit=100M/100M name=172.16.71.41 target=172.16.71.41/32
+add comment=3083 max-limit=100M/100M name=172.16.5.43 target=172.16.5.43/32
+add comment=5122 max-limit=100M/100M name=172.16.71.93 target=172.16.71.93/32
+add comment=53716 max-limit=100M/100M name=172.16.5.78 target=172.16.5.78/32
+add comment=3405 max-limit=50M/50M name=172.16.3.33 target=172.16.3.33/32
+add comment=4052 max-limit=50M/50M name=172.16.3.55 target=172.16.3.55/32
+add comment=2776 max-limit=50M/50M name=172.16.9.73 target=172.16.9.73/32
+add comment=3720 max-limit=100M/100M name=172.16.5.148 target=172.16.5.148/32
+add comment=2274 max-limit=30M/30M name=172.16.8.27 target=172.16.8.27/32
+add comment=39237 max-limit=100M/100M name=172.16.5.83 target=172.16.5.83/32
+add comment=35985 max-limit=50M/50M name=172.16.5.107 target=172.16.5.107/32
+add comment=98209 max-limit=100M/100M name=172.16.72.21 target=\
+    172.16.72.21/32
+add comment=2265 max-limit=30M/30M name=172.16.5.60 target=172.16.5.60/32
+add comment=3277 max-limit=100M/100M name=172.16.5.143 target=172.16.5.143/32
+add comment=5112 max-limit=30M/30M name=172.16.5.145 target=172.16.5.145/32
+add comment=1442 max-limit=100M/100M name=172.16.6.3 target=172.16.6.3/32
+add comment=5069 max-limit=100M/100M name=172.16.71.92 target=172.16.71.92/32
+add comment=2248 max-limit=30M/30M name=172.16.5.254 target=172.16.5.254/32
+add comment=39743 max-limit=50M/50M name=172.16.8.54 target=172.16.8.54/32
+add comment=39721 max-limit=100M/100M name=172.16.9.42 target=172.16.9.42/32
+add comment=4753 max-limit=50M/50M name=172.16.71.61 target=172.16.71.61/32
+add comment=3957 max-limit=100M/100M name=172.16.5.93 target=172.16.5.93/32
+add comment=50016 max-limit=50M/50M name=172.16.5.59 target=172.16.5.59/32
+add comment=2180 max-limit=50M/50M name=172.16.72.44 target=172.16.72.44/32
+add comment=4999 max-limit=100M/100M name=185.190.150.171 target=\
+    185.190.150.171/32
+add comment=2089 max-limit=50M/50M name=172.16.4.21 target=172.16.4.21/32
+add comment=1795 max-limit=50M/50M name=172.16.76.14 target=172.16.76.14/32
+add comment=80172 max-limit=100M/100M name=172.16.71.73 target=\
+    172.16.71.73/32
+add comment=1576 max-limit=100M/100M name=172.16.9.19 target=172.16.9.19/32
+add comment=3017 max-limit=100M/100M name=172.16.9.187 target=172.16.9.187/32
+add comment=2471 max-limit=100M/100M name=172.16.2.21 target=172.16.2.21/32
+add comment=1454 max-limit=100M/100M name=172.16.8.2 target=172.16.8.2/32
+add comment=1808 name=185.190.150.200 target=185.190.150.200/32
+add comment=1453 max-limit=100M/100M name=172.16.9.5 target=172.16.9.5/32
+add comment=1533 max-limit=500M/500M name=172.16.5.152 target=172.16.5.152/32
+add comment=5197 max-limit=30M/30M name=172.16.3.98 target=172.16.3.98/32
+add comment=100449 max-limit=50M/50M name=172.16.71.9 target=172.16.71.9/32
+add comment=1531 max-limit=100M/100M name=172.16.9.44 target=172.16.9.44/32
+add comment=35255 max-limit=100M/100M name=172.16.9.50 target=172.16.9.50/32
+add comment=3731 max-limit=100M/100M name=172.16.3.50 target=172.16.3.50/32
+add comment=2929 max-limit=100M/100M name=172.16.9.91 target=172.16.9.91/32
+add comment=2103 max-limit=50M/50M name=172.16.72.14 target=172.16.72.14/32
+add comment=1413 max-limit=100M/100M name=172.16.1.6 target=172.16.1.6/32
+add comment=2932 max-limit=100M/100M name=172.16.5.36 target=172.16.5.36/32
+add comment=31622 max-limit=30M/30M name=185.190.150.196 target=\
+    185.190.150.196/32
+add comment=80177 max-limit=100M/100M name=172.16.71.30 target=\
+    172.16.71.30/32
+add comment=1526 max-limit=50M/50M name=172.16.6.8 target=172.16.6.8/32
+add comment=4883 max-limit=100M/100M name=172.16.71.76 target=172.16.71.76/32
+add comment=4822 max-limit=50M/50M name=172.16.71.68 target=172.16.71.68/32
+add comment=40330 max-limit=100M/100M name=172.16.2.30 target=172.16.2.30/32
+add comment=60826 max-limit=100M/100M name=172.16.6.22 target=172.16.6.22/32
+add comment=76294 max-limit=100M/100M name=172.16.76.2 target=172.16.76.2/32
+add comment=3867 max-limit=50M/50M name=172.16.5.88 target=172.16.5.88/32
+add comment=43399 max-limit=30M/30M name=172.16.3.26 target=172.16.3.26/32
+add comment=1444 max-limit=100M/100M name=172.16.9.3 target=172.16.9.3/32
+add comment=2430 max-limit=100M/100M name=172.16.8.34 target=172.16.8.34/32
+add comment=1497 max-limit=100M/100M name=172.16.3.100 target=172.16.3.100/32
+add comment=1626 max-limit=100M/100M name=172.16.6.16 target=172.16.6.16/32
+add comment=43377 max-limit=100M/100M name=172.16.3.18 target=172.16.3.18/32
+add comment=50892 max-limit=100M/100M name=172.16.2.37 target=172.16.2.37/32
+add comment=35200 max-limit=50M/50M name=172.16.9.61 target=172.16.9.61/32
+add comment=2792 max-limit=500M/500M name=185.190.150.52 target=\
+    185.190.150.52/32
+add comment=2981 max-limit=30M/30M name=172.16.5.40 target=172.16.5.40/32
+add comment=1470 max-limit=100M/100M name=172.16.5.77 target=172.16.5.77/32
+add comment=4022 max-limit=50M/50M name=172.16.5.101 target=172.16.5.101/32
+add comment=31712 max-limit=100M/100M name=185.190.150.198 target=\
+    185.190.150.198/32
+add comment=2481 max-limit=100M/100M name=172.16.7.27 target=172.16.7.27/32
+add comment=1462 max-limit=50M/50M name=172.16.5.113 target=172.16.5.113/32
+add comment=99895 max-limit=100M/100M name=172.16.72.40 target=\
+    172.16.72.40/32
+add comment=101399 max-limit=30M/30M name=172.16.6.9 target=172.16.6.9/32
+add comment=2247 max-limit=100M/100M name=172.16.8.24 target=172.16.8.24/32
+add comment=2724 max-limit=100M/100M name=172.16.9.70 target=172.16.9.70/32
+add comment=1539 max-limit=30M/30M name=172.16.72.24 target=172.16.72.24/32
+add comment=46594 max-limit=30M/30M name=172.16.3.24 target=172.16.3.24/32
+add comment=3824 max-limit=100M/100M name=172.16.71.48 target=172.16.71.48/32
+add comment=3675 max-limit=100M/100M name=172.16.5.73 target=172.16.5.73/32
+add comment=2513 max-limit=50M/50M name=172.16.5.130 target=172.16.5.130/32
+add comment=5159 max-limit=100M/100M name=172.16.5.150 target=172.16.5.150/32
+add comment=71165 max-limit=100M/100M name=172.16.5.2 target=172.16.5.2/32
+add comment=1549 max-limit=100M/100M name=172.16.4.6 target=172.16.4.6/32
+add comment=2807 max-limit=50M/50M name=172.16.8.47 target=172.16.8.47/32
+add comment=1529 max-limit=100M/100M name=172.16.5.155 target=172.16.5.155/32
+add comment=1550 max-limit=100M/100M name=172.16.76.15 target=172.16.76.15/32
+add comment=3684 max-limit=500M/500M name=185.190.150.197 target=\
+    185.190.150.197/32
+add comment=2542 max-limit=100M/100M name=172.16.7.29 target=172.16.7.29/32
+add comment=3427 max-limit=100M/100M name=172.16.5.58 target=172.16.5.58/32
+add comment=98007 max-limit=100M/100M name=172.16.71.19 target=\
+    172.16.71.19/32
+add comment=101248 max-limit=100M/100M name=172.16.71.46 target=\
+    172.16.71.46/32
+add comment=1573 max-limit=50M/50M name=172.16.3.92 target=172.16.3.92/32
+add comment=1511 max-limit=100M/100M name=172.16.2.8 target=172.16.2.8/32
+add comment=1475 max-limit=100M/100M name=172.16.9.8 target=172.16.9.8/32
+add comment=1490 max-limit=100M/100M name=172.16.7.4 target=172.16.7.4/32
+add comment=1466 max-limit=100M/100M name=172.16.7.3 target=172.16.7.3/32
+add comment=5214 max-limit=100M/100M name=172.16.5.153 target=172.16.5.153/32
+add comment=96814 max-limit=100M/100M name=172.16.71.2 target=172.16.71.2/32
+add comment=36144 max-limit=50M/50M name=172.16.8.38 target=172.16.8.38/32
+add comment=4067 max-limit=30M/30M name=172.16.3.57 target=172.16.3.57/32
+add comment=37594 max-limit=500M/500M name=172.16.5.62 target=172.16.5.62/32
+add comment=40150 max-limit=100M/100M name=172.16.5.154 target=\
+    172.16.5.154/32
+add comment=1504 max-limit=100M/100M name=172.16.8.7 target=172.16.8.7/32
+add comment=1133 max-limit=100M/100M name=172.16.3.67 target=172.16.3.67/32
+add comment=56056 max-limit=100M/100M name=172.16.5.10 target=172.16.5.10/32
+add comment=59688 max-limit=100M/100M name=172.16.6.31 target=172.16.6.31/32
+add comment=2624 max-limit=50M/50M name=172.16.3.60 target=172.16.3.60/32
+add comment=2854 max-limit=100M/100M name=172.16.5.116 target=172.16.5.116/32
+add comment=4013 max-limit=50M/50M name=172.16.5.21 target=172.16.5.21/32
+add comment=2005 max-limit=100M/100M name=172.16.9.39 target=172.16.9.39/32
+add comment=3329 max-limit=100M/100M name=172.16.5.47 target=172.16.5.47/32
+add comment=3129 max-limit=100M/100M name=172.16.2.40 target=172.16.2.40/32
+add comment=1567 max-limit=100M/100M name=172.16.5.74 target=172.16.5.74/32
+add comment=1703 max-limit=50M/50M name=172.16.5.18 target=172.16.5.18/32
+add comment=2461 max-limit=100M/100M name=172.16.7.24 target=172.16.7.24/32
+add comment=4959 max-limit=100M/100M name=172.16.3.84 target=172.16.3.84/32
+add comment=5698 max-limit=100M/100M name=172.16.5.159 target=172.16.5.159/32
+add comment=65573 max-limit=100M/100M name=172.16.2.18 target=172.16.2.18/32
+add comment=1783 max-limit=50M/50M name=172.16.71.120 target=172.16.71.120/32
+add comment=3256 max-limit=100M/100M name=172.16.5.146 target=172.16.5.146/32
+add comment=1274 max-limit=100M/100M name=172.16.5.121 target=172.16.5.121/32
+add comment=2494 max-limit=50M/50M name=172.16.3.53 target=172.16.3.53/32
+add comment=4869 max-limit=50M/50M name=172.16.5.126 target=172.16.5.126/32
+add comment=1989 max-limit=50M/50M name=172.16.71.22 target=172.16.71.22/32
+add comment=2840 max-limit=50M/50M name=172.16.3.71 target=172.16.3.71/32
+add comment=42905 max-limit=30M/30M name=172.16.8.119 target=172.16.8.119/32
+add comment=4767 max-limit=100M/100M name=172.16.5.41 target=172.16.5.41/32
+add comment=46707 max-limit=100M/100M name=172.16.3.118 target=\
+    172.16.3.118/32
+add comment=3645 max-limit=30M/30M name=172.16.71.45 target=172.16.71.45/32
+add comment=1736 max-limit=50M/50M name=172.16.5.81 target=172.16.5.81/32
+add comment=101397 max-limit=100M/100M name=172.16.9.12 target=172.16.9.12/32
+add comment=1578 max-limit=100M/100M name=172.16.9.16 target=172.16.9.16/32
+add comment=1815 max-limit=100M/100M name=172.16.1.110 target=172.16.1.110/32
+add comment=1503 max-limit=30M/30M name=172.16.5.98 target=172.16.5.98/32
+add comment=37516 max-limit=50M/50M name=172.16.3.94 target=172.16.3.94/32
+add comment=99008 max-limit=50M/50M name=172.16.72.22 target=172.16.72.22/32
+add comment=1452 max-limit=100M/100M name=172.16.5.22 target=172.16.5.22/32
+add comment=2918 max-limit=100M/100M name=172.16.7.33 target=172.16.7.33/32
+add comment=2630 max-limit=100M/100M name=172.16.5.31 target=172.16.5.31/32
+add comment=2067 max-limit=100M/100M name=172.16.6.28 target=172.16.6.28/32
+add comment=1913 max-limit=50M/50M name=172.16.5.20 target=172.16.5.20/32
+add comment=98939 max-limit=100M/100M name=172.16.72.11 target=\
+    172.16.72.11/32
+add comment=3414 max-limit=100M/100M name=172.16.5.15 target=172.16.5.15/32
+add comment=3338 max-limit=100M/100M name=172.16.5.71 target=172.16.5.71/32
+add comment=36931 max-limit=100M/100M name=172.16.6.24 target=172.16.6.24/32
+add comment=1630 max-limit=30M/30M name=172.16.4.9 target=172.16.4.9/32
+add comment=2563 max-limit=50M/50M name=172.16.1.174 target=172.16.1.174/32
+add comment=37280 max-limit=100M/100M name=172.16.5.66 target=172.16.5.66/32
+add comment=1585 max-limit=100M/100M name=172.16.6.7 target=172.16.6.7/32
+add comment=1545 max-limit=50M/50M name=172.16.6.10 target=172.16.6.10/32
+add comment=2877 max-limit=100M/100M name=172.16.7.25 target=172.16.7.25/32
+add comment=101394 max-limit=100M/100M name=172.16.72.19 target=\
+    172.16.72.19/32
+add comment=38247 max-limit=100M/100M name=172.16.5.28 target=172.16.5.28/32
+add comment=40846 max-limit=50M/50M name=172.16.5.147 target=172.16.5.147/32
+add comment=3336 max-limit=100M/100M name=172.16.9.85 target=172.16.9.85/32
+add comment=2002 max-limit=50M/50M name=172.16.9.14 target=172.16.9.14/32
+add comment=3166 max-limit=100M/100M name=172.16.9.72 target=172.16.9.72/32
+add comment=2209 max-limit=50M/50M name=172.16.4.25 target=172.16.4.25/32
+add comment=1484 max-limit=100M/100M name=172.16.6.4 target=172.16.6.4/32
+add comment=41218 max-limit=100M/100M name=172.16.5.42 target=172.16.5.42/32
+add comment=2183 max-limit=100M/100M name=172.16.7.215 target=172.16.7.215/32
+add comment=3378 max-limit=50M/50M name=172.16.5.51 target=172.16.5.51/32
+add comment=3460 max-limit=100M/100M name=172.16.3.36 target=172.16.3.36/32
+add comment=80216 max-limit=100M/100M name=172.16.71.14 target=\
+    172.16.71.14/32
+add comment=1612 max-limit=100M/100M name=172.16.5.17 target=172.16.5.17/32
+add comment=1581 max-limit=100M/100M name=172.16.9.17 target=172.16.9.17/32
+add comment=2032 max-limit=30M/30M name=172.16.8.20 target=172.16.8.20/32
+add comment=2482 max-limit=100M/100M name=172.16.2.23 target=172.16.2.23/32
+add comment=2960 max-limit=100M/100M name=172.16.4.48 target=172.16.4.48/32
+add comment=5017 max-limit=50M/50M name=172.16.71.84 target=172.16.71.84/32
+add comment=55189 max-limit=50M/50M name=172.16.5.162 target=172.16.5.162/32
+add comment=3856 max-limit=30M/30M name=172.16.5.86 target=172.16.5.86/32
+add comment=1622 max-limit=100M/100M name=172.16.5.14 target=172.16.5.14/32
+add comment=1434 max-limit=100M/100M name=172.16.5.65 target=172.16.5.65/32
+add comment=1514 max-limit=100M/100M name=172.16.8.9 target=172.16.8.9/32
+add comment=1456 max-limit=100M/100M name=172.16.8.6 target=172.16.8.6/32
+add comment=1506 max-limit=100M/100M name=172.16.5.158 target=172.16.5.158/32
+add comment=2046 max-limit=100M/100M name=172.16.3.95 target=172.16.3.95/32
+add comment=4786 max-limit=500M/500M name=172.16.5.80 target=172.16.5.80/32
+add comment=4948 max-limit=50M/50M name=172.16.5.164 target=172.16.5.164/32
+add comment=2530 max-limit=100M/100M name=172.16.1.29 target=172.16.1.29/32
+add comment=2472 max-limit=100M/100M name=172.16.7.26 target=172.16.7.26/32
+add comment=5984 max-limit=30M/30M name=172.16.5.163 target=172.16.5.163/32
+add comment=35536 max-limit=100M/100M name=172.16.5.84 target=172.16.5.84/32
+add comment=2615 max-limit=50M/50M name=172.16.9.67 target=172.16.9.67/32
+add comment=2134 max-limit=100M/100M name=185.190.150.45 target=\
+    185.190.150.45/32
+add comment=1775 max-limit=50M/50M name=172.16.9.28 target=172.16.9.28/32
+add comment=1588 max-limit=50M/50M name=172.16.71.96 target=172.16.71.96/32
+add comment=2650 max-limit=50M/50M name=172.16.7.10 target=172.16.7.10/32
+add comment=1748 max-limit=50M/50M name=172.16.72.53 target=172.16.72.53/32
+add comment=5995 max-limit=30M/30M name=172.16.76.16 target=172.16.76.16/32
+add comment=3511 max-limit=50M/50M name=172.16.71.42 target=172.16.71.42/32
+add comment=2833 max-limit=50M/50M name=172.16.14.94 target=172.16.14.94/32
+add comment=3972 max-limit=30M/30M name=172.16.71.5 target=172.16.71.5/32
+add comment=3087 max-limit=50M/50M name=172.16.14.123 target=172.16.14.123/32
+add comment=2119 max-limit=50M/50M name=172.16.14.9 target=172.16.14.9/32
+add comment=4057 max-limit=100M/100M name=172.16.14.182 target=\
+    172.16.14.182/32
+add comment=41555 max-limit=100M/100M name=172.16.5.19 target=172.16.5.19/32
+add comment=4087 max-limit=50M/50M name=172.16.14.187 target=172.16.14.187/32
+add comment=1126 max-limit=100M/100M name=172.16.14.195 target=\
+    172.16.14.195/32
+add comment=96397 max-limit=100M/100M name=172.16.9.66 target=172.16.9.66/32
+add comment=6003 max-limit=100M/100M name=172.16.5.68 target=172.16.5.68/32
+add comment=2616 max-limit=100M/100M name=172.16.14.219 target=\
+    172.16.14.219/32
+add comment=2562 max-limit=50M/50M name=172.16.11.25 target=172.16.11.25/32
+add comment=101405 max-limit=100M/100M name=185.190.150.107 target=\
+    185.190.150.107/32
+add comment=1691 max-limit=50M/50M name=172.16.10.17 target=172.16.10.17/32
+add comment=1717 max-limit=50M/50M name=172.16.10.19 target=172.16.10.19/32
+add comment=1956 max-limit=500M/500M name=172.16.10.24 target=172.16.10.24/32
+add comment=2018 max-limit=100M/100M name=172.16.10.26 target=172.16.10.26/32
+add comment=2575 max-limit=100M/100M name=172.16.10.37 target=172.16.10.37/32
+add comment=2309 max-limit=30M/30M name=172.16.10.32 target=172.16.10.32/32
+add comment=2758 max-limit=100M/100M name=172.16.10.41 target=172.16.10.41/32
+add comment=2850 max-limit=100M/100M name=172.16.10.45 target=172.16.10.45/32
+add comment=1244 max-limit=30M/30M name=172.16.10.56 target=172.16.10.56/32
+add comment=3884 max-limit=100M/100M name=172.16.10.15 target=172.16.10.15/32
+add comment=4071 max-limit=100M/100M name=172.16.10.88 target=172.16.10.88/32
+add comment=1294 max-limit=500M/500M name=172.16.10.105 target=\
+    172.16.10.105/32
+add comment=4933 max-limit=50M/50M name=172.16.10.124 target=172.16.10.124/32
+add comment=88411 max-limit=50M/50M name=172.16.11.12 target=172.16.11.12/32
+add comment=1681 max-limit=100M/100M name=185.190.150.116 target=\
+    185.190.150.116/32
+add comment=2642 max-limit=100M/100M name=172.16.10.38 target=172.16.10.38/32
+add comment=2003 max-limit=30M/30M name=172.16.12.18 target=172.16.12.18/32
+add comment=1213 max-limit=50M/50M name=172.16.10.128 target=172.16.10.128/32
+add comment=3439 max-limit=100M/100M name=172.16.10.57 target=172.16.10.57/32
+add comment=1501 max-limit=500M/500M name=172.16.3.7 target=172.16.3.7/32
+add comment=1457 max-limit=50M/50M name=172.16.5.4 target=172.16.5.4/32
+add comment=3995 max-limit=50M/50M name=172.16.14.125 target=172.16.14.125/32
+add comment=4922 max-limit=100M/100M name=172.16.10.125 target=\
+    172.16.10.125/32
+add comment=4849 max-limit=30M/30M name=185.253.216.66 target=\
+    185.253.216.66/32
+add comment=1674 max-limit=50M/50M name=172.16.12.9 target=172.16.12.9/32
+add comment=1408 max-limit=50M/50M name=172.16.20.57 target=172.16.20.57/32
+add comment=1408 max-limit=50M/50M name=172.16.20.52 target=172.16.20.52/32
+add comment=1308 max-limit=100M/100M name=172.16.10.107 target=\
+    172.16.10.107/32
+add comment=4733 max-limit=100M/100M name=172.16.10.108 target=\
+    172.16.10.108/32
+add comment=72414 max-limit=500M/500M name=172.16.10.39 target=\
+    172.16.10.39/32
+add comment=2303 max-limit=50M/50M name=172.16.10.135 target=172.16.10.135/32
+add comment=2765 max-limit=30M/30M name=172.16.14.85 target=172.16.14.85/32
+add comment=100483 max-limit=50M/50M name=172.16.72.17 target=172.16.72.17/32
+add comment=2400 max-limit=100M/100M name=172.16.1.43 target=172.16.1.43/32
+add comment=3278 max-limit=100M/100M name=172.16.4.153 target=172.16.4.153/32
+add comment=1561 max-limit=100M/100M name=172.16.5.156 target=172.16.5.156/32
+add comment=3961 max-limit=100M/100M name=172.16.5.96 target=172.16.5.96/32
+add comment=2415 max-limit=100M/100M name=172.16.7.23 target=172.16.7.23/32
+add comment=3514 max-limit=100M/100M name=172.16.5.63 target=172.16.5.63/32
+add comment=80178 max-limit=100M/100M name=172.16.71.83 target=\
+    172.16.71.83/32
+add comment=3052 max-limit=50M/50M name=172.16.9.79 target=172.16.9.79/32
+add comment=1716 max-limit=100M/100M name=172.16.7.12 target=172.16.7.12/32
+add comment=2622 max-limit=100M/100M name=172.16.8.37 target=172.16.8.37/32
+add comment=61401 max-limit=100M/100M name=172.16.3.23 target=172.16.3.23/32
+add comment=3487 max-limit=30M/30M name=172.16.5.61 target=172.16.5.61/32
+add comment=3355 max-limit=100M/100M name=172.16.5.49 target=172.16.5.49/32
+add comment=1124 max-limit=100M/100M name=172.16.5.109 target=172.16.5.109/32
+add comment=1129 max-limit=50M/50M name=172.16.5.115 target=172.16.5.115/32
+add comment=66248 max-limit=50M/50M name=172.16.4.40 target=172.16.4.40/32
+add comment=1673 max-limit=100M/100M name=172.16.6.118 target=172.16.6.118/32
+add comment=3401 max-limit=100M/100M name=172.16.76.4 target=172.16.76.4/32
+add comment=2416 max-limit=100M/100M name=172.16.2.19 target=172.16.2.19/32
+add comment=40239 max-limit=100M/100M name=172.16.5.85 target=172.16.5.85/32
+add comment=3137 max-limit=100M/100M name=172.16.3.20 target=172.16.3.20/32
+add comment=5273 max-limit=100M/100M name=172.16.3.101 target=172.16.3.101/32
+add comment=3289 max-limit=100M/100M name=172.16.3.63 target=172.16.3.63/32
+add comment=1153 max-limit=50M/50M name=172.16.5.118 target=172.16.5.118/32
+add comment=2806 max-limit=50M/50M name=172.16.8.42 target=172.16.8.42/32
+add comment=41386 max-limit=100M/100M name=172.16.5.99 target=172.16.5.99/32
+add comment=2226 max-limit=100M/100M name=172.16.3.66 target=172.16.3.66/32
+add comment=2439 max-limit=30M/30M name=172.16.4.30 target=172.16.4.30/32
+add comment=1653 max-limit=50M/50M name=172.16.6.17 target=172.16.6.17/32
+add comment=1447 max-limit=100M/100M name=172.16.9.4 target=172.16.9.4/32
+add comment=2540 max-limit=50M/50M name=172.16.9.58 target=172.16.9.58/32
+add comment=1702 max-limit=100M/100M name=172.16.9.114 target=172.16.9.114/32
+add comment=3426 max-limit=100M/100M name=172.16.5.57 target=172.16.5.57/32
+add comment=3246 max-limit=500M/500M name=172.16.5.24 target=172.16.5.24/32
+add comment=2939 max-limit=500M/500M name=172.16.5.70 target=172.16.5.70/32
+add comment=1430 max-limit=50M/50M name=172.16.9.2 target=172.16.9.2/32
+add comment=1518 max-limit=100M/100M name=172.16.8.8 target=172.16.8.8/32
+add comment=1429 max-limit=100M/100M name=172.16.2.3 target=172.16.2.3/32
+add comment=2844 max-limit=50M/50M name=172.16.8.45 target=172.16.8.45/32
+add comment=1482 max-limit=30M/30M name=172.16.5.76 target=172.16.5.76/32
+add comment=1155 max-limit=100M/100M name=172.16.5.120 target=172.16.5.120/32
+add comment=5075 max-limit=100M/100M name=172.16.3.91 target=172.16.3.91/32
+add comment=1541 max-limit=50M/50M name=172.16.8.12 target=172.16.8.12/32
+add comment=1458 max-limit=100M/100M name=172.16.2.33 target=172.16.2.33/32
+add comment=3099 max-limit=100M/100M name=172.16.5.44 target=172.16.5.44/32
+add comment=101396 max-limit=50M/50M name=172.16.7.6 target=172.16.7.6/32
+add comment=35053 max-limit=100M/100M name=172.16.3.28 target=172.16.3.28/32
+add comment=61524 max-limit=100M/100M name=172.16.3.96 target=172.16.3.96/32
+add comment=1566 max-limit=30M/30M name=172.16.71.15 target=172.16.71.15/32
+add comment=2892 max-limit=100M/100M name=172.16.8.51 target=172.16.8.51/32
+add comment=1862 max-limit=50M/50M name=172.16.9.29 target=172.16.9.29/32
+add comment=2556 max-limit=50M/50M name=172.16.5.165 target=172.16.5.165/32
+add comment=3364 max-limit=50M/50M name=172.16.5.52 target=172.16.5.52/32
+add comment=3030 max-limit=50M/50M name=172.16.9.88 target=172.16.9.88/32
+add comment=2879 max-limit=100M/100M name=172.16.6.214 target=172.16.6.214/32
+add comment=31644 max-limit=100M/100M name=172.16.76.5 target=172.16.76.5/32
+add comment=97006 max-limit=100M/100M name=172.16.71.3 target=172.16.71.3/32
+add comment=2733 max-limit=100M/100M name=172.16.5.34 target=172.16.5.34/32
+add comment=77004 max-limit=500M/500M name=172.16.3.32 target=172.16.3.32/32
+add comment=2593 max-limit=100M/100M name=172.16.3.83 target=172.16.3.83/32
+add comment=1855 max-limit=100M/100M name=172.16.71.79 target=172.16.71.79/32
+add comment=1739 max-limit=500M/500M name=172.16.5.108 target=172.16.5.108/32
+add comment=1451 max-limit=100M/100M name=172.16.1.35 target=172.16.1.35/32
+add comment=2767 max-limit=50M/50M name=172.16.4.41 target=172.16.4.41/32
+add comment=4979 max-limit=100M/100M name=172.16.5.138 target=172.16.5.138/32
+add comment=86295 max-limit=50M/50M name=172.16.7.22 target=172.16.7.22/32
+add comment=2131 max-limit=50M/50M name=172.16.9.43 target=172.16.9.43/32
+add comment=1575 max-limit=50M/50M name=172.16.20.49 target=172.16.20.49/32
+add comment=3069 max-limit=100M/100M name=172.16.5.128 target=172.16.5.128/32
+add comment=2646 max-limit=50M/50M name=172.16.4.51 target=172.16.4.51/32
+add comment=2760 max-limit=100M/100M name=172.16.9.71 target=172.16.9.71/32
+add comment=3559 max-limit=100M/100M name=172.16.20.24 target=172.16.20.24/32
+add comment=1496 max-limit=50M/50M name=172.16.5.26 target=172.16.5.26/32
+add comment=3005 max-limit=50M/50M name=172.16.5.69 target=172.16.5.69/32
+add comment=2945 max-limit=50M/50M name=172.16.72.59 target=172.16.72.59/32
+add comment=2364 max-limit=100M/100M name=172.16.8.32 target=172.16.8.32/32
+add comment=1744 max-limit=100M/100M name=172.16.72.34 target=172.16.72.34/32
+add comment=1589 max-limit=50M/50M name=172.16.6.20 target=172.16.6.20/32
+add comment=1606 max-limit=50M/50M name=172.16.8.44 target=172.16.8.44/32
+add comment=3032 max-limit=100M/100M name=172.16.9.186 target=172.16.9.186/32
+add comment=1428 max-limit=30M/30M name=172.16.6.2 target=172.16.6.2/32
+add comment=2465 max-limit=100M/100M name=172.16.3.111 target=172.16.3.111/32
+add comment=1595 max-limit=50M/50M name=172.16.5.125 target=172.16.5.125/32
+add comment=5153 max-limit=100M/100M name=172.16.20.44 target=172.16.20.44/32
+add comment=91426 max-limit=50M/50M name=172.16.6.38 target=172.16.6.38/32
+add comment=6013 max-limit=100M/100M name=172.16.20.60 target=172.16.20.60/32
+add comment=1844 max-limit=100M/100M name=172.16.72.37 target=172.16.72.37/32
+add comment=4764 max-limit=50M/50M name=172.16.3.77 target=172.16.3.77/32
+add comment=3050 max-limit=100M/100M name=172.16.4.49 target=172.16.4.49/32
+add comment=1713 max-limit=100M/100M name=172.16.72.30 target=172.16.72.30/32
+add comment=1661 max-limit=500M/500M name=172.16.4.10 target=172.16.4.10/32
+add comment=40543 max-limit=100M/100M name=172.16.9.59 target=172.16.9.59/32
+add comment=5558 max-limit=50M/50M name=172.16.5.132 target=172.16.5.132/32
+add comment=6017 name=172.16.13.5 target=172.16.13.5/32
+add comment=3953 max-limit=100M/100M name=172.16.5.92 target=172.16.5.92/32
+add comment=2283 max-limit=100M/100M name=172.16.8.28 target=172.16.8.28/32
+add comment=2640 max-limit=500M/500M name=172.16.5.32 target=172.16.5.32/32
+add comment=1448 max-limit=50M/50M name=172.16.5.6 target=172.16.5.6/32
+add comment=4991 max-limit=50M/50M name=172.16.3.86 target=172.16.3.86/32
+add comment=6018 max-limit=500M/500M name=172.16.13.3 target=172.16.13.3/32
+add comment=3212 max-limit=100M/100M name=172.16.3.21 target=172.16.3.21/32
+add comment=1285 max-limit=50M/50M name=172.16.3.73 target=172.16.3.73/32
+add comment=1870 max-limit=100M/100M name=172.16.9.30 target=172.16.9.30/32
+add comment=6022 max-limit=100M/100M name=172.16.13.7 target=172.16.13.7/32
+add comment=6020 name=172.16.13.2 target=172.16.13.2/32
+add comment=84978 max-limit=50M/50M name=172.16.5.110 target=172.16.5.110/32
+add comment=82303 max-limit=100M/100M name=172.16.9.77 target=172.16.9.77/32
+add comment=5972 max-limit=100M/100M name=172.16.5.139 target=172.16.5.139/32
+add comment=2020 max-limit=50M/50M name=172.16.9.188 target=172.16.9.188/32
+add comment=3868 max-limit=500M/500M name=172.16.5.89 target=172.16.5.89/32
+add comment=1889 max-limit=100M/100M name=172.16.72.38 target=172.16.72.38/32
+add comment=1431 max-limit=50M/50M name=172.16.7.2 target=172.16.7.2/32
+add comment=3006 max-limit=50M/50M name=172.16.5.149 target=172.16.5.149/32
+add comment=2245 max-limit=100M/100M name=172.16.9.48 target=172.16.9.48/32
+add comment=2388 max-limit=100M/100M name=172.16.5.29 target=172.16.5.29/32
+add comment=1509 max-limit=100M/100M name=172.16.9.11 target=172.16.9.11/32
+add comment=1598 max-limit=100M/100M name=172.16.9.41 target=172.16.9.41/32
+add comment=6021 max-limit=100M/100M name=185.253.216.36 target=\
+    185.253.216.36/32
+add comment=3368 max-limit=100M/100M name=172.16.5.53 target=172.16.5.53/32
+add comment=73044 max-limit=100M/100M name=172.16.8.33 target=172.16.8.33/32
+add comment=51578 max-limit=50M/50M name=172.16.2.25 target=172.16.2.25/32
+add comment=82549 max-limit=50M/50M name=172.16.5.27 target=172.16.5.27/32
+add comment=6019 max-limit=100M/100M name=172.16.13.8 target=172.16.13.8/32
+add comment=6036 max-limit=500M/500M name=172.16.13.14 target=172.16.13.14/32
+add comment=6028 max-limit=100M/100M name=172.16.13.15 target=172.16.13.15/32
+add comment=6037 max-limit=100M/100M name=172.16.13.16 target=172.16.13.16/32
+add comment=6034 max-limit=100M/100M name=172.16.13.17 target=172.16.13.17/32
+add comment=2924 max-limit=100M/100M name=172.16.6.6 target=172.16.6.6/32
+add comment=3024 max-limit=30M/30M name=172.16.6.39 target=172.16.6.39/32
+add comment=6006 max-limit=50M/50M name=172.16.20.61 target=172.16.20.61/32
+add comment=6014 max-limit=100M/100M name=172.16.13.19 target=172.16.13.19/32
+add comment=6040 max-limit=100M/100M name=172.16.13.20 target=172.16.13.20/32
+add comment=6026 max-limit=100M/100M name=172.16.13.21 target=172.16.13.21/32
+add comment=6033 max-limit=100M/100M name=172.16.13.22 target=172.16.13.22/32
+add comment=6038 max-limit=100M/100M name=172.16.20.62 target=172.16.20.62/32
+add comment=6043 max-limit=100M/100M name=172.16.13.23 target=172.16.13.23/32
+add comment=1543 max-limit=100M/100M name=172.16.72.23 target=172.16.72.23/32
+add comment=2078 max-limit=100M/100M name=172.16.9.80 target=172.16.9.80/32
+add comment=6044 max-limit=100M/100M name=172.16.13.24 target=172.16.13.24/32
+add comment=2647 max-limit=50M/50M name=172.16.71.31 target=172.16.71.31/32
+add comment=6024 max-limit=100M/100M name=172.16.13.27 target=172.16.13.27/32
+add comment=6045 max-limit=100M/100M name=172.16.13.25 target=172.16.13.25/32
+add comment=6047 max-limit=500M/500M name=185.190.150.177 target=\
+    185.190.150.177/32
+add comment=34591 max-limit=100M/100M name=172.16.8.39 target=172.16.8.39/32
+add comment=4884 max-limit=50M/50M name=172.16.5.127 target=172.16.5.127/32
+add comment=6048 max-limit=100M/100M name=172.16.13.28 target=172.16.13.28/32
+add comment=6012 max-limit=100M/100M name=172.16.13.29 target=172.16.13.29/32
+add comment=6025 max-limit=100M/100M name=172.16.13.30 target=172.16.13.30/32
+add comment=6041 max-limit=100M/100M name=172.16.13.26 target=172.16.13.26/32
+add comment=1643 max-limit=100M/100M name=172.16.71.16 target=172.16.71.16/32
+add comment=3730 max-limit=100M/100M name=172.16.5.140 target=172.16.5.140/32
+add comment=6059 name=172.16.13.33 target=172.16.13.33/32
+add comment=1404 name=172.16.13.32 target=172.16.13.32/32
+add comment=3751 max-limit=50M/50M name=172.16.5.82 target=172.16.5.82/32
+add comment=6053 max-limit=100M/100M name=172.16.13.34 target=172.16.13.34/32
+add comment=6054 max-limit=100M/100M name=172.16.13.36 target=172.16.13.36/32
+add comment=6060 max-limit=100M/100M name=172.16.13.40 target=172.16.13.40/32
+add comment=6058 max-limit=100M/100M name=172.16.20.63 target=172.16.20.63/32
+add comment=3925 max-limit=100M/100M name=185.253.216.67 target=\
+    185.253.216.67/32
+add comment=33983 max-limit=500M/500M name=172.16.6.32 target=172.16.6.32/32
+add comment=6064 max-limit=100M/100M name=172.16.13.39 target=172.16.13.39/32
+add comment=2839 max-limit=100M/100M name=172.16.8.14 target=172.16.8.14/32
+add comment=6066 max-limit=100M/100M name=172.16.13.44 target=172.16.13.44/32
+add comment=6049 max-limit=100M/100M name=172.16.13.38 target=172.16.13.38/32
+add comment=6057 max-limit=100M/100M name=172.16.71.101 target=\
+    172.16.71.101/32
+add comment=6065 max-limit=50M/50M name=172.16.71.102 target=172.16.71.102/32
+add comment=6056 max-limit=100M/100M name=172.16.13.46 target=172.16.13.46/32
+add comment=41487 max-limit=30M/30M name=172.16.5.157 target=172.16.5.157/32
+add comment=39136 max-limit=100M/100M name=172.16.2.20 target=172.16.2.20/32
+add comment=6074 max-limit=100M/100M name=172.16.13.48 target=172.16.13.48/32
+add comment=3529 max-limit=50M/50M name=172.16.5.64 target=172.16.5.64/32
+add comment=6075 max-limit=100M/100M name=172.16.13.49 target=172.16.13.49/32
+add comment=6055 max-limit=100M/100M name=172.16.13.41 target=172.16.13.41/32
+add comment=2883 max-limit=100M/100M name=172.16.8.48 target=172.16.8.48/32
+add comment=6069 max-limit=500M/500M name=172.16.71.103 target=\
+    172.16.71.103/32
+add comment=96128 max-limit=100M/100M name=172.16.71.104 target=\
+    172.16.71.104/32
+add comment=6082 max-limit=100M/100M name=172.16.13.53 target=172.16.13.53/32
+add comment=6086 max-limit=100M/100M name=172.16.13.55 target=172.16.13.55/32
+add comment=6083 max-limit=500M/500M name=172.16.13.56 target=172.16.13.56/32
+add comment=2573 max-limit=500M/500M name=172.16.2.28 target=172.16.2.28/32
+add comment=6085 max-limit=100M/100M name=172.16.71.106 target=\
+    172.16.71.106/32
+add comment=6089 max-limit=100M/100M name=172.16.13.57 target=172.16.13.57/32
+add comment=1275 max-limit=50M/50M name=172.16.71.60 target=172.16.71.60/32
+add comment=5565 max-limit=50M/50M name=172.16.13.59 target=172.16.13.59/32
+add comment=6093 max-limit=100M/100M name=172.16.13.58 target=172.16.13.58/32
+add comment=2074 max-limit=100M/100M name=172.16.13.4 target=172.16.13.4/32
+add comment=6102 max-limit=100M/100M name=172.16.13.61 target=172.16.13.61/32
+add comment=6100 max-limit=100M/100M name=172.16.13.65 target=172.16.13.65/32
+add comment=1633 max-limit=50M/50M name=172.16.72.27 target=172.16.72.27/32
+add comment=6091 max-limit=100M/100M name=172.16.20.58 target=172.16.20.58/32
+add comment=3373 max-limit=100M/100M name=172.16.71.39 target=172.16.71.39/32
+add comment=6092 max-limit=100M/100M name=172.16.71.107 target=\
+    172.16.71.107/32
+add comment=6097 max-limit=100M/100M name=172.16.20.64 target=172.16.20.64/32
+add comment=6099 max-limit=100M/100M name=172.16.13.67 target=172.16.13.67/32
+add comment=6098 max-limit=100M/100M name=172.16.13.63 target=172.16.13.63/32
+add comment=6110 max-limit=100M/100M name=172.16.13.69 target=172.16.13.69/32
+add comment=6109 max-limit=50M/50M name=172.16.13.71 target=172.16.13.71/32
+add comment=1574 max-limit=100M/100M name=172.16.3.54 target=172.16.3.54/32
+add comment=6101 max-limit=100M/100M name=185.253.216.37 target=\
+    185.253.216.37/32
+add comment=4858 max-limit=30M/30M name=172.16.20.39 target=172.16.20.39/32
+add comment=2458 max-limit=500M/500M name=172.16.3.78 target=172.16.3.78/32
+add comment=94373 max-limit=100M/100M name=185.190.150.168 target=\
+    185.190.150.168/32
+add comment=100595 max-limit=500M/500M name=172.16.71.10 target=\
+    172.16.71.10/32
+add comment=6027 max-limit=30M/30M name=172.16.13.9 target=172.16.13.9/32
+add comment=2365 max-limit=100M/100M name=172.16.72.4 target=172.16.72.4/32
+add comment=6005 max-limit=100M/100M name=172.16.20.55 target=172.16.20.55/32
+add comment=4835 max-limit=50M/50M name=172.16.71.80 target=172.16.71.80/32
+add comment=2597 max-limit=100M/100M name=172.16.20.6 target=172.16.20.6/32
+add comment=6030 max-limit=50M/50M name=172.16.13.11 target=172.16.13.11/32
+add comment=6030 max-limit=50M/50M name=172.16.13.18 target=172.16.13.18/32
+add comment=6032 max-limit=100M/100M name=172.16.13.13 target=172.16.13.13/32
+add comment=10140 max-limit=100M/100M name=172.16.72.25 target=\
+    172.16.72.25/32
+add comment=1807 max-limit=100M/100M name=185.190.150.176 target=\
+    185.190.150.176/32
+add comment=6029 max-limit=50M/50M name=172.16.13.10 target=172.16.13.10/32
+add comment=97747 max-limit=100M/100M name=172.16.72.8 target=172.16.72.8/32
+add comment=3849 max-limit=100M/100M name=172.16.20.19 target=172.16.20.19/32
+add comment=2531 max-limit=50M/50M name=172.16.1.26 target=172.16.1.26/32
+add comment=2414 max-limit=100M/100M name=172.16.4.129 target=172.16.4.129/32
+add comment=99468 max-limit=100M/100M name=172.16.71.49 target=\
+    172.16.71.49/32
+add comment=1695 max-limit=100M/100M name=172.16.72.49 target=172.16.72.49/32
+add comment=1522 max-limit=100M/100M name=172.16.3.9 target=172.16.3.9/32
+add comment=6042 max-limit=100M/100M name=172.16.13.37 target=172.16.13.37/32
+add comment=6106 max-limit=100M/100M name=172.16.13.64 target=172.16.13.64/32
+add comment=3153 max-limit=100M/100M name=172.16.71.26 target=172.16.71.26/32
+add comment=2098 max-limit=50M/50M name=172.16.4.22 target=172.16.4.22/32
+add comment=5290 max-limit=100M/100M name=172.16.20.47 target=172.16.20.47/32
+add comment=6088 max-limit=500M/500M name=172.16.71.105 target=\
+    172.16.71.105/32
+add comment=6016 max-limit=30M/30M name=172.16.13.6 target=172.16.13.6/32
+add comment=6035 max-limit=100M/100M name=172.16.13.12 target=172.16.13.12/32
+add comment=6081 max-limit=100M/100M name=172.16.13.52 target=172.16.13.52/32
+add comment=5063 max-limit=30M/30M name=172.16.3.89 target=172.16.3.89/32
+add comment=5942 max-limit=50M/50M name=172.16.3.103 target=172.16.3.103/32
+add comment=1731 max-limit=50M/50M name=172.16.72.31 target=172.16.72.31/32
+add comment=5292 max-limit=30M/30M name=172.16.20.81 target=172.16.20.81/32
+add comment=3829 max-limit=100M/100M name=172.16.20.22 target=172.16.20.22/32
+add comment=4006 max-limit=100M/100M name=172.16.20.51 target=172.16.20.51/32
+add comment=94362 max-limit=30M/30M name=172.16.72.45 target=172.16.72.45/32
+add comment=31655 max-limit=100M/100M name=172.16.76.10 target=\
+    172.16.76.10/32
+add comment=1471 max-limit=50M/50M name=172.16.4.2 target=172.16.4.2/32
+add comment=2683 max-limit=100M/100M name=172.16.4.38 target=172.16.4.38/32
+add comment=2214 max-limit=100M/100M name=172.16.4.24 target=172.16.4.24/32
+add comment=3071 max-limit=100M/100M name=172.16.3.52 target=172.16.3.52/32
+add comment=3002 max-limit=500M/500M name=172.16.1.36 target=172.16.1.36/32
+add comment=1205 max-limit=100M/100M name=172.16.3.69 target=172.16.3.69/32
+add comment=6108 max-limit=100M/100M name=172.16.13.68 target=172.16.13.68/32
+add comment=2957 max-limit=100M/100M name=172.16.4.47 target=172.16.4.47/32
+add comment=6071 max-limit=100M/100M name=172.16.13.42 target=172.16.13.42/32
+add comment=1519 max-limit=30M/30M name=185.190.150.43 target=\
+    185.190.150.43/32
+add comment=100944 max-limit=100M/100M name=172.16.72.18 target=\
+    172.16.72.18/32
+add comment=1478 max-limit=100M/100M name=185.190.150.42 target=\
+    185.190.150.42/32
+add comment=4992 max-limit=100M/100M name=172.16.3.87 target=172.16.3.87/32
+add comment=5921 max-limit=30M/30M name=172.16.20.83 target=172.16.20.83/32
+add comment=6120 max-limit=100M/100M name=172.16.13.74 target=172.16.13.74/32
+add comment=5142 max-limit=30M/30M name=172.16.20.17 target=172.16.20.17/32
+add comment=6096 max-limit=50M/50M name=172.16.13.62 target=172.16.13.62/32
+add comment=4848 max-limit=30M/30M name=172.16.71.70 target=172.16.71.70/32
+add comment=2504 max-limit=50M/50M name=172.16.3.22 target=172.16.3.22/32
+add comment=1939 max-limit=50M/50M name=172.16.72.33 target=172.16.72.33/32
+add comment=6068 max-limit=100M/100M name=172.16.13.45 target=172.16.13.45/32
+add comment=1468 max-limit=100M/100M name=172.16.2.6 target=172.16.2.6/32
+add comment=80004 max-limit=100M/100M name=172.16.71.36 target=\
+    172.16.71.36/32
+add comment=64303 max-limit=50M/50M name=172.16.3.16 target=172.16.3.16/32
+add comment=6137 max-limit=50M/50M name=172.16.76.18 target=172.16.76.18/32
+add comment=1634 max-limit=100M/100M name=185.190.150.48 target=\
+    185.190.150.48/32
+add comment=53222 max-limit=100M/100M name=172.16.4.15 target=172.16.4.15/32
+add comment=6131 max-limit=100M/100M name=172.16.13.77 target=172.16.13.77/32
+add comment=6103 max-limit=100M/100M name=172.16.13.72 target=172.16.13.72/32
+add comment=6129 max-limit=100M/100M name=172.16.13.51 target=172.16.13.51/32
+add comment=6115 max-limit=100M/100M name=172.16.13.76 target=172.16.13.76/32
+add comment=6080 max-limit=100M/100M name=172.16.13.78 target=172.16.13.78/32
+add comment=6126 max-limit=100M/100M name=172.16.13.79 target=172.16.13.79/32
+add comment=5965 max-limit=100M/100M name=172.16.71.97 target=172.16.71.97/32
+add comment=5172 max-limit=50M/50M name=185.190.150.199 target=\
+    185.190.150.199/32
+add comment=2441 max-limit=50M/50M name=172.16.4.31 target=172.16.4.31/32
+add comment=6138 max-limit=100M/100M name=172.16.13.81 target=172.16.13.81/32
+add comment=6117 max-limit=100M/100M name=172.16.13.82 target=172.16.13.82/32
+add comment=6139 max-limit=100M/100M name=172.16.13.83 target=172.16.13.83/32
+add comment=6116 max-limit=50M/50M name=172.16.71.109 target=172.16.71.109/32
+add comment=100450 max-limit=500M/500M name=172.16.72.16 target=\
+    172.16.72.16/32
+add comment=1943 max-limit=30M/30M name=185.190.150.170 target=\
+    185.190.150.170/32
+add comment=1282 max-limit=30M/30M name=172.16.3.74 target=172.16.3.74/32
+add comment=1706 max-limit=50M/50M name=172.16.4.12 target=172.16.4.12/32
+add comment=1712 max-limit=100M/100M name=172.16.4.13 target=172.16.4.13/32
+add comment=2117 max-limit=100M/100M name=172.16.72.56 target=172.16.72.56/32
+add comment=6050 max-limit=500M/500M name=172.16.13.31 target=172.16.13.31/32
+add comment=6111 max-limit=50M/50M name=172.16.71.110 target=172.16.71.110/32
+add comment=6136 max-limit=100M/100M name=172.16.13.84 target=172.16.13.84/32
+add comment=4856 max-limit=100M/100M name=172.16.20.5 target=172.16.20.5/32
+add comment=6133 max-limit=100M/100M name=172.16.13.85 target=172.16.13.85/32
+add comment=6124 max-limit=100M/100M name=172.16.13.86 target=172.16.13.86/32
+add comment=1998 max-limit=30M/30M name=172.16.71.47 target=172.16.71.47/32
+add comment=4008 max-limit=50M/50M name=172.16.20.23 target=172.16.20.23/32
+add comment=4112 max-limit=100M/100M name=172.16.71.111 target=\
+    172.16.71.111/32
+add comment=4775 max-limit=50M/50M name=172.16.71.62 target=172.16.71.62/32
+add comment=2770 max-limit=50M/50M name=172.16.3.58 target=172.16.3.58/32
+add comment=6084 max-limit=100M/100M name=172.16.13.54 target=172.16.13.54/32
+add comment=1762 max-limit=500M/500M name=172.16.3.97 target=172.16.3.97/32
+add comment=2349 max-limit=100M/100M name=172.16.4.27 target=172.16.4.27/32
+add comment=6125 max-limit=100M/100M name=172.16.13.87 target=172.16.13.87/32
+add comment=1272 max-limit=50M/50M name=172.16.71.58 target=172.16.71.58/32
+add comment=34849 max-limit=100M/100M name=172.16.1.12 target=172.16.1.12/32
+add comment=3082 max-limit=50M/50M name=172.16.72.60 target=172.16.72.60/32
+add comment=4790 max-limit=100M/100M name=172.16.3.81 target=172.16.3.81/32
+add comment=3475 max-limit=100M/100M name=172.16.20.12 target=172.16.20.12/32
+add comment=6031 max-limit=100M/100M name=172.16.3.105 target=172.16.3.105/32
+add comment=2228 max-limit=100M/100M name=172.16.71.24 target=172.16.71.24/32
+add comment=5996 max-limit=100M/100M name=172.16.71.100 target=\
+    172.16.71.100/32
+add comment=4896 max-limit=100M/100M name=172.16.20.42 target=172.16.20.42/32
+add comment=97523 max-limit=100M/100M name=172.16.72.7 target=172.16.72.7/32
+add comment=2614 max-limit=50M/50M name=172.16.71.129 target=172.16.71.129/32
+add comment=1310 max-limit=100M/100M name=172.16.71.64 target=172.16.71.64/32
+add comment=2764 max-limit=100M/100M name=172.16.71.34 target=172.16.71.34/32
+add comment=2899 max-limit=30M/30M name=172.16.1.21 target=172.16.1.21/32
+add comment=2480 max-limit=50M/50M name=172.16.71.127 target=172.16.71.127/32
+add comment=6107 max-limit=100M/100M name=172.16.13.66 target=172.16.13.66/32
+add comment=6123 max-limit=100M/100M name=172.16.13.88 target=172.16.13.88/32
+add comment=40880 max-limit=100M/100M name=172.16.76.11 target=\
+    172.16.76.11/32
+add comment=2345 max-limit=30M/30M name=172.16.4.28 target=172.16.4.28/32
+add comment=6104 max-limit=100M/100M name=172.16.13.70 target=172.16.13.70/32
+add comment=3446 max-limit=100M/100M name=172.16.3.35 target=172.16.3.35/32
+add comment=6119 max-limit=500M/500M name=185.253.216.38 target=\
+    185.253.216.38/32
+add comment=4078 max-limit=30M/30M name=172.16.71.29 target=172.16.71.29/32
+add comment=6073 max-limit=50M/50M name=172.16.13.47 target=172.16.13.47/32
+add comment=2878 max-limit=50M/50M name=172.16.1.3 target=172.16.1.3/32
+add comment=6135 max-limit=100M/100M name=172.16.13.90 target=172.16.13.90/32
+add comment=6144 max-limit=500M/500M name=172.16.13.91 target=172.16.13.91/32
+add comment=4782 max-limit=100M/100M name=172.16.3.79 target=172.16.3.79/32
+add comment=1678 max-limit=100M/100M name=172.16.3.64 target=172.16.3.64/32
+add comment=6148 max-limit=100M/100M name=172.16.13.92 target=172.16.13.92/32
+add comment=5055 max-limit=100M/100M name=172.16.71.89 target=172.16.71.89/32
+add comment=2335 max-limit=100M/100M name=172.16.3.17 target=172.16.3.17/32
+add comment=6143 max-limit=100M/100M name=172.16.13.93 target=172.16.13.93/32
+add comment=2771 max-limit=100M/100M name=172.16.72.57 target=172.16.72.57/32
+add comment=6140 max-limit=100M/100M name=172.16.20.66 target=172.16.20.66/32
+add comment=6141 max-limit=100M/100M name=172.16.13.95 target=172.16.13.95/32
+add comment=6072 max-limit=100M/100M name=172.16.13.43 target=172.16.13.43/32
+add comment=2656 max-limit=50M/50M name=172.16.1.27 target=172.16.1.27/32
+add comment=2197 max-limit=100M/100M name=172.16.2.42 target=172.16.2.42/32
+add comment=5189 max-limit=50M/50M name=172.16.76.13 target=172.16.76.13/32
+add comment=6122 max-limit=100M/100M name=172.16.13.94 target=172.16.13.94/32
+add comment=5043 max-limit=100M/100M name=172.16.20.43 target=172.16.20.43/32
+add comment=6127 max-limit=50M/50M name=172.16.13.98 target=172.16.13.98/32
+add comment=4917 max-limit=100M/100M name=172.16.71.78 target=172.16.71.78/32
+add comment=1517 max-limit=100M/100M name=172.16.4.4 target=172.16.4.4/32
+add comment=3374 max-limit=100M/100M name=172.16.3.30 target=172.16.3.30/32
+add comment=3227 max-limit=100M/100M name=172.16.4.52 target=172.16.4.52/32
+add comment=2369 max-limit=100M/100M name=172.16.3.19 target=172.16.3.19/32
+add comment=6155 max-limit=100M/100M name=172.16.13.100 target=\
+    172.16.13.100/32
+add comment=6158 max-limit=100M/100M name=172.16.13.101 target=\
+    172.16.13.101/32
+add comment=1719 max-limit=100M/100M name=172.16.4.14 target=172.16.4.14/32
+add comment=3941 max-limit=100M/100M name=172.16.3.80 target=172.16.3.80/32
+add comment=6149 max-limit=100M/100M name=172.16.13.102 target=\
+    172.16.13.102/32
+add comment=2466 max-limit=100M/100M name=172.16.2.22 target=172.16.2.22/32
+add comment=6157 max-limit=100M/100M name=185.253.216.39 target=\
+    185.253.216.39/32
+add comment=6152 max-limit=100M/100M name=172.16.13.103 target=\
+    172.16.13.103/32
+add comment=6154 max-limit=100M/100M name=172.16.13.104 target=\
+    172.16.13.104/32
+add comment=6163 max-limit=100M/100M name=172.16.13.105 target=\
+    172.16.13.105/32
+add comment=6156 max-limit=100M/100M name=172.16.71.112 target=\
+    172.16.71.112/32
+add comment=6164 max-limit=100M/100M name=172.16.13.106 target=\
+    172.16.13.106/32
+add comment=6166 max-limit=100M/100M name=172.16.13.107 target=\
+    172.16.13.107/32
+add comment=6153 max-limit=100M/100M name=172.16.13.108 target=\
+    172.16.13.108/32
+add comment=97040 max-limit=100M/100M name=172.16.71.4 target=172.16.71.4/32
+add comment=6095 max-limit=100M/100M name=172.16.71.108 target=\
+    172.16.71.108/32
+add comment=1441 max-limit=100M/100M name=172.16.1.2 target=172.16.1.2/32
+add comment=6165 max-limit=100M/100M name=172.16.13.109 target=\
+    172.16.13.109/32
+add comment=6167 max-limit=100M/100M name=172.16.20.68 target=172.16.20.68/32
+add comment=6159 max-limit=50M/50M name=172.16.13.110 target=172.16.13.110/32
+add comment=6159 max-limit=50M/50M name=172.16.13.111 target=172.16.13.111/32
+add comment=6134 max-limit=100M/100M name=172.16.13.112 target=\
+    172.16.13.112/32
+add comment=6168 max-limit=100M/100M name=172.16.13.113 target=\
+    172.16.13.113/32
+add comment=6121 max-limit=30M/30M name=172.16.13.80 target=172.16.13.80/32
+add comment=6162 max-limit=100M/100M name=172.16.71.113 target=\
+    172.16.71.113/32
+add comment=6145 max-limit=100M/100M name=172.16.13.99 target=172.16.13.99/32
+add comment=2250 max-limit=30M/30M name=172.16.71.25 target=172.16.71.25/32
+add comment=6112 max-limit=100M/100M name=172.16.13.73 target=172.16.13.73/32
+add comment=6170 max-limit=100M/100M name=172.16.13.114 target=\
+    172.16.13.114/32
+add comment=60264 max-limit=100M/100M name=172.16.1.7 target=172.16.1.7/32
+add comment=6161 max-limit=100M/100M name=172.16.71.115 target=\
+    172.16.71.115/32
+add comment=6173 name=172.16.13.115 target=172.16.13.115/32
+add comment=6146 max-limit=50M/50M name=172.16.13.116 target=172.16.13.116/32
+add comment=6160 max-limit=100M/100M name=172.16.71.116 target=\
+    172.16.71.116/32
+add comment=6180 max-limit=100M/100M name=172.16.13.117 target=\
+    172.16.13.117/32
+add comment=6094 max-limit=100M/100M name=172.16.13.60 target=172.16.13.60/32
+add comment=6094 max-limit=100M/100M name=172.16.13.118 target=\
+    172.16.13.118/32
+add comment=6174 max-limit=100M/100M name=172.16.13.119 target=\
+    172.16.13.119/32
+add comment=6039 max-limit=100M/100M name=172.16.13.120 target=\
+    172.16.13.120/32
+add comment=6171 max-limit=100M/100M name=172.16.71.117 target=\
+    172.16.71.117/32
+add comment=80213 max-limit=100M/100M name=172.16.71.118 target=\
+    172.16.71.118/32
+add comment=6177 max-limit=100M/100M name=172.16.13.121 target=\
+    172.16.13.121/32
+add comment=1473 max-limit=100M/100M name=172.16.20.67 target=172.16.20.67/32
+add comment=5025 max-limit=100M/100M name=172.16.71.87 target=172.16.71.87/32
+add comment=6183 max-limit=50M/50M name=172.16.13.122 target=172.16.13.122/32
+add comment=6132 max-limit=30M/30M name=172.16.13.75 target=172.16.13.75/32
+add comment=6176 max-limit=100M/100M name=172.16.71.119 target=\
+    172.16.71.119/32
+add comment=6079 max-limit=500M/500M name=172.16.13.50 target=172.16.13.50/32
+add comment=6184 max-limit=100M/100M name=172.16.13.123 target=\
+    172.16.13.123/32
+add comment=6182 max-limit=50M/50M name=172.16.13.124 target=172.16.13.124/32
+add comment=6185 max-limit=100M/100M name=172.16.71.121 target=\
+    172.16.71.121/32
+add comment=6147 max-limit=100M/100M name=172.16.13.89 target=172.16.13.89/32
+add comment=6187 max-limit=100M/100M name=172.16.13.125 target=\
+    172.16.13.125/32
+add comment=6175 max-limit=100M/100M name=172.16.71.122 target=\
+    172.16.71.122/32
+add comment=6178 max-limit=100M/100M name=172.16.71.52 target=172.16.71.52/32
+add comment=64235 max-limit=100M/100M name=185.190.150.51 target=\
+    185.190.150.51/32
+add comment=6046 max-limit=100M/100M name=172.16.13.35 target=172.16.13.35/32
+add comment=6205 max-limit=500M/500M name=172.16.20.69 target=172.16.20.69/32
+add comment=6207 max-limit=100M/100M name=172.16.20.79 target=172.16.20.79/32
+add comment=6202 max-limit=30M/30M name=172.16.71.124 target=172.16.71.124/32
+add comment=1439 max-limit=100M/100M name=172.16.2.4 target=172.16.2.4/32
+add comment=4897 max-limit=100M/100M name=172.16.71.77 target=172.16.71.77/32
+add comment=4853 max-limit=100M/100M name=172.16.20.36 target=172.16.20.36/32
+add comment=4867 max-limit=100M/100M name=172.16.71.75 target=172.16.71.75/32
+add comment=6114 max-limit=100M/100M name=172.16.13.96 target=172.16.13.96/32
+add comment=6203 max-limit=100M/100M name=172.16.20.84 target=172.16.20.84/32
+add comment=6192 max-limit=100M/100M name=172.16.13.126 target=\
+    172.16.13.126/32
+add comment=6206 max-limit=50M/50M name=172.16.13.127 target=172.16.13.127/32
+add comment=6195 max-limit=100M/100M name=172.16.13.128 target=\
+    172.16.13.128/32
+add comment=6186 max-limit=100M/100M name=172.16.13.129 target=\
+    172.16.13.129/32
+add comment=6188 max-limit=100M/100M name=172.16.13.130 target=\
+    172.16.13.130/32
+add comment=6190 max-limit=100M/100M name=172.16.13.131 target=\
+    172.16.13.131/32
+add comment=6191 max-limit=100M/100M name=172.16.13.132 target=\
+    172.16.13.132/32
+add comment=6209 max-limit=100M/100M name=172.16.13.133 target=\
+    172.16.13.133/32
+add comment=6189 max-limit=100M/100M name=172.16.13.134 target=\
+    172.16.13.134/32
+add comment=1263 max-limit=50M/50M name=172.16.20.33 target=172.16.20.33/32
+add comment=6193 max-limit=30M/30M name=172.16.13.135 target=172.16.13.135/32
+add comment=1417 max-limit=50M/50M name=172.16.20.10 target=172.16.20.10/32
+add comment=2906 max-limit=50M/50M name=172.16.1.33 target=172.16.1.33/32
+add comment=6201 max-limit=100M/100M name=172.16.71.123 target=\
+    172.16.71.123/32
+add comment=1288 max-limit=100M/100M name=172.16.71.12 target=172.16.71.12/32
+add comment=6008 max-limit=50M/50M name=172.16.71.99 target=172.16.71.99/32
+add comment=2237 max-limit=100M/100M name=172.16.71.125 target=\
+    172.16.71.125/32
+/routing bgp instance
+set default disabled=yes
+add as=210092 client-to-client-reflection=no name=GoldenNet router-id=\
+    185.253.216.1
+/routing ospf instance
+set [ find default=yes ] distribute-default=always-as-type-2 name=\
+    OspfDownLinkDaniya router-id=0.0.0.10
+/snmp community
+set [ find default=yes ] disabled=yes
+add addresses="185.190.150.4/32,185.190.150.7/32,185.190.150.8/32,185.190.150.\
+    10/32,185.190.150.25/32,176.36.86.10/32" authentication-password=billing \
+    encryption-password=billing name=billing
+add addresses=176.36.86.10/32 authentication-password=gtest disabled=yes \
+    encryption-password=gtest name=gtest
+/user group
+set full policy="local,telnet,ssh,ftp,reboot,read,write,policy,test,winbox,pas\
+    sword,web,sniff,sensitive,api,romon,dude,tikapp"
+/ip neighbor discovery-settings
+set discover-interface-list=AllowNeighbors
+/interface l2tp-server server
+set allow-fast-path=yes authentication=mschap1,mschap2
+/interface list member
+add interface=ether3 list=MNG
+add interface=ether4 list=MNG
+add interface=vlan2585_L9_2 list=MNG
+add interface=vlan2584_L9_3 list=AllowNeighbors
+add interface=vlan2585_L9_2 list=AllowNeighbors
+add interface=GoldenMng-200 list=AllowNeighbors
+add disabled=yes interface=BGNET-BGP-uplink list=AllowNeighbors
+add interface=EuroCity-LobanV2337 list=AllowNeighbors
+add disabled=yes interface=KyivLink-BGP-uplink list=AllowNeighbors
+add disabled=yes interface=Simnet-BGP-uplink list=AllowNeighbors
+/ip address
+add address=185.190.150.33/27 interface=E2ext301 network=185.190.150.32
+add address=10.1.1.1/24 interface=E2sw501 network=10.1.1.0
+add address=185.190.150.1/27 interface=GoldenMng-200 network=185.190.150.0
+add address=10.1.2.1/24 interface=J1sw502 network=10.1.2.0
+add address=10.1.3.1/24 interface=sw503 network=10.1.3.0
+add address=172.16.1.1/24 interface=E2ext301 network=172.16.1.0
+add address=172.16.2.1/24 interface=E2ext301 network=172.16.2.0
+add address=172.16.3.1/24 interface=E2ext301 network=172.16.3.0
+add address=172.16.4.1/24 interface=E2ext301 network=172.16.4.0
+add address=10.1.4.1/24 interface=Schastya1_sw504 network=10.1.4.0
+add address=10.2.0.1/24 interface=Lu62sw2354 network=10.2.0.0
+add address=185.190.150.161/27 interface=Lu62ext601 network=185.190.150.160
+add address=172.16.71.1/24 interface=Lu62ext601 network=172.16.71.0
+add address=172.16.72.1/24 interface=Lu62ext601 network=172.16.72.0
+add address=185.190.150.193/28 interface=BorExt360 network=185.190.150.192
+add address=10.1.56.1/24 interface=Bor560sw network=10.1.56.0
+add address=172.16.76.1/24 interface=BorExt360 network=172.16.76.0
+add address=10.0.0.1/30 interface=EuroCity-LobanV2337 network=10.0.0.0
+add address=172.17.1.1/24 interface=OmoVlan network=172.17.1.0
+add address=172.16.254.1/24 interface=ControlPower network=172.16.254.0
+add address=10.36.10.1/24 interface=BorExt360 network=10.36.10.0
+add address=10.37.10.1/24 interface=Lu62ext601 network=10.37.10.0
+add address=10.31.10.1/24 interface=E2ext301 network=10.31.10.0
+add address=10.49.254.63 interface=BGNET-BGP-uplink network=10.49.254.62
+add address=10.49.254.61 interface=KyivLink-BGP-uplink network=10.49.254.60
+add address=185.253.216.226 interface=vlan2585_L9_2 network=185.253.216.225
+add address=10.5.0.1/29 interface=SimNetSw506 network=10.5.0.0
+add address=10.46.254.1/30 interface=vlan2376 network=10.46.254.0
+add address=172.16.20.1/24 interface=olt_ext811 network=172.16.20.0
+add address=10.38.10.1/24 interface=olt_ext811 network=10.38.10.0
+add address=185.253.216.228 interface=vlan2584_L9_3 network=185.253.216.227
+add address=185.253.216.65/28 interface=olt_ext811 network=185.253.216.64
+add address=172.16.13.1/24 interface=shalimova300 network=172.16.13.0
+add address=10.33.10.1/24 interface=shalimova300 network=10.33.10.0
+add address=185.253.216.1/27 interface=GoldenMng-200 network=185.253.216.0
+add address=185.253.216.33/27 interface=shalimova300 network=185.253.216.32
+add address=10.55.55.1/24 interface=vlan555 network=10.55.55.0
+add address=10.56.56.1/24 interface=vlan1test network=10.56.56.0
+add address=185.253.216.236 interface=vlan801_L9_1_corbina network=\
+    185.253.216.235
+add address=192.168.40.1/30 interface=gre-home network=192.168.40.0
+/ip arp
+add address=185.190.150.7 comment=Billing_Server_Prod interface=GoldenMng-200 \
+    mac-address=00:0C:29:8D:A1:3E
+add address=185.190.150.8 comment=VMWARE_1 interface=GoldenMng-200 \
+    mac-address=64:D1:54:C9:1B:43
+add address=185.190.150.9 comment=VMWARE_2 interface=GoldenMng-200 \
+    mac-address=64:D1:54:C9:1B:43
+add address=185.190.150.10 comment=fdev_server interface=GoldenMng-200 \
+    mac-address=00:0C:29:16:1A:F7
+add address=185.190.150.13 comment=Cloud interface=GoldenMng-200 mac-address=\
+    00:0C:29:7E:8F:91
+add address=185.190.150.21 comment=SpeedTest interface=GoldenMng-200 \
+    mac-address=00:0C:29:E1:F9:4E
+add address=185.190.150.23 comment=NS1 disabled=yes interface=GoldenMng-200 \
+    mac-address=18:03:73:D9:23:AF
+add address=185.190.150.26 comment=1C_Magazin interface=GoldenMng-200 \
+    mac-address=00:0C:29:6A:0F:39
+add address=185.190.150.25 comment=PON interface=GoldenMng-200 mac-address=\
+    00:0C:29:4D:02:0E
+add address=185.190.150.6 comment=MailServer interface=GoldenMng-200 \
+    mac-address=00:0C:29:AF:A4:9F
+add address=185.190.150.27 comment=CKD interface=GoldenMng-200 mac-address=\
+    00:0C:29:43:15:B9
+add address=185.190.150.2 comment=NS1 interface=GoldenMng-200 mac-address=\
+    00:0C:29:EB:E0:39
+add address=185.190.150.14 comment=Regik interface=GoldenMng-200 mac-address=\
+    A0:BD:1D:EC:E2:0B
+add address=185.253.216.2 comment=PBX interface=GoldenMng-200 mac-address=\
+    00:0C:29:48:66:C9
+add address=185.253.216.3 comment=GATE interface=GoldenMng-200 mac-address=\
+    12:34:56:78:9A:BA
+add address=185.253.216.12 comment=1C-GOLDEN interface=GoldenMng-200 \
+    mac-address=00:0C:29:27:A9:7F
+/ip dhcp-server alert
+add disabled=no interface=E2ext301 on-alert=\
+    "/system script run UnknownDHCPServer" valid-server=48:8F:5A:8E:3F:DC
+add disabled=no interface=J1ext302 on-alert=\
+    "/system script run UnknownDHCPServer" valid-server=48:8F:5A:8E:3F:DC
+add disabled=no interface=shalimova300 on-alert=\
+    "/system script run UnknownDHCPServer" valid-server=48:8F:5A:8E:3F:DC
+add disabled=no interface=BorExt360 on-alert=\
+    "/system script run UnknownDHCPServer" valid-server=48:8F:5A:8E:3F:DC
+add disabled=no interface=Lu62ext601 on-alert=\
+    "/system script run UnknownDHCPServer" valid-server=48:8F:5A:8E:3F:DC
+add disabled=no interface=olt_ext811 on-alert=\
+    "/system script run UnknownDHCPServer" valid-server=48:8F:5A:8E:3F:DC
+/ip dhcp-server lease
+add address=172.16.254.5 comment=CP_EC mac-address=74:7D:24:15:93:BB server=\
+    ControlPower
+add address=172.16.254.3 comment=CP_Promenada mac-address=74:7D:24:15:8E:54 \
+    server=ControlPower
+add address=172.17.1.16 client-id=1:dc:a6:32:4d:70:f0 comment=OmoVlan \
+    mac-address=DC:A6:32:4D:70:F0 server=OmoVlan
+add address=172.17.1.17 client-id=1:dc:a6:32:35:a2:8b comment=OmoVlan \
+    mac-address=DC:A6:32:35:A2:8B server=OmoVlan
+add address=172.16.254.4 client-id=1:f8:1a:67:db:3:31 comment=CP_oneHouse \
+    mac-address=F8:1A:67:DB:03:31 server=ControlPower
+add address=172.16.254.2 client-id=1:64:70:2:50:c4:b comment=CP_Sofiya \
+    mac-address=64:70:02:50:C4:0B server=ControlPower
+add address=172.16.72.59 client-id=1:8c:53:c3:91:5a:52 lease-time=12h \
+    mac-address=8C:53:C3:91:5A:52 server=Lu62ext601
+add address=185.190.150.174 client-id=1:40:ee:15:1a:4b:f1 lease-time=12h \
+    mac-address=40:EE:15:1A:4B:F1 server=Lu62ext601
+add address=172.16.72.14 client-id=1:8c:de:f9:c5:40:4b lease-time=12h \
+    mac-address=8C:DE:F9:C5:40:4B server=Lu62ext601
+add address=172.16.72.55 client-id=1:50:d4:f7:da:b8:c7 lease-time=12h \
+    mac-address=50:D4:F7:DA:B8:C7 server=Lu62ext601
+add address=185.190.150.166 client-id=1:4:5e:a4:58:38:d lease-time=12h \
+    mac-address=04:5E:A4:58:38:0D server=Lu62ext601
+add address=172.16.13.25 client-id=1:cc:2d:e0:63:d6:bb lease-time=12h \
+    mac-address=CC:2D:E0:63:D6:BB server=shalimova300
+add address=172.16.13.14 client-id=1:4:95:e6:ab:99:58 lease-time=12h \
+    mac-address=04:95:E6:AB:99:58 server=shalimova300
+add address=172.16.72.51 client-id=1:74:4d:28:53:11:b6 lease-time=12h \
+    mac-address=74:4D:28:53:11:B6 server=Lu62ext601
+add address=172.16.13.8 client-id=1:1c:61:b4:5c:c4:44 lease-time=12h \
+    mac-address=1C:61:B4:5C:C4:44 server=shalimova300
+add address=172.16.13.7 client-id=1:3c:84:6a:b6:4b:ca lease-time=12h \
+    mac-address=3C:84:6A:B6:4B:CA server=shalimova300
+add address=172.16.20.44 client-id=1:60:32:b1:fe:ac:53 lease-time=12h \
+    mac-address=60:32:B1:FE:AC:53 server=olt_ext811
+add address=172.16.71.55 client-id=1:5c:92:5e:4b:30:81 lease-time=12h \
+    mac-address=5C:92:5E:4B:30:81 server=Lu62ext601
+add address=172.16.72.23 client-id=1:c:80:63:83:8c:bf lease-time=12h \
+    mac-address=0C:80:63:83:8C:BF server=Lu62ext601
+add address=172.16.71.46 client-id=1:bc:62:ce:7c:e5:89 lease-time=12h \
+    mac-address=BC:62:CE:7C:E5:89 server=Lu62ext601
+add address=172.16.72.58 client-id=1:c4:ad:34:74:2d:db lease-time=12h \
+    mac-address=C4:AD:34:74:2D:DB server=Lu62ext601
+add address=172.16.71.42 client-id=1:5c:92:5e:53:76:9 lease-time=12h \
+    mac-address=5C:92:5E:53:76:09 server=Lu62ext601
+add address=172.16.72.48 client-id=1:68:ff:7b:4e:27:65 lease-time=12h \
+    mac-address=68:FF:7B:4E:27:65 server=Lu62ext601
+add address=172.16.72.22 client-id=1:e8:48:b8:f7:a3:a4 lease-time=12h \
+    mac-address=E8:48:B8:F7:A3:A4 server=Lu62ext601
+add address=172.16.71.19 client-id=1:5c:92:5e:8a:11:e9 lease-time=12h \
+    mac-address=5C:92:5E:8A:11:E9 server=Lu62ext601
+add address=172.16.71.65 client-id=1:50:d2:f5:8:6:51 lease-time=12h \
+    mac-address=50:D2:F5:08:06:51 server=Lu62ext601
+add address=172.16.13.21 client-id=1:84:d8:1b:f0:a3:5d lease-time=12h \
+    mac-address=84:D8:1B:F0:A3:5D server=shalimova300
+add address=172.16.72.17 client-id=1:58:d5:6e:dd:a3:d lease-time=12h \
+    mac-address=58:D5:6E:DD:A3:0D server=Lu62ext601
+add address=172.16.20.52 client-id=1:20:6a:8a:ab:77:7c lease-time=12h \
+    mac-address=20:6A:8A:AB:77:7C server=olt_ext811
+add address=172.16.20.31 client-id=1:90:f6:52:58:d5:6 lease-time=12h \
+    mac-address=90:F6:52:58:D5:06 server=olt_ext811
+add address=172.16.20.63 client-id=1:3c:7c:3f:cc:0:28 lease-time=12h \
+    mac-address=3C:7C:3F:CC:00:28 server=olt_ext811
+add address=172.16.71.41 client-id=1:74:da:88:2e:e5:74 lease-time=12h \
+    mac-address=74:DA:88:2E:E5:74 server=Lu62ext601
+add address=185.190.150.196 client-id=1:28:d1:27:cc:2e:af lease-time=12h \
+    mac-address=28:D1:27:CC:2E:AF server=BorExt360
+add address=172.16.20.54 client-id=1:90:9a:4a:20:91:a1 lease-time=12h \
+    mac-address=90:9A:4A:20:91:A1 server=olt_ext811
+add address=172.16.71.35 client-id=1:14:4d:67:c2:bc:71 lease-time=12h \
+    mac-address=14:4D:67:C2:BC:71 server=Lu62ext601
+add address=172.16.13.40 client-id=1:70:4f:57:30:90:6d lease-time=12h \
+    mac-address=70:4F:57:30:90:6D server=shalimova300
+add address=172.16.72.43 client-id=1:b0:be:76:66:51:b5 lease-time=12h \
+    mac-address=B0:BE:76:66:51:B5 server=Lu62ext601
+add address=172.16.20.60 client-id=1:c0:25:2f:b1:56:b7 lease-time=12h \
+    mac-address=C0:25:2F:B1:56:B7 server=olt_ext811
+add address=172.16.71.30 client-id=1:40:b0:76:25:cb:e8 lease-time=12h \
+    mac-address=40:B0:76:25:CB:E8 server=Lu62ext601
+add address=172.16.13.15 client-id=1:74:4d:28:20:a2:b6 lease-time=12h \
+    mac-address=74:4D:28:20:A2:B6 server=shalimova300
+add address=172.16.76.2 client-id=1:5c:92:5e:89:df:89 lease-time=12h \
+    mac-address=5C:92:5E:89:DF:89 server=BorExt360
+add address=172.16.13.36 client-id=1:8:40:f3:b7:3d:90 lease-time=12h \
+    mac-address=08:40:F3:B7:3D:90 server=shalimova300
+add address=172.16.13.3 client-id=1:b0:a7:b9:65:dc:f2 lease-time=12h \
+    mac-address=B0:A7:B9:65:DC:F2 server=shalimova300
+add address=172.16.72.34 client-id=1:c:80:63:5d:3c:a7 lease-time=12h \
+    mac-address=0C:80:63:5D:3C:A7 server=Lu62ext601
+add address=172.16.71.2 client-id=1:bc:62:ce:23:b7:4f lease-time=12h \
+    mac-address=BC:62:CE:23:B7:4F server=Lu62ext601
+add address=172.16.72.38 client-id=1:90:9a:4a:85:bb:b8 lease-time=12h \
+    mac-address=90:9A:4A:85:BB:B8 server=Lu62ext601
+add address=185.190.150.200 client-id=1:dc:2c:6e:e2:2f:9c lease-time=12h \
+    mac-address=DC:2C:6E:E2:2F:9C server=BorExt360
+add address=172.16.71.38 client-id=1:b0:95:75:24:fd:99 lease-time=12h \
+    mac-address=B0:95:75:24:FD:99 server=Lu62ext601
+add address=172.16.13.17 client-id=1:34:60:f9:6b:f8:21 lease-time=12h \
+    mac-address=34:60:F9:6B:F8:21 server=shalimova300
+add address=172.16.13.30 client-id=1:8c:53:c3:36:16:4a lease-time=12h \
+    mac-address=8C:53:C3:36:16:4A server=shalimova300
+add address=172.16.13.26 client-id=1:8c:de:f9:c8:57:a2 lease-time=12h \
+    mac-address=8C:DE:F9:C8:57:A2 server=shalimova300
+add address=172.16.72.42 client-id=1:74:4d:28:b7:cf:ac lease-time=12h \
+    mac-address=74:4D:28:B7:CF:AC server=Lu62ext601
+add address=172.16.71.14 client-id=1:5c:92:5e:49:3:a1 lease-time=12h \
+    mac-address=5C:92:5E:49:03:A1 server=Lu62ext601
+add address=172.16.71.3 client-id=1:50:c7:bf:3b:6:84 lease-time=12h \
+    mac-address=50:C7:BF:3B:06:84 server=Lu62ext601
+add address=172.16.20.18 client-id=1:14:4d:67:ca:61:91 lease-time=12h \
+    mac-address=14:4D:67:CA:61:91 server=olt_ext811
+add address=172.16.71.9 client-id=1:60:14:b3:82:f2:75 lease-time=12h \
+    mac-address=60:14:B3:82:F2:75 server=Lu62ext601
+add address=172.16.71.79 client-id=1:74:da:88:ef:6:4b lease-time=12h \
+    mac-address=74:DA:88:EF:06:4B server=Lu62ext601
+add address=172.16.76.17 client-id=1:5c:92:5e:52:f1:29 lease-time=12h \
+    mac-address=5C:92:5E:52:F1:29 server=BorExt360
+add address=172.16.71.44 client-id=1:5c:92:5e:53:3b:d1 lease-time=12h \
+    mac-address=5C:92:5E:53:3B:D1 server=Lu62ext601
+add address=172.16.71.22 client-id=1:e2:d:17:82:11:a7 lease-time=12h \
+    mac-address=E2:0D:17:82:11:A7 server=Lu62ext601
+add address=172.16.71.45 client-id=1:14:4d:67:ca:60:45 lease-time=12h \
+    mac-address=14:4D:67:CA:60:45 server=Lu62ext601
+add address=172.16.71.43 client-id=1:5c:92:5e:53:86:21 lease-time=12h \
+    mac-address=5C:92:5E:53:86:21 server=Lu62ext601
+add address=172.16.72.15 lease-time=12h mac-address=50:64:2B:4D:91:9F server=\
+    Lu62ext601
+add address=172.16.20.53 client-id=1:5c:92:5e:48:e0:21 lease-time=12h \
+    mac-address=5C:92:5E:48:E0:21 server=olt_ext811
+add address=172.16.20.56 client-id=1:70:4d:7b:5c:3d:f8 lease-time=12h \
+    mac-address=70:4D:7B:5C:3D:F8 server=olt_ext811
+add address=172.16.71.85 client-id=1:f0:b4:d2:19:14:da lease-time=12h \
+    mac-address=F0:B4:D2:19:14:DA server=Lu62ext601
+add address=172.16.76.16 client-id=1:b0:4e:26:30:a2:3b lease-time=12h \
+    mac-address=B0:4E:26:30:A2:3B server=BorExt360
+add address=172.16.72.54 client-id=1:98:da:c4:e3:b9:f9 lease-time=12h \
+    mac-address=98:DA:C4:E3:B9:F9 server=Lu62ext601
+add address=172.16.20.24 client-id=1:50:d4:f7:af:db:11 lease-time=12h \
+    mac-address=50:D4:F7:AF:DB:11 server=olt_ext811
+add address=172.16.72.37 client-id=1:c:80:63:5c:de:5f lease-time=12h \
+    mac-address=0C:80:63:5C:DE:5F server=Lu62ext601
+add address=172.16.71.15 client-id=1:38:2c:4a:45:48:70 lease-time=12h \
+    mac-address=38:2C:4A:45:48:70 server=Lu62ext601
+add address=172.16.76.15 client-id=1:b0:be:76:7:da:f4 lease-time=12h \
+    mac-address=B0:BE:76:07:DA:F4 server=BorExt360
+add address=172.16.71.32 client-id=1:74:da:88:27:41:d lease-time=12h \
+    mac-address=74:DA:88:27:41:0D server=Lu62ext601
+add address=172.16.71.56 client-id=1:b0:4e:26:a2:b3:c5 lease-time=12h \
+    mac-address=B0:4E:26:A2:B3:C5 server=Lu62ext601
+add address=172.16.71.13 client-id=1:cc:2d:21:29:c1:f0 lease-time=12h \
+    mac-address=CC:2D:21:29:C1:F0 server=Lu62ext601
+add address=172.16.20.13 client-id=1:14:4d:67:99:2f:6d lease-time=12h \
+    mac-address=14:4D:67:99:2F:6D server=olt_ext811
+add address=172.16.72.30 client-id=1:c8:3a:35:93:45:9 lease-time=12h \
+    mac-address=C8:3A:35:93:45:09 server=Lu62ext601
+add address=172.16.72.44 client-id=1:4:d9:f5:13:55:80 lease-time=12h \
+    mac-address=04:D9:F5:13:55:80 server=Lu62ext601
+add address=185.190.150.167 client-id=1:74:4d:28:d5:38:c5 lease-time=12h \
+    mac-address=74:4D:28:D5:38:C5 server=Lu62ext601
+add address=172.16.13.19 client-id=1:a8:5e:45:21:c7:8 lease-time=12h \
+    mac-address=A8:5E:45:21:C7:08 server=shalimova300
+add address=172.16.72.53 client-id=1:cc:2d:21:30:3d:29 lease-time=12h \
+    mac-address=CC:2D:21:30:3D:29 server=Lu62ext601
+add address=172.16.13.5 client-id=1:ac:9e:17:7d:da:90 lease-time=12h \
+    mac-address=AC:9E:17:7D:DA:90 server=shalimova300
+add address=172.16.71.48 client-id=1:24:4b:fe:ed:b7:50 lease-time=12h \
+    mac-address=24:4B:FE:ED:B7:50 server=Lu62ext601
+add address=172.16.71.86 client-id=1:4:5e:a4:cc:e4:30 lease-time=12h \
+    mac-address=04:5E:A4:CC:E4:30 server=Lu62ext601
+add address=172.16.20.40 client-id=1:60:a4:b7:b9:dd:ef lease-time=12h \
+    mac-address=60:A4:B7:B9:DD:EF server=olt_ext811
+add address=172.16.13.34 client-id=1:4:8d:38:bf:e8:d4 lease-time=12h \
+    mac-address=04:8D:38:BF:E8:D4 server=shalimova300
+add address=172.16.71.73 client-id=1:5c:a6:e6:a0:11:eb lease-time=12h \
+    mac-address=5C:A6:E6:A0:11:EB server=Lu62ext601
+add address=172.16.13.33 client-id=1:4:8d:38:c6:1a:7a lease-time=12h \
+    mac-address=04:8D:38:C6:1A:7A server=shalimova300
+add address=172.16.71.88 client-id=1:b0:a7:b9:2:9d:98 lease-time=12h \
+    mac-address=B0:A7:B9:02:9D:98 server=Lu62ext601
+add address=172.16.13.22 client-id=1:c4:71:54:a9:38:45 lease-time=12h \
+    mac-address=C4:71:54:A9:38:45 server=shalimova300
+add address=172.16.13.23 client-id=1:74:da:88:65:98:fd lease-time=12h \
+    mac-address=74:DA:88:65:98:FD server=shalimova300
+add address=172.16.20.25 client-id=1:98:de:d0:58:b6:19 lease-time=12h \
+    mac-address=98:DE:D0:58:B6:19 server=olt_ext811
+add address=172.16.71.21 client-id=1:34:8:4:36:57:b6 lease-time=12h \
+    mac-address=34:08:04:36:57:B6 server=Lu62ext601
+add address=172.16.72.10 client-id=1:c4:6e:1f:65:89:4d lease-time=12h \
+    mac-address=C4:6E:1F:65:89:4D server=Lu62ext601
+add address=172.16.72.46 client-id=1:f4:ec:38:fb:8a:51 lease-time=12h \
+    mac-address=F4:EC:38:FB:8A:51 server=Lu62ext601
+add address=172.16.76.8 client-id=1:c4:71:54:50:ee:15 lease-time=12h \
+    mac-address=C4:71:54:50:EE:15 server=BorExt360
+add address=185.190.150.198 client-id=1:c4:71:54:50:ff:63 lease-time=12h \
+    mac-address=C4:71:54:50:FF:63 server=BorExt360
+add address=172.16.76.14 client-id=1:7c:8b:ca:b3:6c:2b lease-time=12h \
+    mac-address=7C:8B:CA:B3:6C:2B server=BorExt360
+add address=172.16.71.83 client-id=1:18:a6:f7:fc:93:ad lease-time=12h \
+    mac-address=18:A6:F7:FC:93:AD server=Lu62ext601
+add address=172.16.71.11 client-id=1:e8:94:f6:4c:41:fb lease-time=12h \
+    mac-address=E8:94:F6:4C:41:FB server=Lu62ext601
+add address=172.16.71.96 client-id=1:f8:d1:11:bb:11:c3 lease-time=12h \
+    mac-address=F8:D1:11:BB:11:C3 server=Lu62ext601
+add address=172.16.71.120 client-id=1:f4:f2:6d:4b:a2:5f lease-time=12h \
+    mac-address=F4:F2:6D:4B:A2:5F server=Lu62ext601
+add address=172.16.71.90 client-id=1:b0:4e:26:e6:ff:43 lease-time=12h \
+    mac-address=B0:4E:26:E6:FF:43 server=Lu62ext601
+add address=172.16.71.57 client-id=1:c4:71:54:50:ff:bd lease-time=12h \
+    mac-address=C4:71:54:50:FF:BD server=Lu62ext601
+add address=172.16.72.19 client-id=1:34:e8:94:9:8:7d lease-time=12h \
+    mac-address=34:E8:94:09:08:7D server=Lu62ext601
+add address=172.16.72.20 client-id=1:b0:be:76:23:39:7c lease-time=12h \
+    mac-address=B0:BE:76:23:39:7C server=Lu62ext601
+add address=172.16.72.21 client-id=1:c:80:63:34:7c:e1 lease-time=12h \
+    mac-address=0C:80:63:34:7C:E1 server=Lu62ext601
+add address=172.16.71.59 client-id=1:c:80:63:df:11:f7 lease-time=12h \
+    mac-address=0C:80:63:DF:11:F7 server=Lu62ext601
+add address=172.16.76.5 client-id=1:d4:6e:e:a4:b8:3d lease-time=12h \
+    mac-address=D4:6E:0E:A4:B8:3D server=BorExt360
+add address=172.16.71.84 client-id=1:7c:8b:ca:86:3b:51 lease-time=12h \
+    mac-address=7C:8B:CA:86:3B:51 server=Lu62ext601
+add address=172.16.72.40 client-id=1:b0:be:76:23:50:8c lease-time=12h \
+    mac-address=B0:BE:76:23:50:8C server=Lu62ext601
+add address=172.16.20.4 client-id=1:10:fe:ed:7c:85:f9 lease-time=12h \
+    mac-address=10:FE:ED:7C:85:F9 server=olt_ext811
+add address=172.16.71.93 client-id=1:f8:d1:11:b7:a3:d1 lease-time=12h \
+    mac-address=F8:D1:11:B7:A3:D1 server=Lu62ext601
+add address=172.16.13.20 client-id=1:f8:1a:67:b5:15:d lease-time=12h \
+    mac-address=F8:1A:67:B5:15:0D server=shalimova300
+add address=172.16.13.28 client-id=1:ec:8:6b:b5:21:a3 lease-time=12h \
+    mac-address=EC:08:6B:B5:21:A3 server=shalimova300
+add address=172.16.71.16 client-id=1:84:d8:1b:a4:d4:23 lease-time=12h \
+    mac-address=84:D8:1B:A4:D4:23 server=Lu62ext601
+add address=172.16.71.31 client-id=1:28:d1:27:bd:e7:8a lease-time=12h \
+    mac-address=28:D1:27:BD:E7:8A server=Lu62ext601
+add address=172.16.20.48 lease-time=12h mac-address=E4:BE:ED:F3:CE:E3 server=\
+    olt_ext811
+add address=185.253.216.66 client-id=1:b8:69:f4:da:1f:6b lease-time=12h \
+    mac-address=B8:69:F4:DA:1F:6B server=olt_ext811
+add address=172.16.20.49 client-id=1:28:d1:27:cf:5d:3d lease-time=12h \
+    mac-address=28:D1:27:CF:5D:3D server=olt_ext811
+add address=172.16.20.62 client-id=1:e8:94:f6:70:cc:43 lease-time=12h \
+    mac-address=E8:94:F6:70:CC:43 server=olt_ext811
+add address=185.190.150.171 client-id=1:b8:69:f4:47:91:3f lease-time=12h \
+    mac-address=B8:69:F4:47:91:3F server=Lu62ext601
+add address=172.16.72.11 client-id=1:5c:92:5e:49:bf:51 lease-time=12h \
+    mac-address=5C:92:5E:49:BF:51 server=Lu62ext601
+add address=185.190.150.177 client-id=1:b8:69:f4:3:e8:89 lease-time=12h \
+    mac-address=B8:69:F4:03:E8:89 server=Lu62ext601
+add address=172.16.71.61 client-id=1:40:ee:15:1a:a7:f9 lease-time=12h \
+    mac-address=40:EE:15:1A:A7:F9 server=Lu62ext601
+add address=172.16.76.4 client-id=1:80:1f:2:d6:1a:98 lease-time=12h \
+    mac-address=80:1F:02:D6:1A:98 server=BorExt360
+add address=172.16.13.27 client-id=1:f0:2f:74:a:80:c8 lease-time=12h \
+    mac-address=F0:2F:74:0A:80:C8 server=shalimova300
+add address=172.16.13.29 client-id=1:3c:7c:3f:cc:6:80 lease-time=12h \
+    mac-address=3C:7C:3F:CC:06:80 server=shalimova300
+add address=172.16.13.24 client-id=1:28:d1:27:cc:ec:5a lease-time=12h \
+    mac-address=28:D1:27:CC:EC:5A server=shalimova300
+add address=172.16.20.57 client-id=1:8:55:31:ab:ad:d6 lease-time=12h \
+    mac-address=08:55:31:AB:AD:D6 server=olt_ext811
+add address=172.16.71.67 client-id=1:98:da:c4:e3:5e:df lease-time=12h \
+    mac-address=98:DA:C4:E3:5E:DF server=Lu62ext601
+add address=172.16.71.68 client-id=1:5c:92:5e:4b:41:79 lease-time=12h \
+    mac-address=5C:92:5E:4B:41:79 server=Lu62ext601
+add address=172.16.71.66 client-id=1:ac:84:c6:62:6c:ad lease-time=12h \
+    mac-address=AC:84:C6:62:6C:AD server=Lu62ext601
+add address=185.253.216.67 client-id=1:4:5e:a4:cd:8f:b1 lease-time=12h \
+    mac-address=04:5E:A4:CD:8F:B1 server=olt_ext811
+add address=172.16.71.76 client-id=1:28:ee:52:69:75:66 lease-time=12h \
+    mac-address=28:EE:52:69:75:66 server=Lu62ext601
+add address=172.16.13.39 client-id=1:b0:4e:26:a4:3b:b lease-time=12h \
+    mac-address=B0:4E:26:A4:3B:0B server=shalimova300
+add address=172.16.71.92 client-id=1:58:d5:6e:b1:78:4a lease-time=12h \
+    mac-address=58:D5:6E:B1:78:4A server=Lu62ext601
+add address=172.16.13.44 client-id=1:40:31:3c:e2:8a:e0 lease-time=12h \
+    mac-address=40:31:3C:E2:8A:E0 server=shalimova300
+add address=172.16.13.38 client-id=1:bc:e9:2f:88:6f:f0 lease-time=12h \
+    mac-address=BC:E9:2F:88:6F:F0 server=shalimova300
+add address=172.16.71.102 client-id=1:74:4d:28:46:9:12 lease-time=12h \
+    mac-address=74:4D:28:46:09:12 server=Lu62ext601
+add address=172.16.71.101 client-id=1:50:64:2b:5b:38:b0 lease-time=12h \
+    mac-address=50:64:2B:5B:38:B0 server=Lu62ext601
+add address=172.16.20.11 client-id=1:14:4d:67:ca:46:55 lease-time=12h \
+    mac-address=14:4D:67:CA:46:55 server=olt_ext811
+add address=172.16.72.24 client-id=1:4:8d:39:30:1a:b7 lease-time=12h \
+    mac-address=04:8D:39:30:1A:B7 server=Lu62ext601
+add address=172.16.13.46 client-id=1:5c:92:5e:9a:e:25 lease-time=12h \
+    mac-address=5C:92:5E:9A:0E:25 server=shalimova300
+add address=172.16.13.48 client-id=1:cc:32:e5:23:46:d9 lease-time=12h \
+    mac-address=CC:32:E5:23:46:D9 server=shalimova300
+add address=172.16.13.49 client-id=1:34:60:f9:5b:a4:ec lease-time=12h \
+    mac-address=34:60:F9:5B:A4:EC server=shalimova300
+add address=172.16.13.41 client-id=1:34:60:f9:6b:fd:70 lease-time=12h \
+    mac-address=34:60:F9:6B:FD:70 server=shalimova300
+add address=172.16.71.103 client-id=1:1c:61:b4:93:7c:ad lease-time=12h \
+    mac-address=1C:61:B4:93:7C:AD server=Lu62ext601
+add address=172.16.13.53 client-id=1:c4:ad:34:5a:81:8d lease-time=12h \
+    mac-address=C4:AD:34:5A:81:8D server=shalimova300
+add address=172.16.71.104 client-id=1:4:92:26:60:8b:88 lease-time=12h \
+    mac-address=04:92:26:60:8B:88 server=Lu62ext601
+add address=172.16.13.56 client-id=1:f0:2f:74:ba:82:30 lease-time=12h \
+    mac-address=F0:2F:74:BA:82:30 server=shalimova300
+add address=172.16.71.106 client-id=1:d4:6e:e:3e:5d:35 lease-time=12h \
+    mac-address=D4:6E:0E:3E:5D:35 server=Lu62ext601
+add address=172.16.13.57 client-id=1:54:af:97:7:66:5d lease-time=12h \
+    mac-address=54:AF:97:07:66:5D server=shalimova300
+add address=172.16.71.60 client-id=1:78:44:76:b2:4b:4d lease-time=12h \
+    mac-address=78:44:76:B2:4B:4D server=Lu62ext601
+add address=172.16.13.55 client-id=1:70:4f:57:fc:ae:53 lease-time=12h \
+    mac-address=70:4F:57:FC:AE:53 server=shalimova300
+add address=172.16.13.59 client-id=1:c4:e9:84:68:27:71 lease-time=12h \
+    mac-address=C4:E9:84:68:27:71 server=shalimova300
+add address=172.16.13.58 client-id=1:9c:5c:8e:ca:38:58 lease-time=12h \
+    mac-address=9C:5C:8E:CA:38:58 server=shalimova300
+add address=172.16.13.4 client-id=1:ac:84:c6:5b:77:99 lease-time=12h \
+    mac-address=AC:84:C6:5B:77:99 server=shalimova300
+add address=172.16.13.65 client-id=1:7c:8b:ca:d2:3:4b lease-time=12h \
+    mac-address=7C:8B:CA:D2:03:4B server=shalimova300
+add address=172.16.13.61 lease-time=12h mac-address=50:64:2B:4D:0D:42 server=\
+    shalimova300
+add address=172.16.13.16 client-id=1:0:e0:4c:41:68:b9 lease-time=12h \
+    mac-address=00:E0:4C:41:68:B9 server=shalimova300
+add address=172.16.72.27 client-id=1:34:e8:94:8:e6:25 lease-time=12h \
+    mac-address=34:E8:94:08:E6:25 server=Lu62ext601
+add address=172.16.20.58 client-id=1:e8:48:b8:8d:5f:c4 lease-time=12h \
+    mac-address=E8:48:B8:8D:5F:C4 server=olt_ext811
+add address=172.16.71.107 client-id=1:4:d9:f5:73:e1:b9 lease-time=12h \
+    mac-address=04:D9:F5:73:E1:B9 server=Lu62ext601
+add address=172.16.20.64 client-id=1:34:60:f9:62:a9:ad lease-time=12h \
+    mac-address=34:60:F9:62:A9:AD server=olt_ext811
+add address=172.16.13.67 client-id=1:60:e3:27:c6:a1:63 lease-time=12h \
+    mac-address=60:E3:27:C6:A1:63 server=shalimova300
+add address=172.16.71.39 client-id=1:5c:92:5e:53:ee:11 lease-time=12h \
+    mac-address=5C:92:5E:53:EE:11 server=Lu62ext601
+add address=172.16.13.69 client-id=1:ec:43:f6:8:d0:79 lease-time=12h \
+    mac-address=EC:43:F6:08:D0:79 server=shalimova300
+add address=172.16.13.71 client-id=1:0:5f:67:e1:21:97 lease-time=12h \
+    mac-address=00:5F:67:E1:21:97 server=shalimova300
+add address=172.16.13.63 client-id=1:50:d2:f5:9a:c6:f4 lease-time=12h \
+    mac-address=50:D2:F5:9A:C6:F4 server=shalimova300
+add address=172.16.20.82 client-id=1:5c:92:5e:8a:10:89 lease-time=12h \
+    mac-address=5C:92:5E:8A:10:89 server=olt_ext811
+add address=185.253.216.37 client-id=1:84:d8:1b:2:36:37 lease-time=12h \
+    mac-address=84:D8:1B:02:36:37 server=shalimova300
+add address=172.16.71.49 client-id=1:60:32:b1:fe:b1:2a lease-time=12h \
+    mac-address=60:32:B1:FE:B1:2A server=Lu62ext601
+add address=172.16.72.4 client-id=1:64:ee:b7:a4:0:c3 lease-time=12h \
+    mac-address=64:EE:B7:A4:00:C3 server=Lu62ext601
+add address=185.190.150.168 client-id=1:c:80:63:cf:a:1f lease-time=12h \
+    mac-address=0C:80:63:CF:0A:1F server=Lu62ext601
+add address=172.16.71.10 client-id=1:a4:39:b3:82:40:4d lease-time=12h \
+    mac-address=A4:39:B3:82:40:4D server=Lu62ext601
+add address=172.16.71.80 client-id=1:40:ee:15:19:f1:d9 lease-time=12h \
+    mac-address=40:EE:15:19:F1:D9 server=Lu62ext601
+add address=172.16.72.8 client-id=1:c4:71:54:50:ec:ad lease-time=12h \
+    mac-address=C4:71:54:50:EC:AD server=Lu62ext601
+add address=172.16.72.49 client-id=1:b0:be:76:66:5a:49 lease-time=12h \
+    mac-address=B0:BE:76:66:5A:49 server=Lu62ext601
+add address=172.16.13.11 client-id=1:50:64:2b:90:11:e8 lease-time=12h \
+    mac-address=50:64:2B:90:11:E8 server=shalimova300
+add address=185.190.150.176 client-id=1:54:af:97:88:50:9 lease-time=12h \
+    mac-address=54:AF:97:88:50:09 server=Lu62ext601
+add address=172.16.71.26 client-id=1:5c:92:5e:53:63:81 lease-time=12h \
+    mac-address=5C:92:5E:53:63:81 server=Lu62ext601
+add address=172.16.72.25 client-id=1:f4:8c:eb:6:e2:a8 lease-time=12h \
+    mac-address=F4:8C:EB:06:E2:A8 server=Lu62ext601
+add address=172.16.72.31 client-id=1:7c:8b:ca:9b:a5:8f lease-time=12h \
+    mac-address=7C:8B:CA:9B:A5:8F server=Lu62ext601
+add address=172.16.71.105 client-id=1:18:fd:74:c2:d2:ca lease-time=12h \
+    mac-address=18:FD:74:C2:D2:CA server=Lu62ext601
+add address=172.16.72.45 client-id=1:64:66:b3:d8:53:ef lease-time=12h \
+    mac-address=64:66:B3:D8:53:EF server=Lu62ext601
+add address=172.16.76.10 client-id=1:c0:4a:0:35:29:23 lease-time=12h \
+    mac-address=C0:4A:00:35:29:23 server=BorExt360
+add address=172.16.13.42 client-id=1:d8:47:32:bb:6d:e lease-time=12h \
+    mac-address=D8:47:32:BB:6D:0E server=shalimova300
+add address=172.16.20.17 client-id=1:bc:ee:7b:54:f5:54 lease-time=12h \
+    mac-address=BC:EE:7B:54:F5:54 server=olt_ext811
+add address=172.16.13.10 client-id=1:b4:75:e:c2:b1:14 lease-time=12h \
+    mac-address=B4:75:0E:C2:B1:14 server=shalimova300
+add address=172.16.20.83 client-id=1:5c:2:14:87:e7:36 lease-time=12h \
+    mac-address=5C:02:14:87:E7:36 server=olt_ext811
+add address=172.16.13.68 client-id=1:a8:63:7d:41:c9:72 lease-time=12h \
+    mac-address=A8:63:7D:41:C9:72 server=shalimova300
+add address=172.16.13.52 client-id=1:f0:b4:29:d8:38:1f lease-time=12h \
+    mac-address=F0:B4:29:D8:38:1F server=shalimova300
+add address=172.16.13.62 client-id=1:38:6b:1c:9f:ae:79 lease-time=12h \
+    mac-address=38:6B:1C:9F:AE:79 server=shalimova300
+add address=172.16.13.9 lease-time=12h mac-address=F0:B4:D2:8C:92:C2 server=\
+    shalimova300
+add address=172.16.20.55 client-id=1:c0:25:2f:54:53:f lease-time=12h \
+    mac-address=C0:25:2F:54:53:0F server=olt_ext811
+add address=172.16.71.36 client-id=1:18:d6:c7:f3:c1:63 lease-time=12h \
+    mac-address=18:D6:C7:F3:C1:63 server=Lu62ext601
+add address=172.16.76.18 client-id=1:0:2b:67:87:1a:85 lease-time=12h \
+    mac-address=00:2B:67:87:1A:85 server=BorExt360
+add address=172.16.13.37 client-id=1:84:16:f9:35:ef:3d lease-time=12h \
+    mac-address=84:16:F9:35:EF:3D server=shalimova300
+add address=172.16.13.64 client-id=1:58:d9:d5:ec:3a:30 lease-time=12h \
+    mac-address=58:D9:D5:EC:3A:30 server=shalimova300
+add address=172.16.13.45 client-id=1:d4:6e:e:96:1:f lease-time=12h \
+    mac-address=D4:6E:0E:96:01:0F server=shalimova300
+add address=172.16.20.19 client-id=1:74:da:88:d2:60:a7 lease-time=12h \
+    mac-address=74:DA:88:D2:60:A7 server=olt_ext811
+add address=172.16.13.51 client-id=1:9c:5c:8e:ca:46:e8 lease-time=12h \
+    mac-address=9C:5C:8E:CA:46:E8 server=shalimova300
+add address=172.16.13.12 client-id=1:f4:28:53:65:56:c5 lease-time=12h \
+    mac-address=F4:28:53:65:56:C5 server=shalimova300
+add address=172.16.13.6 client-id=1:4c:5e:c:68:97:2c lease-time=12h \
+    mac-address=4C:5E:0C:68:97:2C server=shalimova300
+add address=172.16.13.76 client-id=1:ec:8:6b:b5:11:43 lease-time=12h \
+    mac-address=EC:08:6B:B5:11:43 server=shalimova300
+add address=172.16.13.13 client-id=1:7c:c2:c6:19:14:10 lease-time=12h \
+    mac-address=7C:C2:C6:19:14:10 server=shalimova300
+add address=172.16.13.79 client-id=1:64:9:80:1:2e:19 lease-time=12h \
+    mac-address=64:09:80:01:2E:19 server=shalimova300
+add address=172.16.20.6 client-id=1:e8:94:f6:53:9f:a7 lease-time=12h \
+    mac-address=E8:94:F6:53:9F:A7 server=olt_ext811
+add address=172.16.13.74 client-id=1:64:ee:b7:79:63:93 lease-time=12h \
+    mac-address=64:EE:B7:79:63:93 server=shalimova300
+add address=172.16.13.78 client-id=1:c0:18:50:a9:e7:f0 lease-time=12h \
+    mac-address=C0:18:50:A9:E7:F0 server=shalimova300
+add address=185.190.150.199 client-id=1:94:c:6d:ed:79:a7 lease-time=12h \
+    mac-address=94:0C:6D:ED:79:A7 server=BorExt360
+add address=172.16.71.97 client-id=1:14:eb:b6:34:bc:88 lease-time=12h \
+    mac-address=14:EB:B6:34:BC:88 server=Lu62ext601
+add address=172.16.13.81 client-id=1:e8:94:f6:f7:2e:4d lease-time=12h \
+    mac-address=E8:94:F6:F7:2E:4D server=shalimova300
+add address=172.16.13.83 client-id=1:0:72:63:41:a0:8 lease-time=12h \
+    mac-address=00:72:63:41:A0:08 server=shalimova300
+add address=172.16.71.70 client-id=1:ec:8:6b:a4:b4:bf lease-time=12h \
+    mac-address=EC:08:6B:A4:B4:BF server=Lu62ext601
+add address=172.16.13.82 client-id=1:10:7b:44:3b:ad:d0 lease-time=12h \
+    mac-address=10:7B:44:3B:AD:D0 server=shalimova300
+add address=172.16.72.18 client-id=1:14:4d:67:30:8a:75 lease-time=12h \
+    mac-address=14:4D:67:30:8A:75 server=Lu62ext601
+add address=172.16.72.33 client-id=1:34:60:f9:c7:46:9c lease-time=12h \
+    mac-address=34:60:F9:C7:46:9C server=Lu62ext601
+add address=172.16.71.109 client-id=1:cc:32:e5:c6:99:2f lease-time=12h \
+    mac-address=CC:32:E5:C6:99:2F server=Lu62ext601
+add address=172.16.13.31 client-id=1:8:ff:24:c6:cd:a4 lease-time=12h \
+    mac-address=08:FF:24:C6:CD:A4 server=shalimova300
+add address=172.16.13.86 client-id=1:68:ff:7b:44:2b:f9 lease-time=12h \
+    mac-address=68:FF:7B:44:2B:F9 server=shalimova300
+add address=172.16.13.54 client-id=1:64:66:b3:12:0:f8 lease-time=12h \
+    mac-address=64:66:B3:12:00:F8 server=shalimova300
+add address=172.16.20.39 client-id=1:b0:be:76:67:2f:9f lease-time=12h \
+    mac-address=B0:BE:76:67:2F:9F server=olt_ext811
+add address=172.16.13.84 client-id=1:18:a6:f7:4:e5:cf lease-time=12h \
+    mac-address=18:A6:F7:04:E5:CF server=shalimova300
+add address=172.16.71.129 client-id=1:ec:41:18:d8:92:ca lease-time=12h \
+    mac-address=EC:41:18:D8:92:CA server=Lu62ext601
+add address=172.16.71.58 client-id=1:5c:92:5e:4b:56:1 lease-time=12h \
+    mac-address=5C:92:5E:4B:56:01 server=Lu62ext601
+add address=172.16.13.85 client-id=1:ec:41:18:1c:4:94 lease-time=12h \
+    mac-address=EC:41:18:1C:04:94 server=shalimova300
+add address=172.16.71.34 client-id=1:78:24:af:e4:be:f8 lease-time=12h \
+    mac-address=78:24:AF:E4:BE:F8 server=Lu62ext601
+add address=172.16.13.77 client-id=1:ac:84:c6:e6:f4:5f lease-time=12h \
+    mac-address=AC:84:C6:E6:F4:5F server=shalimova300
+add address=172.16.71.64 client-id=1:18:3c:b7:5a:5b:27 lease-time=12h \
+    mac-address=18:3C:B7:5A:5B:27 server=Lu62ext601
+add address=172.16.20.12 client-id=1:58:d5:6e:ba:c0:3c lease-time=12h \
+    mac-address=58:D5:6E:BA:C0:3C server=olt_ext811
+add address=172.16.71.24 client-id=1:84:16:f9:47:9:ed lease-time=12h \
+    mac-address=84:16:F9:47:09:ED server=Lu62ext601
+add address=172.16.71.62 client-id=1:10:fe:ed:9e:b8:fd lease-time=12h \
+    mac-address=10:FE:ED:9E:B8:FD server=Lu62ext601
+add address=172.16.20.5 client-id=1:d4:6e:e:f4:37:23 lease-time=12h \
+    mac-address=D4:6E:0E:F4:37:23 server=olt_ext811
+add address=172.16.71.100 client-id=1:70:4f:57:f4:6b:9 lease-time=12h \
+    mac-address=70:4F:57:F4:6B:09 server=Lu62ext601
+add address=172.16.71.110 client-id=1:b0:c:d1:32:e8:90 lease-time=12h \
+    mac-address=B0:0C:D1:32:E8:90 server=Lu62ext601
+add address=172.16.13.88 client-id=1:d8:7:b6:4e:d0:5d lease-time=12h \
+    mac-address=D8:07:B6:4E:D0:5D server=shalimova300
+add address=172.16.71.111 client-id=1:70:4d:7b:d2:60:50 lease-time=12h \
+    mac-address=70:4D:7B:D2:60:50 server=Lu62ext601
+add address=172.16.76.11 client-id=1:50:64:2b:1a:49:b4 lease-time=12h \
+    mac-address=50:64:2B:1A:49:B4 server=BorExt360
+add address=172.16.13.87 client-id=1:10:fe:ed:ed:af:e7 lease-time=12h \
+    mac-address=10:FE:ED:ED:AF:E7 server=shalimova300
+add address=172.16.13.66 client-id=1:b8:69:f4:58:b3:de lease-time=12h \
+    mac-address=B8:69:F4:58:B3:DE server=shalimova300
+add address=172.16.71.127 client-id=1:b0:be:76:7e:d6:c1 lease-time=12h \
+    mac-address=B0:BE:76:7E:D6:C1 server=Lu62ext601
+add address=185.190.150.170 client-id=1:b0:be:76:db:13:d lease-time=12h \
+    mac-address=B0:BE:76:DB:13:0D server=Lu62ext601
+add address=172.16.72.7 client-id=1:c4:71:54:50:ff:b3 lease-time=12h \
+    mac-address=C4:71:54:50:FF:B3 server=Lu62ext601
+add address=172.16.72.60 client-id=1:0:19:b9:7f:1b:55 lease-time=12h \
+    mac-address=00:19:B9:7F:1B:55 server=Lu62ext601
+add address=172.16.72.56 client-id=1:b0:be:76:22:ff:b lease-time=12h \
+    mac-address=B0:BE:76:22:FF:0B server=Lu62ext601
+add address=172.16.71.47 client-id=1:4c:ed:fb:b2:e0:40 lease-time=12h \
+    mac-address=4C:ED:FB:B2:E0:40 server=Lu62ext601
+add address=172.16.72.16 client-id=1:1c:3b:f3:3a:f6:b2 lease-time=12h \
+    mac-address=1C:3B:F3:3A:F6:B2 server=Lu62ext601
+add address=172.16.13.70 client-id=1:84:16:f9:53:76:f5 lease-time=12h \
+    mac-address=84:16:F9:53:76:F5 server=shalimova300
+add address=172.16.71.29 client-id=1:3c:84:6a:54:83:5d lease-time=12h \
+    mac-address=3C:84:6A:54:83:5D server=Lu62ext601
+add address=172.16.13.47 client-id=1:b0:be:76:da:f2:1 lease-time=12h \
+    mac-address=B0:BE:76:DA:F2:01 server=shalimova300
+add address=172.16.13.72 client-id=1:50:f:f5:33:e1:e9 lease-time=12h \
+    mac-address=50:0F:F5:33:E1:E9 server=shalimova300
+add address=172.16.20.47 client-id=1:50:eb:f6:5f:c5:28 lease-time=12h \
+    mac-address=50:EB:F6:5F:C5:28 server=olt_ext811
+add address=172.16.13.91 client-id=1:d0:f3:f5:50:b6:a3 lease-time=12h \
+    mac-address=D0:F3:F5:50:B6:A3 server=shalimova300
+add address=172.16.13.90 client-id=1:90:9a:4a:c0:6:db lease-time=12h \
+    mac-address=90:9A:4A:C0:06:DB server=shalimova300
+add address=172.16.71.89 client-id=1:50:d2:f5:b9:7d:ee lease-time=12h \
+    mac-address=50:D2:F5:B9:7D:EE server=Lu62ext601
+add address=172.16.20.66 client-id=1:f0:b4:d2:18:1:7e lease-time=12h \
+    mac-address=F0:B4:D2:18:01:7E server=olt_ext811
+add address=172.16.72.57 client-id=1:14:4d:67:b1:5e:f1 lease-time=12h \
+    mac-address=14:4D:67:B1:5E:F1 server=Lu62ext601
+add address=172.16.20.42 client-id=1:3c:cd:57:51:77:e4 lease-time=12h \
+    mac-address=3C:CD:57:51:77:E4 server=olt_ext811
+add address=172.16.20.22 client-id=1:5c:92:5e:73:fb:21 lease-time=12h \
+    mac-address=5C:92:5E:73:FB:21 server=olt_ext811
+add address=172.16.20.43 client-id=1:38:6b:1c:cc:79:ed lease-time=12h \
+    mac-address=38:6B:1C:CC:79:ED server=olt_ext811
+add address=172.16.13.98 client-id=1:a4:2b:b0:a8:ad:a5 lease-time=12h \
+    mac-address=A4:2B:B0:A8:AD:A5 server=shalimova300
+add address=172.16.13.95 client-id=1:50:d2:f5:9b:c:b7 lease-time=12h \
+    mac-address=50:D2:F5:9B:0C:B7 server=shalimova300
+add address=172.16.13.92 client-id=1:1c:3b:f3:db:ee:7b lease-time=12h \
+    mac-address=1C:3B:F3:DB:EE:7B server=shalimova300
+add address=185.253.216.38 client-id=1:a0:ce:c8:e:35:1d lease-time=12h \
+    mac-address=A0:CE:C8:0E:35:1D server=shalimova300
+add address=172.16.13.94 client-id=1:10:fe:ed:41:5a:cd lease-time=12h \
+    mac-address=10:FE:ED:41:5A:CD server=shalimova300
+add address=172.16.13.43 client-id=1:10:c3:7b:43:81:70 lease-time=12h \
+    mac-address=10:C3:7B:43:81:70 server=shalimova300
+add address=172.16.76.13 client-id=1:a0:f3:c1:89:b9:37 lease-time=12h \
+    mac-address=A0:F3:C1:89:B9:37 server=BorExt360
+add address=172.16.71.78 client-id=1:40:ee:15:1a:ab:49 lease-time=12h \
+    mac-address=40:EE:15:1A:AB:49 server=Lu62ext601
+add address=172.16.20.81 client-id=1:5c:92:5e:8a:c:89 lease-time=12h \
+    mac-address=5C:92:5E:8A:0C:89 server=olt_ext811
+add address=172.16.13.102 client-id=1:e8:48:b8:c5:64:24 lease-time=12h \
+    mac-address=E8:48:B8:C5:64:24 server=shalimova300
+add address=185.253.216.39 client-id=1:a4:2b:b0:f2:ea:fe lease-time=12h \
+    mac-address=A4:2B:B0:F2:EA:FE server=shalimova300
+add address=172.16.13.103 client-id=1:d4:6e:e:25:d5:2b lease-time=12h \
+    mac-address=D4:6E:0E:25:D5:2B server=shalimova300
+add address=172.16.13.104 client-id=1:70:4f:57:f8:9b:66 lease-time=12h \
+    mac-address=70:4F:57:F8:9B:66 server=shalimova300
+add address=172.16.13.105 client-id=1:10:fe:ed:92:a5:5d lease-time=12h \
+    mac-address=10:FE:ED:92:A5:5D server=shalimova300
+add address=172.16.13.106 client-id=1:7c:8b:ca:82:50:77 lease-time=12h \
+    mac-address=7C:8B:CA:82:50:77 server=shalimova300
+add address=172.16.13.107 client-id=1:7c:8b:ca:d1:af:5b lease-time=12h \
+    mac-address=7C:8B:CA:D1:AF:5B server=shalimova300
+add address=172.16.13.93 client-id=1:b0:4e:26:a4:48:d7 lease-time=12h \
+    mac-address=B0:4E:26:A4:48:D7 server=shalimova300
+add address=172.16.71.4 client-id=1:4:95:e6:63:2a:28 lease-time=12h \
+    mac-address=04:95:E6:63:2A:28 server=Lu62ext601
+add address=172.16.20.7 client-id=1:5c:78:f8:4a:6:26 lease-time=12h \
+    mac-address=5C:78:F8:4A:06:26 server=olt_ext811
+add address=172.16.13.100 client-id=1:2c:56:dc:9e:94:78 lease-time=12h \
+    mac-address=2C:56:DC:9E:94:78 server=shalimova300
+add address=172.16.71.112 client-id=1:88:c3:97:ec:f0:59 lease-time=12h \
+    mac-address=88:C3:97:EC:F0:59 server=Lu62ext601
+add address=172.16.71.108 client-id=1:90:9a:4a:80:94:87 lease-time=12h \
+    mac-address=90:9A:4A:80:94:87 server=Lu62ext601
+add address=172.16.20.23 client-id=1:50:f:f5:91:8a:90 lease-time=12h \
+    mac-address=50:0F:F5:91:8A:90 server=olt_ext811
+add address=172.16.13.109 client-id=1:34:60:f9:6c:44:77 lease-time=12h \
+    mac-address=34:60:F9:6C:44:77 server=shalimova300
+add address=172.16.20.68 client-id=1:38:6b:1c:43:73:28 lease-time=12h \
+    mac-address=38:6B:1C:43:73:28 server=olt_ext811
+add address=172.16.13.112 client-id=1:14:cc:20:b:5:4b lease-time=12h \
+    mac-address=14:CC:20:0B:05:4B server=shalimova300
+add address=172.16.13.101 lease-time=12h mac-address=9C:9D:7E:31:D0:11 \
+    server=shalimova300
+add address=172.16.13.108 client-id=1:9c:9d:7e:81:58:81 lease-time=12h \
+    mac-address=9C:9D:7E:81:58:81 server=shalimova300
+add address=172.16.13.113 client-id=1:c4:71:54:c3:9f:1f lease-time=12h \
+    mac-address=C4:71:54:C3:9F:1F server=shalimova300
+add address=172.16.71.113 client-id=1:c8:3a:35:2e:a1:c0 lease-time=12h \
+    mac-address=C8:3A:35:2E:A1:C0 server=Lu62ext601
+add address=172.16.13.99 client-id=1:4:92:26:cb:1c:c lease-time=12h \
+    mac-address=04:92:26:CB:1C:0C server=shalimova300
+add address=172.16.13.80 client-id=1:40:b0:76:4f:95:74 lease-time=12h \
+    mac-address=40:B0:76:4F:95:74 server=shalimova300
+add address=172.16.71.25 client-id=1:d4:6e:e:bc:32:4b lease-time=12h \
+    mac-address=D4:6E:0E:BC:32:4B server=Lu62ext601
+add address=172.16.13.73 client-id=1:64:ee:b7:51:6d:91 lease-time=12h \
+    mac-address=64:EE:B7:51:6D:91 server=shalimova300
+add address=185.253.216.36 lease-time=12h mac-address=74:DA:38:C2:73:D3 \
+    server=shalimova300
+add address=172.16.71.115 client-id=1:9c:a2:f4:1a:73:ef lease-time=12h \
+    mac-address=9C:A2:F4:1A:73:EF server=Lu62ext601
+add address=172.16.13.115 client-id=1:84:16:f9:c6:fc:9f lease-time=12h \
+    mac-address=84:16:F9:C6:FC:9F server=shalimova300
+add address=172.16.13.114 client-id=1:c8:3a:35:9:4b:78 lease-time=12h \
+    mac-address=C8:3A:35:09:4B:78 server=shalimova300
+add address=172.16.13.116 client-id=1:d8:7:b6:50:76:df lease-time=12h \
+    mac-address=D8:07:B6:50:76:DF server=shalimova300
+add address=172.16.71.116 client-id=1:b0:4e:26:b6:22:1c lease-time=12h \
+    mac-address=B0:4E:26:B6:22:1C server=Lu62ext601
+add address=172.16.13.117 client-id=1:c0:25:e9:e7:a6:15 lease-time=12h \
+    mac-address=C0:25:E9:E7:A6:15 server=shalimova300
+add address=172.16.13.118 client-id=1:10:fe:ed:41:61:93 lease-time=12h \
+    mac-address=10:FE:ED:41:61:93 server=shalimova300
+add address=172.16.13.119 client-id=1:50:c7:bf:c1:ab:29 lease-time=12h \
+    mac-address=50:C7:BF:C1:AB:29 server=shalimova300
+add address=172.16.20.51 client-id=1:5c:92:5e:89:34:21 lease-time=12h \
+    mac-address=5C:92:5E:89:34:21 server=olt_ext811
+add address=172.16.13.120 client-id=1:28:87:ba:4f:36:7c lease-time=12h \
+    mac-address=28:87:BA:4F:36:7C server=shalimova300
+add address=172.16.20.67 client-id=1:20:1a:6:d3:11:bf lease-time=12h \
+    mac-address=20:1A:06:D3:11:BF server=olt_ext811
+add address=172.16.13.121 client-id=1:28:d1:27:cc:8a:32 lease-time=12h \
+    mac-address=28:D1:27:CC:8A:32 server=shalimova300
+add address=172.16.13.50 client-id=1:b4:b0:24:f4:27:31 lease-time=12h \
+    mac-address=B4:B0:24:F4:27:31 server=shalimova300
+add address=172.16.71.119 client-id=1:1c:61:b4:5d:20:5a lease-time=12h \
+    mac-address=1C:61:B4:5D:20:5A server=Lu62ext601
+add address=172.16.13.75 lease-time=12h mac-address=24:CF:24:C4:8C:82 server=\
+    shalimova300
+add address=172.16.71.118 client-id=1:84:d8:1b:27:bb:5e lease-time=12h \
+    mac-address=84:D8:1B:27:BB:5E server=Lu62ext601
+add address=172.16.71.117 client-id=1:1c:bd:b9:94:f2:8e lease-time=12h \
+    mac-address=1C:BD:B9:94:F2:8E server=Lu62ext601
+add address=172.16.71.87 client-id=1:14:eb:b6:8d:fc:2d lease-time=12h \
+    mac-address=14:EB:B6:8D:FC:2D server=Lu62ext601
+add address=172.16.13.122 client-id=1:7c:76:68:ab:1c:da lease-time=12h \
+    mac-address=7C:76:68:AB:1C:DA server=shalimova300
+add address=172.16.13.123 client-id=1:2c:c8:1b:f8:5d:84 lease-time=12h \
+    mac-address=2C:C8:1B:F8:5D:84 server=shalimova300
+add address=172.16.71.121 client-id=1:a0:b3:cc:77:c7:79 lease-time=12h \
+    mac-address=A0:B3:CC:77:C7:79 server=Lu62ext601
+add address=172.16.13.125 client-id=1:70:4f:57:6a:49:43 lease-time=12h \
+    mac-address=70:4F:57:6A:49:43 server=shalimova300
+add address=172.16.71.122 client-id=1:60:e3:27:a5:22:29 lease-time=12h \
+    mac-address=60:E3:27:A5:22:29 server=Lu62ext601
+add address=172.16.13.124 client-id=1:c:37:96:b:f7:99 lease-time=12h \
+    mac-address=0C:37:96:0B:F7:99 server=shalimova300
+add address=172.16.71.52 client-id=1:74:da:88:a1:f7:cb lease-time=12h \
+    mac-address=74:DA:88:A1:F7:CB server=Lu62ext601
+add address=172.16.13.35 client-id=1:cc:2d:e0:c4:26:e6 lease-time=12h \
+    mac-address=CC:2D:E0:C4:26:E6 server=shalimova300
+add address=172.16.20.69 client-id=1:28:ee:52:69:63:ff lease-time=12h \
+    mac-address=28:EE:52:69:63:FF server=olt_ext811
+add address=172.16.20.79 client-id=1:cc:32:e5:d7:3e:69 lease-time=12h \
+    mac-address=CC:32:E5:D7:3E:69 server=olt_ext811
+add address=172.16.71.124 client-id=1:b0:be:76:87:7e:17 lease-time=12h \
+    mac-address=B0:BE:76:87:7E:17 server=Lu62ext601
+add address=172.16.20.36 client-id=1:b0:be:76:56:d1:53 lease-time=12h \
+    mac-address=B0:BE:76:56:D1:53 server=olt_ext811
+add address=172.16.71.77 client-id=1:4:95:e6:96:ed:80 lease-time=12h \
+    mac-address=04:95:E6:96:ED:80 server=Lu62ext601
+add address=172.16.71.75 client-id=1:1c:61:b4:82:6f:b7 lease-time=12h \
+    mac-address=1C:61:B4:82:6F:B7 server=Lu62ext601
+add address=172.16.13.96 client-id=1:50:d4:f7:ee:3d:8c lease-time=12h \
+    mac-address=50:D4:F7:EE:3D:8C server=shalimova300
+add address=172.16.13.126 client-id=1:d4:6e:e:50:3:25 lease-time=12h \
+    mac-address=D4:6E:0E:50:03:25 server=shalimova300
+/ip dhcp-server network
+add address=10.1.1.0/24 gateway=10.1.1.1
+add address=10.31.10.0/24 dns-server=8.8.8.8,1.1.1.1 gateway=10.31.10.1
+add address=10.33.10.0/24 dns-server=8.8.8.8,1.1.1.1 gateway=10.33.10.1
+add address=10.36.10.0/24 dns-server=8.8.8.8,1.1.1.1 gateway=10.36.10.1
+add address=10.37.10.0/24 dns-server=8.8.8.8,1.1.1.1 gateway=10.37.10.1
+add address=10.38.10.0/24 dns-server=8.8.8.8,1.1.1.1 gateway=10.38.10.1
+add address=10.56.56.0/24 gateway=10.56.56.1
+add address=172.16.1.0/24 gateway=172.16.1.1
+add address=172.16.2.0/24 gateway=172.16.2.1
+add address=172.16.3.0/24 gateway=172.16.3.1
+add address=172.16.4.0/24 gateway=172.16.4.1
+add address=172.16.13.0/24 gateway=172.16.13.1
+add address=172.16.20.0/24 gateway=172.16.20.1
+add address=172.16.71.0/24 gateway=172.16.71.1
+add address=172.16.72.0/24 gateway=172.16.72.1
+add address=172.16.76.0/24 gateway=172.16.76.1
+add address=172.16.254.0/24 gateway=172.16.254.1
+add address=172.17.1.0/24 gateway=172.17.1.1
+add address=172.17.2.0/24 gateway=172.17.2.1
+add address=185.190.150.0/27 gateway=185.190.150.1
+add address=185.190.150.32/27 gateway=185.190.150.33
+add address=185.190.150.160/27 gateway=185.190.150.161
+add address=185.190.150.192/28 gateway=185.190.150.193
+add address=185.253.216.32/27 gateway=185.253.216.33
+add address=185.253.216.64/28 gateway=185.253.216.65
+/ip dns
+set servers=8.8.8.8,1.1.1.1,185.190.150.2,195.12.59.1
+/ip dns static
+add address=185.190.150.7 name=service.golden.net.ua
+/ip firewall address-list
+add address=speedtest.net list=AllowFake
+add address=www.privat24.ua list=AllowFake
+add address=privatbank.ua list=AllowFake
+add address=p24.privatbank.ua list=AllowFake
+add address=www.monobank.com.ua list=AllowFake
+add address=city24.ua list=AllowFake
+add address=easypay.ua list=AllowFake
+add address=8.8.8.8 list=AllowFake
+add address=www.liqpay.ua list=AllowFake
+add address=ligpay.ua list=AllowFake
+add address=golden.net.ua list=AllowFake
+add address=habr.com list=AllowFake
+add address=www.monobank.ua list=AllowFake
+add address=fonts.google.com list=AllowFake
+add address=next.privat24.ua list=AllowFake
+add address=1.1.1.1 list=AllowFake
+add address=fonts.googleapis.com list=AllowFake
+add address=maps.googleapis.com list=AllowFake
+add address=ajax.googleapis.com list=AllowFake
+add address=176.36.86.10 list=AllowPing
+add address=37.17.247.23 list=AllowPing
+add address=185.190.149.134 list=AllowPing
+add address=185.190.150.7 list=AllowPing
+add address=176.36.86.10 list=AllowWB
+add address=37.17.247.23 list=AllowWB
+add address=185.190.150.8 list=AllowWB
+add address=185.190.150.77 list=AllowWB
+add address=185.190.149.134 list=AllowWB
+add address=172.16.9.0/24 list=AllowWB
+add address=185.190.150.7 list=AllowWB
+add address=30.30.0.0/24 list=AllowWB
+add address=8.8.8.8 list=AllowPing
+add address=185.190.150.8 list=AllowPing
+add address=37.57.212.3 list=AllowPing
+add address=176.36.0.0/16 list=SipGoldeNet
+add address=37.17.247.23 comment=AndreyHome list=SipGoldeNet
+add address=185.190.150.0/24 list=SipGoldeNet
+add address=185.190.150.15 list=GoldeSipServer
+add address=185.190.150.17 list=GoldeSipServer
+add address=185.190.150.10 list=AllowWB
+add address=185.253.216.0/24 list=SipGoldeNet
+add address=46.211.0.0/16 comment=KyivstarOdessa list=SipGoldeNet
+add address=1.1.1.1 list=SipGoldeNet
+add address=8.8.8.8 list=SipGoldeNet
+add address=176.36.9.102 list=SipGoldeNet
+add address=188.231.213.134 disabled=yes list=AllowWB
+add address=5.248.0.0/16 comment=KyivstarOdessa list=SipGoldeNet
+add address=37.115.0.0/16 comment=KyivstarOdessa list=SipGoldeNet
+add address=37.229.0.0/16 comment=KyivstarOdessa list=SipGoldeNet
+add address=46.118.0.0/15 comment=KyivstarOdessa list=SipGoldeNet
+add address=46.185.0.0/17 comment=KyivstarOdessa list=SipGoldeNet
+add address=37.73.0.0/16 comment=Life list=SipGoldeNet
+add address=46.96.0.0/16 comment=Life list=SipGoldeNet
+add address=88.154.0.0/15 comment=Life list=SipGoldeNet
+add address=46.211.48.123 list=SipGoldeNet
+add address=94.153.0.0/19 list=SipGoldeNet
+add address=185.190.150.19 list=AllowWB
+add address=10.31.10.0/24 list=DropFake
+add address=10.32.10.0/24 list=DropFake
+add address=10.33.10.0/24 list=DropFake
+add address=10.34.10.0/24 list=DropFake
+add address=10.35.10.0/24 list=DropFake
+add address=10.36.10.0/24 list=DropFake
+add address=10.37.10.0/24 list=DropFake
+add address=185.190.150.20 list=AllowWB
+add address=185.190.150.4 list=AllowPing
+add address=1.1.1.1 list=AllowPing
+add address=8.8.8.8 list=AllowWB
+add address=91.202.104.0/22 comment=lesya-znet list=SipGoldeNet
+add address=194.42.112.0/23 comment=borova.net.ua list=SipGoldeNet
+add address=178.94.166.174 list=SipGoldeNet
+add address=95.132.0.0/15 list=SipGoldeNet
+add address=176.122.105.30 comment="Ukraine telecommunication group" list=\
+    SipGoldeNet
+add address=178.54.128.0/17 comment="BCM bcm.net.ua" list=SipGoldeNet
+add address=185.190.150.25 list=AllowWB
+add address=5.183.200.32 list=AllowWB
+add address=194.150.233.68 list=AllowWB
+add address=31.43.130.97 list=SipGoldeNet
+add address=security.ubuntu.com comment=UBUNTU list=SipGoldeNet
+add address=archive.ubuntu.com comment=UBUNTU list=SipGoldeNet
+add address=176.36.188.126 comment=DimaSIp list=SipGoldeNet
+add address=194.150.233.68 comment=Andrey list=SipGoldeNet
+add address=185.190.150.5 list=AllowWB
+add address=googleapis.com list=AllowFake
+add address=fonts.gstatic.com list=AllowFake
+add address=cdn.datatables.net list=AllowFake
+add address=176.105.201.12 list=AllowWB
+add address=176.105.201.12 list=SipGoldeNet
+add address=176.105.192.0/19 list=SipGoldeNet
+add address=176.105.192.0/19 list=AllowWB
+add address=88.210.48.0/24 comment=webmoney list=uablacklist
+add address=212.118.56.0/24 comment=webmoney list=uablacklist
+add address=90.156.201.90 comment=webmoney list=uablacklist
+add address=90.156.201.78 comment=webmoney list=uablacklist
+add address=172.67.154.50 comment=webmoney list=uablacklist
+add address=212.118.48.0/21 comment=webmoney list=uablacklist
+add address=88.210.56.0/23 comment=webmoney list=uablacklist
+add address=90.156.201.32 comment=webmoney list=uablacklist
+add address=212.118.32.0/20 comment=webmoney list=uablacklist
+add address=195.177.205.0/24 comment=webmoney list=uablacklist
+add address=88.210.52.0/22 comment=webmoney list=uablacklist
+add address=89.222.152.0/21 comment=webmoney list=uablacklist
+add address=195.208.1.138 comment=webmoney list=uablacklist
+add address=172.67.70.202 comment=webmoney list=uablacklist
+add address=89.20.144.0/21 comment=webmoney list=uablacklist
+add address=185.76.252.0/22 comment=webmoney list=uablacklist
+add address=104.26.1.86 comment=webmoney list=uablacklist
+add address=185.196.68.45 comment=webmoney list=uablacklist
+add address=104.26.0.86 comment=webmoney list=uablacklist
+add address=54.38.167.251 comment=webmoney list=uablacklist
+add address=88.210.50.0/24 comment=webmoney list=uablacklist
+add address=85.192.48.0/21 comment=webmoney list=uablacklist
+add address=212.118.60.0/24 comment=webmoney list=uablacklist
+add address=91.200.28.0/22 comment=webmoney list=uablacklist
+add address=88.210.34.0/23 comment=webmoney list=uablacklist
+add address=194.88.208.0/23 comment=webmoney list=uablacklist
+add address=91.227.52.0/23 comment=webmoney list=uablacklist
+add address=89.184.68.152 comment=webmoney list=uablacklist
+add address=88.210.44.0/22 comment=webmoney list=uablacklist
+add address=62.122.170.171 comment=webmoney list=uablacklist
+add address=91.217.153.39 comment=webmoney list=uablacklist
+add address=178.172.255.39 comment=webmoney list=uablacklist
+add address=88.210.40.0/22 comment=webmoney list=uablacklist
+add address=91.228.155.53 comment=webmoney list=uablacklist
+add address=145.239.95.188 comment=webmoney list=uablacklist
+add address=192.88.99.0/24 comment=webmoney list=uablacklist
+add address=51.254.201.70 comment=webmoney list=uablacklist
+add address=104.21.4.150 comment=webmoney list=uablacklist
+add address=94.143.52.0/22 comment=webmoney list=uablacklist
+add address=90.156.201.109 comment=webmoney list=uablacklist
+add address=217.182.78.61 comment=webmoney list=uablacklist
+add address=95.142.192.0/20 comment=vk list=uablacklist
+add address=79.137.164.0/24 comment=vk list=uablacklist
+add address=185.29.130.0/24 comment=vk list=uablacklist
+add address=5.181.61.0/24 comment=vk list=uablacklist
+add address=87.240.128.0/18 comment=vk list=uablacklist
+add address=79.137.183.0/24 comment=vk list=uablacklist
+add address=185.32.248.0/22 comment=vk list=uablacklist
+add address=79.137.139.0/24 comment=vk list=uablacklist
+add address=95.213.0.0/17 comment=vk list=uablacklist
+add address=93.186.224.0/21 comment=vk list=uablacklist
+add address=195.211.22.0/24 comment=vk list=uablacklist
+add address=79.137.180.0/24 comment=vk list=uablacklist
+add address=93.186.232.0/21 comment=vk list=uablacklist
+add address=217.20.144.0/20 comment=mail.ru list=uablacklist
+add address=45.84.128.0/22 comment=mail.ru list=uablacklist
+add address=185.5.136.0/22 comment=mail.ru list=uablacklist
+add address=146.185.240.0/22 comment=mail.ru list=uablacklist
+add address=213.219.212.0/22 comment=mail.ru list=uablacklist
+add address=45.136.20.0/22 comment=mail.ru list=uablacklist
+add address=146.185.208.0/22 comment=mail.ru list=uablacklist
+add address=89.208.84.0/22 comment=mail.ru list=uablacklist
+add address=195.211.20.0/22 comment=mail.ru list=uablacklist
+add address=94.100.176.0/20 comment=mail.ru list=uablacklist
+add address=195.218.168.0/24 comment=mail.ru list=uablacklist
+add address=195.218.190.0/23 comment=mail.ru list=uablacklist
+add address=79.137.157.0/24 comment=mail.ru list=uablacklist
+add address=208.87.94.0/24 comment=mail.ru list=uablacklist
+add address=128.140.168.0/21 comment=mail.ru list=uablacklist
+add address=89.208.228.0/22 comment=mail.ru list=uablacklist
+add address=178.237.16.0/20 comment=mail.ru list=uablacklist
+add address=5.101.40.0/22 comment=mail.ru list=uablacklist
+add address=185.6.244.0/22 comment=mail.ru list=uablacklist
+add address=109.120.180.0/22 comment=mail.ru list=uablacklist
+add address=5.61.232.0/21 comment=mail.ru list=uablacklist
+add address=95.163.208.0/21 comment=mail.ru list=uablacklist
+add address=109.120.188.0/22 comment=mail.ru list=uablacklist
+add address=185.16.148.0/22 comment=mail.ru list=uablacklist
+add address=208.87.93.0/24 comment=mail.ru list=uablacklist
+add address=185.86.144.0/22 comment=mail.ru list=uablacklist
+add address=195.211.128.0/22 comment=mail.ru list=uablacklist
+add address=85.192.32.0/22 comment=mail.ru list=uablacklist
+add address=87.239.104.0/21 comment=mail.ru list=uablacklist
+add address=185.187.63.0/24 comment=mail.ru list=uablacklist
+add address=185.226.52.0/22 comment=mail.ru list=uablacklist
+add address=37.139.32.0/22 comment=mail.ru list=uablacklist
+add address=178.22.88.0/21 comment=mail.ru list=uablacklist
+add address=193.203.40.0/22 comment=mail.ru list=uablacklist
+add address=95.163.216.0/22 comment=mail.ru list=uablacklist
+add address=89.208.208.0/22 comment=mail.ru list=uablacklist
+add address=185.241.192.0/22 comment=mail.ru list=uablacklist
+add address=84.23.52.0/22 comment=mail.ru list=uablacklist
+add address=217.174.188.0/22 comment=mail.ru list=uablacklist
+add address=217.69.128.0/20 comment=mail.ru list=uablacklist
+add address=89.208.216.0/23 comment=mail.ru list=uablacklist
+add address=79.137.174.0/23 comment=mail.ru list=uablacklist
+add address=185.16.244.0/22 comment=mail.ru list=uablacklist
+add address=5.188.140.0/22 comment=mail.ru list=uablacklist
+add address=5.61.16.0/21 comment=mail.ru list=uablacklist
+add address=188.93.56.0/21 comment=mail.ru list=uablacklist
+add address=95.163.180.0/22 comment=mail.ru list=uablacklist
+add address=185.100.104.0/22 comment=mail.ru list=uablacklist
+add address=194.186.63.0/24 comment=mail.ru list=uablacklist
+add address=95.163.248.0/21 comment=mail.ru list=uablacklist
+add address=89.208.196.0/22 comment=mail.ru list=uablacklist
+add address=79.137.240.0/21 comment=mail.ru list=uablacklist
+add address=89.208.220.0/22 comment=mail.ru list=uablacklist
+add address=95.163.32.0/19 comment=mail.ru list=uablacklist
+add address=37.139.40.0/22 comment=mail.ru list=uablacklist
+add address=185.16.8.0/22 comment=mail.ru list=uablacklist
+add address=62.217.160.0/20 comment=mail.ru list=uablacklist
+add address=79.137.142.0/24 comment=mail.ru list=uablacklist
+add address=5.181.60.0/22 comment=mail.ru list=uablacklist
+add address=185.130.112.0/22 comment=mail.ru list=uablacklist
+add address=208.87.95.0/24 comment=mail.ru list=uablacklist
+add address=94.139.244.0/22 comment=mail.ru list=uablacklist
+add address=185.54.220.0/24 comment=kaspersky list=uablacklist
+add address=185.54.223.0/24 comment=kaspersky list=uablacklist
+add address=185.54.222.0/24 comment=kaspersky list=uablacklist
+add address=185.85.15.0/24 comment=kaspersky list=uablacklist
+add address=185.85.14.0/24 comment=kaspersky list=uablacklist
+add address=91.103.64.0/21 comment=kaspersky list=uablacklist
+add address=185.85.11.0/24 comment=kaspersky list=uablacklist
+add address=103.167.170.0/23 comment=kaspersky list=uablacklist
+add address=185.85.12.0/24 comment=kaspersky list=uablacklist
+add address=82.202.184.0/23 comment=kaspersky list=uablacklist
+add address=185.54.221.0/24 comment=kaspersky list=uablacklist
+add address=93.159.224.0/21 comment=kaspersky list=uablacklist
+add address=185.85.10.0/24 comment=kaspersky list=uablacklist
+add address=77.74.176.0/21 comment=kaspersky list=uablacklist
+add address=194.85.20.0/24 comment=drweb list=uablacklist
+add address=195.88.252.0/23 comment=drweb list=uablacklist
+add address=178.248.232.183 comment=drweb list=uablacklist
+add address=194.58.112.174 comment=yandex list=uablacklist
+add address=87.250.224.0/19 comment=yandex list=uablacklist
+add address=185.32.184.0/23 comment=yandex list=uablacklist
+add address=77.75.152.0/21 comment=yandex list=uablacklist
+add address=185.71.76.0/22 comment=yandex list=uablacklist
+add address=178.154.128.0/19 comment=yandex list=uablacklist
+add address=90.156.177.0/24 comment=yandex list=uablacklist
+add address=77.87.192.18 comment=yandex list=uablacklist
+add address=80.239.201.76 comment=yandex list=uablacklist
+add address=5.45.192.0/18 comment=yandex list=uablacklist
+add address=5.255.192.0/18 comment=yandex list=uablacklist
+add address=209.99.40.222 comment=yandex list=uablacklist
+add address=109.235.160.0/21 comment=yandex list=uablacklist
+add address=149.5.244.47 comment=yandex list=uablacklist
+add address=91.239.233.254 comment=yandex list=uablacklist
+add address=100.43.64.0/19 comment=yandex list=uablacklist
+add address=199.21.96.0/22 comment=yandex list=uablacklist
+add address=141.8.128.0/18 comment=yandex list=uablacklist
+add address=178.154.160.0/19 comment=yandex list=uablacklist
+add address=77.88.0.0/18 comment=yandex list=uablacklist
+add address=213.180.192.0/19 comment=yandex list=uablacklist
+add address=185.32.187.0/24 comment=yandex list=uablacklist
+add address=37.140.128.0/18 comment=yandex list=uablacklist
+add address=37.9.64.0/18 comment=yandex list=uablacklist
+add address=199.36.240.0/22 comment=yandex list=uablacklist
+add address=84.252.160.0/19 comment=yandex list=uablacklist
+add address=185.32.186.0/24 comment=yandex list=uablacklist
+add address=95.108.128.0/17 comment=yandex list=uablacklist
+add address=93.158.128.0/18 comment=yandex list=uablacklist
+add address=90.156.178.0/24 comment=yandex list=uablacklist
+add address=90.156.176.0/24 comment=yandex list=uablacklist
+add address=89.108.90.170 comment=\
+    "Vidkryte aktsionerne tovarystvo \"Pershyj kanal. Vsesvitnja merezha\"" \
+    list=uablacklist
+add address=89.108.123.53 comment=\
+    "Vidkryte aktsionerne tovarystvo \"Pershyj kanal. Vsesvitnja merezha\"" \
+    list=uablacklist
+add address=178.248.233.188 comment=\
+    "Aktsionerne tovarystvo \"Pershyj kanal\"" list=uablacklist
+add address=212.110.158.160 comment=\
+    "Avtonomna nekomertsijna orhanizatsija \"Teleradiokompanija \"Krym\"" \
+    list=uablacklist
+add address=151.236.80.10 comment=5_tv list=uablacklist
+add address=94.23.103.5 comment=ArgoCasino list=uablacklist
+add address=195.3.246.75 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=95.173.145.58 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=194.226.26.19 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.50 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=95.173.128.111 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.208 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=37.230.252.84 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.110.158.41 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=194.67.71.61 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=193.47.33.140 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.200 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=136.243.66.123 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=178.21.13.3 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=213.59.160.45 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=194.58.88.119 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.9 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=81.177.103.94 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=188.114.96.7 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=95.173.157.61 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=81.177.140.32 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=104.21.92.68 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=2.63.150.66 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.204 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=82.202.189.119 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=45.80.69.75 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=195.208.1.111 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.110.158.43 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=82.202.224.195 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.207 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=82.202.160.193 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=77.222.40.16 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=31.31.198.193 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.110.158.44 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=188.114.97.7 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=89.108.126.124 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.110.158.42 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=95.173.157.181 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=193.148.44.189 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.195 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.203 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=109.236.89.250 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=81.177.49.6 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=31.31.198.73 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=185.183.174.222 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.8 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=172.67.187.162 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=80.245.112.15 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=109.200.142.64 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=78.155.219.132 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=193.47.166.188 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=79.133.87.8 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=82.202.189.118 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=185.183.174.218 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=45.130.41.14 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.196 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=172.67.168.119 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=46.243.177.103 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=31.31.198.211 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.49 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.199 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=104.21.46.114 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=104.21.70.249 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=172.67.141.4 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=95.173.157.48 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=62.109.2.236 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.31.196.135 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.178.208.146 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=93.157.9.254 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.49.144 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.72.130 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=188.120.242.133 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.168.202 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.26.122.57 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.16.5 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.63.193.103 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.86.175 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.31.196.82 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=188.130.254.8 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.28.24.115 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.65.218 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.53.96.178 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.31.197 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.54.45 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.58.102 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.165.162 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=62.109.4.173 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.218.165 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.26.15.20 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.114.137.26 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.88.86 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.79.12 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=144.76.159.217 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.75.80 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.53.96.249 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.229.235.197 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=188.130.254.158 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=178.154.246.145 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.26.14.20 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.174.83 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.168.175 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.217.145 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=77.222.62.134 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=88.212.251.4 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=188.130.254.14 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=178.35.240.89 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.223.74 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.53.96.24 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.28.108.188 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.71.67.49 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.179.166 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=193.109.247.20 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=45.130.41.7 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.9.147.200 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.58.6 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.178.208.137 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.78.191 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.104.248.60 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=87.236.16.171 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=87.236.16.249 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.53.96.124 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.75.83 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=46.4.89.218 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.26.7.194 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=51.250.24.24 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.195.27.241 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.49.189 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=178.154.232.178 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.58.15 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.26.6.194 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.157.5 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=109.254.249.114 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=37.140.192.112 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.40.202 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.58.78 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=188.127.239.149 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.178.208.158 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.197.144 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=109.254.13.162 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.58.100 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=87.236.16.17 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=45.88.107.38 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=45.130.41.4 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=93.157.9.180 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=5.200.52.28 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.114.138.220 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.223.150 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=151.139.128.11 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.114.138.242 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=46.30.40.98 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=154.36.140.114 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.104.45.89 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=178.33.183.157 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=37.140.192.239 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.31.196.208 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=5.101.127.9 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.46.171 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.52.92 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.136.160 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.28.108.74 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.193.105 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=87.236.16.112 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=193.238.75.217 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.9.147.250 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.53.118.140 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=212.66.32.66 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=178.35.228.47 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=87.236.16.230 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.178.208.185 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.114.136.60 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=93.157.9.182 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.59.78 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=212.66.37.43 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=2.57.185.100 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.198 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=87.236.16.9 comment="Pasichnyk Leonid Ivanovych" list=uablacklist
+add address=193.228.160.49 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=91.218.19.28 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=104.21.11.147 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.53 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.162.153 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.162.187 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=185.12.127.58 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=213.159.210.14 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=104.21.13.201 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=172.67.190.102 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=172.67.175.32 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=104.21.36.80 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=178.208.83.18 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=172.67.166.89 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=91.223.118.6 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=142.250.186.97 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=212.8.247.66 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=104.21.56.6 comment="Pasichnyk Leonid Ivanovych" list=uablacklist
+add address=185.26.122.54 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.40 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.161.92 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=195.214.214.106 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=185.30.16.145 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.46 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=91.223.118.250 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=31.31.196.166 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.60 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=104.21.56.97 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=198.54.117.244 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=172.67.157.84 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=92.53.98.191 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=92.63.100.150 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.51 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=195.211.223.14 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=84.201.189.90 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.57 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=172.67.183.190 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=91.214.81.148 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=186.2.163.116 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    Informatsijne ahentstvo \"Anna-n'jus\"" list=uablacklist
+add address=92.119.112.135 comment="Andryeyenko Anatolij Oleksandrovych" \
+    list=uablacklist
+add address=165.232.41.68 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=172.67.151.147 comment="Tovarystvo z obmezhenoju vidpovidal'nistju\
+    \_\"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=185.154.54.11 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=94.198.55.160 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=31.31.198.136 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=87.236.16.63 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=195.208.0.107 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=185.93.110.75 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=104.21.64.144 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=99.83.175.80 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"SKEPTYK\"" list=uablacklist
+add address=199.59.242.150 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"SKEPTYK\"" list=uablacklist
+add address=162.159.130.36 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.198 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=185.165.123.70 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.163 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.150 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.92 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.166 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.105 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.43 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=162.159.133.36 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.202 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.50 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.237 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=79.142.17.142 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.125 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.220 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=87.236.19.238 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.64 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=185.146.1.121 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=104.16.13.16 comment=PartyCasino list=uablacklist
+add address=104.16.12.16 comment=PartyCasino list=uablacklist
+add address=108.165.216.82 comment=casino.redkings list=uablacklist
+add address=108.165.216.174 comment=casino.redkings list=uablacklist
+add address=186.2.163.235 comment="Zakryte aktsionerne tovarystvo \"Redaktsija\
+    \_hazety \"Moskovs'kyj komsomolets'\"" list=uablacklist
+add address=178.248.233.136 comment="Federal'ne derzhavne unitarne pidpryyemst\
+    vo \"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=178.248.233.26 comment="Federal'ne derzhavne unitarne pidpryyemstv\
+    o \"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=178.248.233.32 comment="Federal'ne derzhavne unitarne pidpryyemstv\
+    o \"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=178.248.233.60 comment="Federal'ne derzhavne unitarne pidpryyemstv\
+    o \"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=178.248.232.60 comment="Federal'ne derzhavne unitarne pidpryyemstv\
+    o \"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=195.93.247.69 comment="Federal'ne derzhavne unitarne pidpryyemstvo\
+    \_\"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=23.111.206.128 comment="Tovarystvo z obmezhenoju vidpovidal'nistju\
+    \_\"Informatsijna platforma Krympres\"" list=uablacklist
+add address=82.148.20.65 comment="Telekanaly \"RTR-Planeta\", informatsijnyj k\
+    anal \"Rosija-24\", jaki vkhodjat' do struktury Federal'noho derzhavnoho u\
+    nitarnoho pidpryyemstva \"Vserosijs'ka derzhavna televizijna i radiomovna \
+    kompanija\"" list=uablacklist
+add address=80.247.32.208 comment="Telekanaly \"RTR-Planeta\", informatsijnyj \
+    kanal \"Rosija-24\", jaki vkhodjat' do struktury Federal'noho derzhavnoho \
+    unitarnoho pidpryyemstva \"Vserosijs'ka derzhavna televizijna i radiomovna\
+    \_kompanija\"" list=uablacklist
+add address=172.67.208.242 comment="Zakharchenko Oleksandr Volodymyrovych" \
+    list=uablacklist
+add address=209.126.84.110 comment="Zakharchenko Oleksandr Volodymyrovych" \
+    list=uablacklist
+add address=104.21.58.219 comment="Zakharchenko Oleksandr Volodymyrovych" \
+    list=uablacklist
+add address=185.114.138.221 comment="Zakharchenko Oleksandr Volodymyrovych" \
+    list=uablacklist
+add address=185.53.177.11 comment="Zakharchenko Oleksandr Volodymyrovych" \
+    list=uablacklist
+add address=195.210.46.39 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ERA-MEDIA\"" list=\
+    uablacklist
+add address=89.184.74.30 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ERA-MEDIA\"" list=\
+    uablacklist
+add address=176.126.165.71 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ERA-MEDIA\"" list=\
+    uablacklist
+add address=103.224.212.222 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ERA-MEDIA\"" list=\
+    uablacklist
+add address=172.67.160.12 comment=finbet.bet list=uablacklist
+add address=104.21.9.132 comment=finbet.bet list=uablacklist
+add address=104.26.0.193 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=5.188.118.68 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=172.67.3.106 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=188.114.97.17 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=104.21.3.36 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=104.20.74.219 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=188.114.96.17 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=104.26.1.193 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=172.67.73.42 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=172.67.130.43 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=104.20.73.219 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=81.19.72.2 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=81.19.72.5 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=81.19.72.3 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=81.19.72.1 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=81.19.72.4 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=81.19.72.0 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=109.200.135.13 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Teleradiokompanija ITV\"" \
+    list=uablacklist
+add address=151.248.113.157 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Teleradiokompanija ITV\"" \
+    list=uablacklist
+add address=54.36.225.96 comment=goldfishka68 list=uablacklist
+add address=104.21.13.44 comment="Derzhavna avtonomna ustanova mista Sevastopo\
+    lja \"Sevastopol'skaja teleradyokompanyja\"" list=uablacklist
+add address=195.208.1.100 comment="Derzhavna avtonomna ustanova mista Sevastop\
+    olja \"Sevastopol'skaja teleradyokompanyja\"" list=uablacklist
+add address=172.67.132.151 comment="Derzhavna avtonomna ustanova mista Sevasto\
+    polja \"Sevastopol'skaja teleradyokompanyja\"" list=uablacklist
+add address=82.202.163.4 comment="TOV \"Novinfo\"" list=uablacklist
+add address=94.198.50.57 comment="TOV \"Novinfo\"" list=uablacklist
+add address=152.89.219.221 comment="TOV \"Novinfo\"" list=uablacklist
+add address=94.198.55.45 comment="TOV \"Novinfo\"" list=uablacklist
+add address=94.198.50.178 comment="TOV \"Novinfo\"" list=uablacklist
+add address=185.60.135.10 comment="TOV \"Novinfo\"" list=uablacklist
+add address=87.236.16.113 comment="Aktsionerne tovarystvo \"Inlajn hrup\"" \
+    list=uablacklist
+add address=193.232.152.244 comment="Aktsionerne tovarystvo \"Inlajn hrup\"" \
+    list=uablacklist
+add address=162.144.155.218 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Data Internet\"" list=\
+    uablacklist
+add address=185.178.208.4 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Mul'tymedijnyj informatsijnyj tsentr \"Izvyestija\"" list=uablacklist
+add address=109.235.165.222 comment="Tovarystvo z obmezhenoju vidpovidal'nistj\
+    u Nebankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=185.71.78.17 comment="Tovarystvo z obmezhenoju vidpovidal'nistju N\
+    ebankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=185.4.64.72 comment="Tovarystvo z obmezhenoju vidpovidal'nistju Ne\
+    bankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=185.215.4.0 comment="Tovarystvo z obmezhenoju vidpovidal'nistju Ne\
+    bankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=109.235.165.9 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    Nebankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=185.71.78.222 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    Nebankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=195.208.1.107 comment=\
+    "Asotsiatsija blahodijnoyi dopomohy \"Vzayemodopomoha\"" list=uablacklist
+add address=37.140.192.206 comment="Kartsev Hennadij Oleksandrovych" list=\
+    uablacklist
+add address=178.248.235.122 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Lenta.Ru\"" list=\
+    uablacklist
+add address=188.120.237.198 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Lajt-prynt\"" list=\
+    uablacklist
+add address=103.224.182.208 comment="Starovojtov Volodymyr Anatolijovych" \
+    list=uablacklist
+add address=195.42.165.36 comment="Aktsionerne tovarystvo \"MOSKVA MEDIA\"" \
+    list=uablacklist
+add address=93.174.73.98 comment="Aktsionerne tovarystvo \"MOSKVA MEDIA\"" \
+    list=uablacklist
+add address=195.42.165.44 comment="Aktsionerne tovarystvo \"MOSKVA MEDIA\"" \
+    list=uablacklist
+add address=195.42.165.35 comment="Aktsionerne tovarystvo \"MOSKVA MEDIA\"" \
+    list=uablacklist
+add address=95.213.182.142 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Mehasoft\"" list=\
+    uablacklist
+add address=81.177.143.251 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=172.67.149.226 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=93.125.18.41 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=31.31.196.56 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=195.42.163.240 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=178.210.78.71 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=104.21.88.8 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=81.177.174.9 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=66.212.246.166 comment=gameassists list=uablacklist
+add address=104.16.58.47 comment=partypoker list=uablacklist
+add address=104.16.57.47 comment=partypoker list=uablacklist
+add address=188.124.54.203 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Nashe Radio\"" list=\
+    uablacklist
+add address=94.198.53.49 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Narodni novyny\"" list=\
+    uablacklist
+add address=89.108.110.103 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Narodni novyny\"" list=\
+    uablacklist
+add address=185.253.32.104 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Narodni novyny\"" list=\
+    uablacklist
+add address=188.127.250.84 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Narodni novyny\"" list=\
+    uablacklist
+add address=195.24.64.246 comment=\
+    "Aktsionerne tovarystvo \"Natsional'na media hrupa\"" list=uablacklist
+add address=104.21.88.156 comment=\
+    "Minenkova Anastasija Oleksandrivna ta Chernjak Andrij Ivanovych" list=\
+    uablacklist
+add address=172.67.185.199 comment=\
+    "Minenkova Anastasija Oleksandrivna ta Chernjak Andrij Ivanovych" list=\
+    uablacklist
+add address=185.129.100.135 comment=ntv list=uablacklist
+add address=178.170.171.23 comment=ntvplus list=uablacklist
+add address=75.2.115.196 comment="Pershykov Jurij Oleksandrovych" list=\
+    uablacklist
+add address=195.64.185.10 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"INFORMATsIJNE AHENSTVO \"ONLI N'JuZ\"" list=uablacklist
+add address=5.178.80.46 comment=otr list=uablacklist
+add address=65.9.63.18 comment=play-www.777 list=uablacklist
+add address=65.9.63.48 comment=play-www.777 list=uablacklist
+add address=65.9.63.37 comment=play-www.777 list=uablacklist
+add address=65.9.63.113 comment=play-www.777 list=uablacklist
+add address=94.198.50.226 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Novinfo\"" list=uablacklist
+add address=188.127.226.136 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Novinfo\"" list=uablacklist
+add address=99.86.4.59 comment=primedice list=uablacklist
+add address=99.86.4.125 comment=primedice list=uablacklist
+add address=99.86.4.67 comment=primedice list=uablacklist
+add address=99.86.4.23 comment=primedice list=uablacklist
+add address=109.200.130.38 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Promedia\"" list=\
+    uablacklist
+add address=178.154.208.179 comment=radiovera list=uablacklist
+add address=80.68.253.7 comment=\
+    "Aktsionerne tovarystvo \"Rosbizneskonsaltynh\"" list=uablacklist
+add address=178.248.234.119 comment=\
+    "Aktsionerne tovarystvo \"Rosbizneskonsaltynh\"" list=uablacklist
+add address=185.72.229.7 comment=\
+    "Aktsionerne tovarystvo \"Rosbizneskonsaltynh\"" list=uablacklist
+add address=185.178.208.3 comment=ren list=uablacklist
+add address=82.202.162.43 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=185.253.32.105 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=89.108.110.252 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=188.127.226.94 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=89.108.110.190 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=94.198.50.32 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=195.93.246.234 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Interselekt\"" list=\
+    uablacklist
+add address=186.2.163.31 comment=\
+    "Avtonomna nekomertsijna orhanizatsija \"TV-Novyny\"" list=uablacklist
+add address=176.123.49.42 comment="Federal'ne derzhavne unitarne pidpryyemstvo\
+    \_\"Vserosijs'ka derzhavna televizijna i radiomovna kompanija\"" list=\
+    uablacklist
+add address=80.247.32.206 comment="Federal'ne derzhavne unitarne pidpryyemstvo\
+    \_\"Vserosijs'ka derzhavna televizijna i radiomovna kompanija\"" list=\
+    uablacklist
+add address=178.236.136.126 comment="Avtonomna nekomertsijna orhanizatsija \"V\
+    il'na elektronna entsyklopedija \"Dovidnyk Patriota\"" list=uablacklist
+add address=185.215.4.126 comment="Sharij Anatolij Anatolijovych" list=\
+    uablacklist
+add address=5.188.198.149 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.207 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.90 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=5.188.198.131 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=5.188.198.130 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=5.188.198.148 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.206 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.197 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.72 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.74 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.76 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.86 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.205 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.199 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=5.188.198.147 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.88 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=5.188.198.132 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.198 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=95.213.155.114 comment="Fond vyvchennja istorychnoyi perspektyvy" \
+    list=uablacklist
+add address=88.212.206.75 comment=\
+    "Avtonomna nekomertsijna orhanizatsija  \"Internet-Presa\"" list=\
+    uablacklist
+add address=82.202.190.240 comment="Federal'ne derzhavne unitarne pidpryyemstv\
+    o \"Informatsijne telehrafne ahentstvo Rosiyi (ITAR-TASS)\"" list=\
+    uablacklist
+add address=95.181.203.201 comment="Aktsionerne tovarystvo \"TV Tsentr\"" \
+    list=uablacklist
+add address=80.93.49.35 comment="Aktsionerne tovarystvo \"TV Tsentr\"" list=\
+    uablacklist
+add address=62.210.98.13 comment="Neprybutkova orhanizatsija \"Ofitsijnyj repr\
+    ezentatsijnyj tsentr Donets'koyi narodnoyi respubliky u Frantsiyi\"" \
+    list=uablacklist
+add address=104.16.6.49 comment="Neprybutkova orhanizatsija \"Ofitsijnyj repre\
+    zentatsijnyj tsentr Donets'koyi narodnoyi respubliky u Frantsiyi\"" list=\
+    uablacklist
+add address=195.24.68.21 comment="Neprybutkova orhanizatsija \"Ofitsijnyj repr\
+    ezentatsijnyj tsentr Donets'koyi narodnoyi respubliky u Frantsiyi\"" \
+    list=uablacklist
+add address=217.70.180.131 comment="Neprybutkova orhanizatsija \"Ofitsijnyj re\
+    prezentatsijnyj tsentr Donets'koyi narodnoyi respubliky u Frantsiyi\"" \
+    list=uablacklist
+add address=104.16.7.49 comment="Neprybutkova orhanizatsija \"Ofitsijnyj repre\
+    zentatsijnyj tsentr Donets'koyi narodnoyi respubliky u Frantsiyi\"" list=\
+    uablacklist
+add address=193.232.151.138 comment=tnt list=uablacklist
+add address=178.248.234.76 comment=tvzvezda list=uablacklist
+add address=109.248.237.34 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju  \"Utro.Ru\"" list=\
+    uablacklist
+add address=109.248.237.35 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju  \"Utro.Ru\"" list=\
+    uablacklist
+add address=188.124.39.36 comment=\
+    "Aktsionerne tovarystvo \"Biznes N'jus Media\"" list=uablacklist
+add address=185.91.54.139 comment=\
+    "Aktsionerne tovarystvo \"Biznes N'jus Media\"" list=uablacklist
+add address=176.99.7.29 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Versija\"" list=uablacklist
+add address=92.53.98.198 comment="Aktsionerne tovarystvo \"TRK-3\"" list=\
+    uablacklist
+add address=185.26.122.79 comment="Kholoimov Oleksandr Oleksandrovych" list=\
+    uablacklist
+add address=104.21.69.98 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Media Kontent\"" list=\
+    uablacklist
+add address=172.67.206.251 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Media Kontent\"" list=\
+    uablacklist
+add address=87.226.155.212 comment=\
+    "Publichne aktsionerne tovarystvo \"Rostelekom\"" list=uablacklist
+add address=34.255.25.195 comment=21Casino list=uablacklist
+add address=54.72.153.120 comment=21Casino list=uablacklist
+add address=54.77.62.41 comment=21Casino list=uablacklist
+add address=143.204.215.24 comment=24kcasino list=uablacklist
+add address=143.204.215.68 comment=24kcasino list=uablacklist
+add address=143.204.215.11 comment=24kcasino list=uablacklist
+add address=143.204.215.74 comment=24kcasino list=uablacklist
+add address=104.18.19.26 comment=betchain list=uablacklist
+add address=104.18.18.26 comment=betchain list=uablacklist
+add address=104.18.18.166 comment=bitcoincasino list=uablacklist
+add address=104.18.19.166 comment=bitcoincasino list=uablacklist
+add address=157.245.26.202 comment=Casinotoken list=uablacklist
+add address=104.22.48.165 comment=cloudbet list=uablacklist
+add address=172.67.27.172 comment=cloudbet list=uablacklist
+add address=104.22.49.165 comment=cloudbet list=uablacklist
+add address=104.18.22.206 comment=euslot list=uablacklist
+add address=104.18.23.206 comment=euslot list=uablacklist
+add address=104.18.2.179 comment=fastpay-casino list=uablacklist
+add address=104.18.3.179 comment=fastpay-casino list=uablacklist
+add address=84.50.110.180 comment=grandx list=uablacklist
+add address=178.248.235.63 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Hrupa AjBi Servis\"" list=\
+    uablacklist
+add address=104.26.14.78 comment=ilucki list=uablacklist
+add address=172.67.70.111 comment=ilucki list=uablacklist
+add address=104.26.15.78 comment=ilucki list=uablacklist
+add address=104.18.7.99 comment=joocasino list=uablacklist
+add address=104.18.6.99 comment=joocasino list=uablacklist
+add address=104.18.23.194 comment=konungcasino list=uablacklist
+add address=104.18.22.194 comment=konungcasino list=uablacklist
+add address=194.84.83.151 comment="TOV \"Labirynt.Ru\"" list=uablacklist
+add address=194.84.120.183 comment="TOV \"Labirynt.Ru\"" list=uablacklist
+add address=193.26.19.101 comment="TOV \"LitRes\"" list=uablacklist
+add address=193.26.19.14 comment="TOV \"LitRes\"" list=uablacklist
+add address=193.26.19.99 comment="TOV \"LitRes\"" list=uablacklist
+add address=193.26.19.16 comment="TOV \"LitRes\"" list=uablacklist
+add address=99.86.4.6 comment=loyalcasino list=uablacklist
+add address=99.86.4.99 comment=loyalcasino list=uablacklist
+add address=99.86.4.46 comment=loyalcasino list=uablacklist
+add address=99.86.4.8 comment=loyalcasino list=uablacklist
+add address=104.18.18.225 comment=N1Casino list=uablacklist
+add address=104.18.19.225 comment=N1Casino list=uablacklist
+add address=45.60.40.164 comment="TOV \"Reksoft\"" list=uablacklist
+add address=104.18.8.161 comment=paradisecasino list=uablacklist
+add address=104.18.9.161 comment=paradisecasino list=uablacklist
+add address=104.18.31.244 comment=Pinnacle list=uablacklist
+add address=104.18.30.244 comment=Pinnacle list=uablacklist
+add address=103.224.182.242 comment=redstarcasino20 list=uablacklist
+add address=185.138.253.1 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.138.254.40 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.138.252.1 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.138.253.40 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.138.252.40 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.138.254.1 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.62.200.33 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=45.147.161.74 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Wildberries\"" list=\
+    uablacklist
+add address=91.205.164.53 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Studija \"Jalta TV\"" list=\
+    uablacklist
+add address=45.80.68.220 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Nashe zavtra\"" list=\
+    uablacklist
+add address=10.70.70.0/30 comment=SIP list=SipGoldeNet
+add address=news.rambler.ru comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Wildberries\"" list=\
+    uablacklist
+add address=regnum.ru comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Wildberries\"" list=\
+    uablacklist
+add address=www.rosbalt.ru comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Wildberries\"" list=\
+    uablacklist
+add address=www.vedomosti.ru comment=webmoney list=uablacklist
+add address=smi2.ru comment=black02.04 list=uablacklist
+add address=aif.ru comment=black02.04 list=uablacklist
+add address=www.pravda.ru comment=black02.04 list=uablacklist
+add address=svpressa.ru comment=black02.04 list=uablacklist
+add address=iz.ru comment=black02.04 list=uablacklist
+add address=vz.ru comment=black02.04 list=uablacklist
+add address=rg.ru comment=black02.04 list=uablacklist
+add address=www.ng.ru comment=black02.04 list=uablacklist
+add address=www.eg.ru comment=black02.04 list=uablacklist
+add address=www.kavkaz-uzel.eu comment=black02.04 list=uablacklist
+add address=topwar.ru comment=black02.04 list=uablacklist
+add address=rusvesna.su comment=black02.04 list=uablacklist
+add address=24smi.org comment=black02.04 list=uablacklist
+add address=www.ridus.ru comment="black02.04 \C0\E1\EE\ED \EF\EE\EF\F0\EE\F1\
+    \E8\EB \F0\E0\E7\E1\EB\EE\F7\E8\F2\FC" list=uablacklist
+add address=newizv.ru comment=black02.04 list=uablacklist
+add address=www.infox.ru comment=black02.04 list=uablacklist
+add address=www.bfm.ru comment=black02.04 list=uablacklist
+add address=newsland.com comment="black02.04 \C0\E1\EE\ED\E5\ED\F2\FB \EF\EE\
+    \EF\F0\EE\F1\E8\EB\E8 \F0\E0\E7\E1\EB\EE\F7\E8\F2\FC" list=uablacklist
+add address=www.politnavigator.net comment=black02.04 list=uablacklist
+add address=sobesednik.ru comment=black02.04 list=uablacklist
+add address=www.trud.ru comment=black02.04 list=uablacklist
+add address=free-news.su comment=black02.04 list=uablacklist
+add address=rapsinews.ru comment=black02.04 list=uablacklist
+add address=wek.ru comment=black02.04 list=uablacklist
+add address=og.ru comment=black02.04 list=uablacklist
+add address=uralpress.ru comment=black02.04 list=uablacklist
+add address=www.mn.ru comment=black02.04 list=uablacklist
+add address=gzt.ru comment=black02.04 list=uablacklist
+add address=online24news.ru comment=black02.04 list=uablacklist
+add address=novostimira24.ru comment=black02.04 list=uablacklist
+add address=novostidnya24.ru comment=black02.04 list=uablacklist
+add address=ostrana.ru comment=black02.04 list=uablacklist
+add address=1prime.ru comment=black02.04 list=uablacklist
+add address=utro.ru comment=black02.04 list=uablacklist
+add address=regions.ru comment=black02.04 list=uablacklist
+add address=176.103.128.0/19 list=uablacklist
+add address=31.6.96.156 list=uablacklist
+add address=185.190.150.4 list=AllowWB
+add address=103.21.244.0/22 list=CloudFlare
+add address=103.22.200.0/22 list=CloudFlare
+add address=103.31.4.0/22 list=CloudFlare
+add address=104.16.0.0/13 list=CloudFlare
+add address=104.24.0.0/14 list=CloudFlare
+add address=108.162.192.0/18 list=CloudFlare
+add address=131.0.72.0/22 list=CloudFlare
+add address=141.101.64.0/18 list=CloudFlare
+add address=162.158.0.0/15 list=CloudFlare
+add address=172.64.0.0/13 list=CloudFlare
+add address=173.245.48.0/20 list=CloudFlare
+add address=188.114.96.0/20 list=CloudFlare
+add address=190.93.240.0/20 list=CloudFlare
+add address=197.234.240.0/22 list=CloudFlare
+add address=198.41.128.0/17 list=CloudFlare
+add address=172.17.1.102 list=OmoVlanFilter
+add address=172.17.1.101 list=OmoVlanFilter
+add address=172.17.1.100 list=OmoVlanFilter
+add address=172.17.1.103 list=OmoVlanFilter
+add address=185.190.150.1 list=AllowWB
+add address=10.71.71.0/30 list=AllowWB
+add address=194.150.233.53 comment=Office list=SipGoldeNet
+add address=10.38.10.0/24 list=DropFake
+add address=185.253.216.2 list=GoldeSipServer
+add address=185.253.216.3 list=GoldeSipServer
+add address=185.190.150.0/24 list=AllowSW
+add address=185.253.216.0/24 list=AllowSW
+add address=192.168.40.0/30 list=AllowSW
+add address=172.16.0.0/12 disabled=yes list=AllowSW
+add address=185.253.216.98 list=AllowPing
+add address=176.36.86.10 list=AllowSW
+/ip firewall filter
+add action=accept chain=input comment=AllowPing protocol=icmp \
+    src-address-list=AllowPing
+add action=drop chain=input comment=DropPing protocol=icmp
+add action=accept chain=forward comment=\
+    "allow already established connections" connection-state=established \
+    disabled=yes
+add action=accept chain=forward comment="allow related connections" \
+    connection-state=related
+add action=drop chain=forward comment="drop invalid connections" \
+    connection-state=invalid
+add action=drop chain=input comment=cisco dst-port=2000 protocol=tcp
+add action=drop chain=input comment=dns dst-port=53 protocol=tcp
+add action=drop chain=input comment=dns dst-port=53 protocol=udp
+add action=drop chain=input comment=DropScanPort disabled=yes dst-port=\
+    22,82,8887,55055,1701 protocol=tcp src-address-list=!AllowWB
+add action=jump chain=input comment="Securing from syn flooding" \
+    connection-state=new disabled=yes jump-target=SYN-Protect protocol=tcp \
+    tcp-flags=syn
+add action=add-dst-to-address-list address-list=SynFlood \
+    address-list-timeout=1h chain=SYN-Protect comment=\
+    "Securing from syn flooding add raw address-list drop" connection-state=\
+    new disabled=yes protocol=tcp
+add action=accept chain=SYN-Protect comment=\
+    "Securing from syn flooding accept 10000 packed" connection-state=new \
+    disabled=yes limit=5k,500:packet protocol=tcp tcp-flags=syn
+add action=drop chain=forward comment=AllowSw dst-address-list=!AllowSW \
+    src-address=10.1.3.0/24
+/ip firewall nat
+add action=same chain=srcnat comment=ALL_FAKE_185.253.216.1 same-not-by-dst=\
+    no src-address-list=DropFake to-addresses=185.253.216.1
+add action=dst-nat chain=dstnat comment=CAP_REDIRECT disabled=yes \
+    dst-address=!185.190.150.7 dst-address-list=!AllowFake dst-port=80 \
+    protocol=tcp src-address-list=DropFake to-addresses=185.190.150.7 \
+    to-ports=8080
+add action=same chain=srcnat comment="ControlPower 4" same-not-by-dst=no \
+    src-address=172.16.254.0/24 to-addresses=185.253.216.33
+add action=same chain=srcnat comment="shalimova 185.253.216.34-35" \
+    same-not-by-dst=no src-address=172.16.13.0/24 to-addresses=185.253.216.34
+add action=same chain=srcnat comment="olt811 185.253.216.65" same-not-by-dst=\
+    no src-address=172.16.20.0/24 to-addresses=185.253.216.65
+add action=same chain=srcnat comment="1d 66 72 71" same-not-by-dst=no \
+    src-address=172.16.9.0/24 to-addresses=185.190.150.72
+add action=same chain=srcnat comment="e2b 36-37" same-not-by-dst=no \
+    src-address=172.16.2.0/24 to-addresses=185.190.150.36
+add action=same chain=srcnat comment="1g 69" same-not-by-dst=no src-address=\
+    172.16.8.0/24 to-addresses=185.190.150.69
+add action=same chain=srcnat comment="1b 67" same-not-by-dst=no src-address=\
+    172.16.6.0/24 to-addresses=185.190.150.67
+add action=same chain=srcnat comment="1a 66, 72, 41" same-not-by-dst=no \
+    src-address=172.16.5.0/24 to-addresses=185.190.150.41
+add action=same chain=srcnat comment="1v 68" same-not-by-dst=no src-address=\
+    172.16.7.0/24 to-addresses=185.190.150.68
+add action=same chain=srcnat comment="e2a 34-35" same-not-by-dst=no \
+    src-address=172.16.1.0/24 to-addresses=185.190.150.34
+add action=same chain=srcnat comment="e2v 38-39" same-not-by-dst=no \
+    src-address=172.16.3.0/24 to-addresses=185.190.150.38
+add action=same chain=srcnat comment="e2g 40-41" same-not-by-dst=no \
+    src-address=172.16.4.0/24 to-addresses=185.190.150.40
+add action=same chain=srcnat comment="Lu62a 162-163" same-not-by-dst=no \
+    src-address=172.16.71.0/24 to-addresses=185.190.150.162
+add action=same chain=srcnat comment="Lu62b 164-165" same-not-by-dst=no \
+    src-address=172.16.72.0/24 to-addresses=185.190.150.164
+add action=same chain=srcnat comment="Bor 194-195" same-not-by-dst=no \
+    src-address=172.16.76.0/24 to-addresses=185.190.150.194
+add action=same chain=srcnat comment=OmoVlan same-not-by-dst=no src-address=\
+    172.17.1.0/24 to-addresses=185.253.216.1
+add action=dst-nat chain=dstnat comment=OMO disabled=yes dst-address=\
+    185.190.150.33 dst-port=22022 protocol=tcp to-addresses=172.17.1.21 \
+    to-ports=22
+add action=dst-nat chain=dstnat comment=NewOffice disabled=yes dst-port=8295 \
+    protocol=tcp to-addresses=10.71.71.2 to-ports=8291
+/ip firewall raw
+add action=accept chain=prerouting comment=AllowSiteInUkraine \
+    src-address-list=CloudFlare
+add action=drop chain=prerouting comment=BlockSiteInUkraine disabled=yes \
+    src-address-list=uablacklist
+add action=drop chain=prerouting comment=SipGoldeNetAllowIp dst-address-list=\
+    !SipGoldeNet src-address-list=GoldeSipServer
+add action=drop chain=prerouting comment=OmoVlanFilter disabled=yes \
+    src-address=172.17.1.0/24 src-address-list=!OmoVlanFilter
+/ip firewall service-port
+set ftp disabled=yes
+set tftp disabled=yes
+set irc disabled=yes
+set h323 disabled=yes
+set udplite disabled=yes
+set dccp disabled=yes
+set sctp disabled=yes
+/ip route
+add comment=SimNetSw distance=1 dst-address=10.7.0.2/32 gateway=10.5.0.2
+add comment=SimNetSw distance=1 dst-address=192.168.5.0/24 gateway=10.5.0.2
+add comment=SimNetSw distance=1 dst-address=192.168.8.0/24 gateway=10.5.0.2
+/ip service
+set telnet address=185.190.150.7/32,185.190.150.10/32 disabled=yes
+set ftp disabled=yes
+set www address=176.36.86.10/32 port=82
+set ssh address=185.190.150.10/32,185.190.150.4/32,176.36.86.10/32
+set api address="185.190.150.4/32,185.190.150.5/32,185.190.150.7/32,185.190.15\
+    0.10/32,185.190.150.25/32,176.36.86.10/32,5.183.200.32/32" port=55055
+set winbox port=8887
+set api-ssl disabled=yes
+/ppp secret
+add local-address=172.16.13.253 name=grin password=grin1306 profile=\
+    default-encryption remote-address=172.16.13.254
+add local-address=10.70.70.1 name=kibass password=kibass1004198811 profile=\
+    default-encryption remote-address=10.70.70.2 service=l2tp
+/radius
+add accounting-port=1812 address=185.190.150.7 comment=MASTER secret=secret \
+    service=dhcp
+add accounting-port=1812 address=185.253.216.98 comment=SLAVE secret=secret \
+    service=dhcp
+/routing bfd interface
+set [ find default=yes ] disabled=yes
+add interface=vlan2585_L9_2
+add interface=vlan2584_L9_3
+add interface=vlan801_L9_1_corbina
+/routing bgp network
+add network=185.190.150.0/24 synchronize=no
+add network=185.253.216.64/28 synchronize=no
+add network=185.253.216.0/27 synchronize=no
+add network=185.253.216.32/27 synchronize=no
+add network=185.253.216.0/24 synchronize=no
+/routing bgp peer
+add hold-time=1m30s in-filter=BGNet_in instance=GoldenNet keepalive-time=30s \
+    name=GRAY_BGNET nexthop-choice=force-self out-filter=BGNet_out \
+    remote-address=10.49.254.62 remote-as=48648 remove-private-as=yes ttl=\
+    default
+add in-filter=UplinkL9_in_2 instance=GoldenNet name=Uplink_L9_2_eurolan \
+    nexthop-choice=force-self out-filter=UplinkL9_out_2 remote-address=\
+    185.253.216.225 remote-as=210092 remove-private-as=yes use-bfd=yes
+add in-filter=UplinkL9_in_3 instance=GoldenNet name=Uplink_L9_3_eurolan \
+    nexthop-choice=force-self out-filter=UplinkL9_out_3 remote-address=\
+    185.253.216.227 remote-as=210092 remove-private-as=yes use-bfd=yes
+add in-filter=UplinkL9_in_1 instance=GoldenNet name=Uplink_L9_1_corbina \
+    nexthop-choice=force-self out-filter=UplinkL9_out remote-address=\
+    185.253.216.235 remote-as=210092 remove-private-as=yes use-bfd=yes
+/routing filter
+add action=accept chain=DEFAULT prefix=0.0.0.0/0
+add action=accept append-bgp-communities="" bgp-communities="" chain=\
+    our_networks prefix=185.190.150.0/24 set-bgp-communities=\
+    21092:150,21092:2
+add action=accept append-bgp-communities="" bgp-communities="" chain=\
+    our_networks prefix=185.253.216.0/24 set-bgp-communities=\
+    21092:150,21092:2
+add action=accept append-bgp-communities="" bgp-communities="" chain=\
+    our_networks_local prefix=185.190.150.0/24 set-bgp-communities=\
+    21092:150,21092:2
+add action=accept append-bgp-communities="" bgp-communities="" chain=\
+    our_networks_local prefix=185.253.216.0/27 set-bgp-communities=\
+    21092:150,21092:2
+add action=accept append-bgp-communities="" bgp-communities="" chain=\
+    our_networks_local prefix=185.253.216.32/27 set-bgp-communities=\
+    21092:150,21092:2
+add action=accept append-bgp-communities="" bgp-communities="" chain=\
+    our_networks_local prefix=185.253.216.64/28 set-bgp-communities=\
+    21092:150,21092:2
+add action=accept chain=BGNet_in match-chain=DEFAULT set-bgp-weight=100
+add action=reject chain=BGNet_in
+add action=accept bgp-communities=21092:2 chain=BGNet_out match-chain=\
+    our_networks set-bgp-prepend=2
+add action=reject chain=BGNet_out
+add action=accept chain=UplinkL9_in_1 prefix=0.0.0.0/0 set-bgp-local-pref=400 \
+    set-bgp-weight=400
+add action=accept chain=UplinkL9_in_2 match-chain=DEFAULT set-bgp-local-pref=\
+    200 set-bgp-weight=200
+add action=accept chain=UplinkL9_in_3 match-chain=DEFAULT set-bgp-local-pref=\
+    100 set-bgp-weight=100
+add action=accept chain=UplinkL9_out match-chain=our_networks_local
+add action=accept chain=UplinkL9_out_2 match-chain=our_networks_local \
+    set-bgp-med=50
+add action=discard chain=UplinkL9_out_2 match-chain=our_networks_local
+add action=accept chain=UplinkL9_out_3 match-chain=our_networks_local \
+    set-bgp-med=100
+add action=discard chain=UplinkL9_out match-chain=our_networks
+add action=discard chain=UplinkL9_out_3 match-chain=our_networks_local
+/routing ospf nbma-neighbor
+add address=10.45.254.2
+add address=10.44.254.2 priority=1
+/snmp
+set contact=asusgrin@gmail.com enabled=yes location=\
+    "Eurocity [50.378051823205695, 30.380616965364048]" trap-community=\
+    billing trap-version=2
+/system clock
+set time-zone-name=Europe/Kiev
+/system clock manual
+set dst-delta=+02:00 time-zone=+02:00
+/system identity
+set name=Golden-Sofiya
+/system logging
+set 0 disabled=yes topics=info,!account
+set 1 disabled=yes
+add disabled=yes topics=radius
+add disabled=yes topics=snmp
+add disabled=yes topics=event
+/system ntp client
+set enabled=yes primary-ntp=91.198.10.1 secondary-ntp=91.236.251.62
+/system ntp server
+set enabled=yes multicast=yes
+/system package update
+set channel=long-term
+/system scheduler
+add disabled=yes interval=4d name=backup on-event="/system script run backup" \
+    policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+    start-date=feb/23/2019 start-time=03:00:00
+add disabled=yes interval=15m name=goldensip on-event=\
+    "/system script run goldensip" policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+    start-date=may/05/2020 start-time=00:00:00
+/system script
+add comment=BackUp dont-require-permissions=no name=backup owner=grin policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=":\
+    log info \"Starting Backup Script...\";\r\
+    \n:local sysname [/system identity get name];\r\
+    \n:local sysver [/system package get system version];\r\
+    \n:log info \"Flushing DNS cache...\";\r\
+    \n/ip dns cache flush;\r\
+    \n:delay 2;\r\
+    \n:log info \"Deleting last Backups...\";\r\
+    \n:foreach i in=[/file find] do={:if ([:typeof [:find [/file get \$i name]\
+    \_\\\r\
+    \n\"\$sysname-backup-\"]]!=\"nil\") do={/file remove \$i}};\r\
+    \n:delay 2;\r\
+    \n:local smtpserv [:resolve \"smtp.gmail.com\"];\r\
+    \n:local Eaccount \"mailgoldennet@gmail.com\";\r\
+    \n:local pass \"golden1306!\";\r\
+    \n:local backupfile (\"\$sysname-backup-\" . \\\r\
+    \n[:pick [/system clock get date] 7 11] . [:pick [/system \\\r\
+    \nclock get date] 0 3] . [:pick [/system clock get date] 4 6] . \".backup\
+    \");\r\
+    \n:log info \"Creating new Full Backup file...\";\r\
+    \n/system backup save name=\$backupfile;\r\
+    \n:delay 2;\r\
+    \n:log info \"Sending Full Backup file via E-mail...\";\r\
+    \n/tool e-mail send from=\"<\$Eaccount>\" to=\$Eaccount server=\$smtpserv \
+    \\\r\
+    \nport=587 user=\$Eaccount password=\$pass start-tls=yes file=\$backupfile\
+    \_\\\r\
+    \nsubject=(\"\$sysname Full Backup (\" . [/system clock get date] . \")\")\
+    \_\\\r\
+    \nbody=(\"\$sysname Core full Backup file see in attachment.\\nRouterOS ve\
+    rsion: \\\r\
+    \n\$sysver\\nTime and Date stamp: \" . [/system clock get time] . \" \" . \
+    \\\r\
+    \n[/system clock get date]);\r\
+    \n:delay 5;\r\
+    \n:local exportfile (\"\$sysname-backup-\" . \\\r\
+    \n[:pick [/system clock get date] 7 11] . [:pick [/system \\\r\
+    \nclock get date] 0 3] . [:pick [/system clock get date] 4 6] . \".rsc\");\
+    \r\
+    \n:log info \"Creating new Setup Script file...\";\r\
+    \n/export verbose file=\$exportfile;\r\
+    \n:delay 2;\r\
+    \n:log info \"Sending  Setup Script file via E-mail...\";\r\
+    \n/tool e-mail send from=\"<\$Eaccount>\" to=\$Eaccount server=\$smtpserv \
+    \\\r\
+    \nport=587 user=\$Eaccount password=\$pass start-tls=yes file=\$exportfile\
+    \_\\\r\
+    \nsubject=(\"\$sysname Setup Script Backup (\" . [/system clock get date] \
+    . \\\r\
+    \n\")\") body=(\"\$sysname Core Setup Script file see in attachment.\\nRou\
+    terOS \\\r\
+    \nversion: \$sysver\\nTime and Date stamp: \" . [/system clock get time] .\
+    \_\" \\\r\
+    \n\" . [/system clock get date]);\r\
+    \n:delay 5;\r\
+    \n:log info \"All System Backups emailed successfully.\\nBackuping complet\
+    ed.\";\r\
+    \n"
+add comment=GoldenSip dont-require-permissions=no name=goldensip owner=grin \
+    policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+    source=":foreach i in=[/ip firewall connection find dst-address~\":5060\" \
+    protocol~\"udp\"] do={ /ip firewall connection remove \$i }"
+add comment=UA_BLACK_LIST dont-require-permissions=no name=uablacklist owner=\
+    grin policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=":\
+    local apiPrefix \"https://uablacklist.net/subnets_mikrotik_\"\r\
+    \n:local tempFile \"uablacklist.txt\"\r\
+    \n:local listName \"uablacklist\"\r\
+    \n\r\
+    \n/log info \"removing existing '\$listName'...\"\r\
+    \n:put \"removing existing '\$listName'...\"\r\
+    \n/ip firewall address-list remove [/ip firewall address-list find list=\$\
+    listName]\r\
+    \n\r\
+    \n# mikrotik can't load >4KB file inside a variable, so backend contains f\
+    ile pieces which we download and parse one by one\r\
+    \n:local i 0\r\
+    \n:local isEnd false\r\
+    \n:do {\r\
+    \n    :local apiPath \"\$apiPrefix\$i.txt\"\r\
+    \n    /log info \"fetching UA blacklist registry piece (\$apiPath)...\"\r\
+    \n    :put \"fetching UA blacklist registry piece (\$apiPath)...\"\r\
+    \n    :local contentLen 0\r\
+    \n    :local content \"\"\r\
+    \n    :do {\r\
+    \n        /tool fetch url=\$apiPath dst-path=\$tempFile\r\
+    \n        :set content [/file get [/file find name=\$tempFile] contents]\r\
+    \n        :set contentLen [:len \$content]\r\
+    \n    } on-error={\r\
+    \n        /log info \"no more pieces\"; \r\
+    \n        :put \"no more pieces\"\r\
+    \n        :set isEnd true\r\
+    \n    }\r\
+    \n    :local lineEnd 0\r\
+    \n    :local line \"\"\r\
+    \n    :local lastEnd 0\r\
+    \n    :local company \"\"\r\
+    \n    :while (\$lastEnd < \$contentLen) do {\r\
+    \n        :set lineEnd [:find \$content \"\\n\" \$lastEnd ]\r\
+    \n        :set line [:pick \$content \$lastEnd \$lineEnd]\r\
+    \n        :set lastEnd (\$lineEnd+1)\r\
+    \n        :local entry [:pick \$line 0 (\$lineEnd-1)]\r\
+    \n        :if ([:pick \$line 0 1] != \"#\") do={\r\
+    \n            :if ([:len \$entry ] > 0) do={\r\
+    \n                /log info \"add '\$entry' subnet of '\$company' to list \
+    '\$listName'...\";\r\
+    \n                :put \"add '\$entry' subnet of '\$company' to list '\$li\
+    stName'...\";\r\
+    \n                :do {\r\
+    \n                    /ip firewall address-list add list=\$listName addres\
+    s=\$entry comment=\$company\r\
+    \n                } on-error={\r\
+    \n                    /log info \"failed to add '\$entry' subnet of '\$com\
+    pany' to list '\$listName', probably, it's duplication error.\"; \r\
+    \n                    :put \"failed to add '\$entry' subnet of '\$company'\
+    \_to list '\$listName', probably, it's duplication error.\"\r\
+    \n                }\r\
+    \n            }\r\
+    \n        } else={\r\
+    \n            :set company [:pick \$line 2 (\$lineEnd) ]\r\
+    \n        }\r\
+    \n    }\r\
+    \n    :set i (i+1)\r\
+    \n} while (!\$isEnd)"
+add dont-require-permissions=no name=UnknownDHCPServer owner=grin policy=\
+    read,write,policy,test source="# Find DHCP Alert \r\
+    \n:local CurrentTime [/system clock get time];\r\
+    \n:local MsgID [/log find where message ~\"dhcp alert\" time =\$CurrentTim\
+    e];\r\
+    \n:local MsgText [/log get number=\$MsgID message];\r\
+    \n\r\
+    \n# Send Telegram Message\r\
+    \n:local Token \"752512952:AAHVqyd92lCmkrQ8DtBe0p-MfE5r0nhKAOQ\";\r\
+    \n:local ChatID \"-1001310477129\";\r\
+    \n:local DeviceName [/system identity get name];\r\
+    \n:local M \"\\F0\\9F\\94\\B4 <b>\$DeviceName: UNKNOWN DHCP SERVER FOUND! \
+    </b> Info: \$CurrentTime \$MsgText\";\r\
+    \n /tool fetch url=\"https://api.telegram.org/bot\$Token/sendMessage\\\?ch\
+    at_id=\$ChatID&text=\$M\" keep-result=no;\r\
+    \n\r\
+    \n#Block Access User \r\
+    \n/ip dhcp-server lease add block-access=yes mac-address=\$\"mac-address\"\
+    ;"
+add comment=---- dont-require-permissions=no name=MakeStaticShalimova owner=\
+    grin policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=":\
+    for i from=2 to=254 do={\r\
+    \n/ip dhcp-server lease make-static [/ip dhcp-server lease find where addr\
+    ess=\"172.16.13.\$i\"];}"
+add comment=---- dont-require-permissions=no name=MakeStaticDaniya owner=grin \
+    policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+    source=":for i from=2 to=254 do={\r\
+    \n/ip dhcp-server lease make-static [/ip dhcp-server lease find where addr\
+    ess=\"172.16.20.\$i\"];}"
+add comment=---- dont-require-permissions=no name=Lu62a owner=grin policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=":\
+    for i from=2 to=254 do={\r\
+    \n/ip dhcp-server lease make-static [/ip dhcp-server lease find where addr\
+    ess=\"172.16.71.\$i\"];}"
+add comment=---- dont-require-permissions=no name=Lu62b owner=grin policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=":\
+    for i from=2 to=254 do={\r\
+    \n/ip dhcp-server lease make-static [/ip dhcp-server lease find where addr\
+    ess=\"172.16.72.\$i\"];}"
+add comment=---- dont-require-permissions=no name=MakeStaticBor owner=grin \
+    policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+    source=":for i from=2 to=254 do={\r\
+    \n/ip dhcp-server lease make-static [/ip dhcp-server lease find where addr\
+    ess=\"172.16.76.\$i\"];}"
+/tool e-mail
+set address=smtp.gmail.com password=golden1306! user=mailgoldennet@gmail.com

@@ -1,0 +1,1390 @@
+# dec/13/2022 11:04:48 by RouterOS 6.47.10
+# software id = HU3V-EY7T
+#
+# model = CCR1016-12S-1S+
+# serial number = 6EFD07F63F91
+/interface bridge
+add name=loopback
+/interface ethernet
+set [ find default-name=sfp4 ] disabled=yes
+set [ find default-name=sfp5 ] disabled=yes
+set [ find default-name=sfp6 ] disabled=yes
+set [ find default-name=sfp7 ] disabled=yes
+set [ find default-name=sfp8 ] disabled=yes
+set [ find default-name=sfp9 ] disabled=yes
+set [ find default-name=sfp10 ] disabled=yes
+set [ find default-name=sfp11 ] disabled=yes
+set [ find default-name=sfp12 ] disabled=yes
+/interface vlan
+add interface=sfpplus1 name=BGNET-BGP-2356-uplink vlan-id=2356
+add interface=sfpplus1 name=BerkovecExt1298 vlan-id=1298
+add interface=sfpplus1 name=BerkovecSw1295 vlan-id=1295
+add interface=sfpplus1 name=ChajkaOspf-2374 vlan-id=2374
+add interface=sfpplus1 name=ChaykaOspf1203 vlan-id=1203
+add interface=sfpplus1 name=LobanovskogoOspf-2229 vlan-id=2229
+add interface=sfpplus1 name=LobanovskogoOspf-2380 vlan-id=2380
+add interface=sfpplus1 name=MNG202 vlan-id=202
+add interface=sfpplus1 name=UA-IX_Skyvision vlan-id=565
+add interface=sfpplus1 name=UGOTun1362 vlan-id=1362
+add interface=sfpplus1 name=vlan801_Sofiya_1 vlan-id=801
+add interface=sfpplus1 name=vlan2584_Sofiya_3 vlan-id=2584
+add interface=sfpplus1 name=vlan2585_Sofiya_2 vlan-id=2585
+add interface=sfpplus1 name=vlan2586 vlan-id=2586
+add interface=sfpplus1 name=vlan2587 vlan-id=2587
+/interface list
+add name=AllowNeighbors
+/ip pool
+add name=BerkovecExt1298 ranges=10.10.50.2-10.10.50.254
+/ip dhcp-server
+add address-pool=BerkovecExt1298 conflict-detection=no disabled=no interface=\
+    BerkovecExt1298 lease-time=8h name=BerkovecExt1298 use-radius=yes
+/routing bgp instance
+set default disabled=yes
+add as=210092 client-to-client-reflection=no name=GoldenNet router-id=\
+    185.253.216.129
+/routing ospf instance
+set [ find default=yes ] distribute-default=always-as-type-1 name=OspfOut \
+    router-id=0.0.0.4
+/snmp community
+set [ find default=yes ] disabled=yes
+add addresses="176.36.86.10/32,185.190.150.4/32,185.190.150.7/32,185.190.150.1\
+    8/32,185.190.150.25/32" authentication-password=billing \
+    encryption-password=billing name=billing
+/user group
+set full policy="local,telnet,ssh,ftp,reboot,read,write,policy,test,winbox,pas\
+    sword,web,sniff,sensitive,api,romon,dude,tikapp"
+/ip neighbor discovery-settings
+set discover-interface-list=AllowNeighbors
+/interface l2tp-server server
+set allow-fast-path=yes authentication=mschap2
+/interface list member
+add disabled=yes interface=BGNET-BGP-2356-uplink list=AllowNeighbors
+add interface=ChajkaOspf-2374 list=AllowNeighbors
+add interface=ChaykaOspf1203 list=AllowNeighbors
+add interface=LobanovskogoOspf-2229 list=AllowNeighbors
+add interface=LobanovskogoOspf-2380 list=AllowNeighbors
+add interface=UA-IX_Skyvision list=AllowNeighbors
+add interface=UGOTun1362 list=AllowNeighbors
+add interface=vlan2585_Sofiya_2 list=AllowNeighbors
+add interface=vlan2584_Sofiya_3 list=AllowNeighbors
+add interface=vlan801_Sofiya_1 list=AllowNeighbors
+/interface pptp-server server
+set enabled=yes
+/ip address
+add address=0.0.0.4 interface=loopback network=0.0.0.4
+add address=10.49.254.89 interface=BGNET-BGP-2356-uplink network=10.49.254.88
+add address=10.4.1.1/24 interface=BerkovecSw1295 network=10.4.1.0
+add address=10.10.50.1/24 interface=BerkovecExt1298 network=10.10.50.0
+add address=172.20.1.1/24 interface=BerkovecExt1298 network=172.20.1.0
+add address=10.40.254.1/30 interface=UGOTun1362 network=10.40.254.0
+add address=83.142.232.218/30 interface=UA-IX_Skyvision network=\
+    83.142.232.216
+add address=185.253.216.225 interface=vlan2585_Sofiya_2 network=\
+    185.253.216.226
+add address=10.1.0.1/24 interface=MNG202 network=10.1.0.0
+add address=185.253.216.227 interface=vlan2584_Sofiya_3 network=\
+    185.253.216.228
+add address=185.253.216.229 interface=LobanovskogoOspf-2380 network=\
+    185.253.216.230
+add address=185.253.216.233 interface=ChajkaOspf-2374 network=185.253.216.234
+add address=185.253.216.231 interface=LobanovskogoOspf-2229 network=\
+    185.253.216.232
+add address=185.253.216.129/28 interface=BerkovecExt1298 network=\
+    185.253.216.128
+add address=185.253.216.235 interface=vlan801_Sofiya_1 network=\
+    185.253.216.236
+/ip dhcp-client
+add add-default-route=no disabled=no interface=sfp2 use-peer-dns=no
+add disabled=no interface=sfp1
+/ip dhcp-server network
+add address=10.10.50.0/24 gateway=10.10.50.1
+add address=172.20.1.0/24 gateway=172.20.1.1
+add address=185.253.216.64/28 gateway=185.253.216.65
+/ip dns
+set servers=8.8.8.8,1.1.1.1
+/ip firewall address-list
+add address=10.10.50.0/24 list=DropFake
+add address=185.190.150.7 list=AllowFake
+add address=8.8.8.8 list=AllowFake
+add address=88.210.48.0/24 comment=webmoney list=uablacklist
+add address=212.118.56.0/24 comment=webmoney list=uablacklist
+add address=90.156.201.90 comment=webmoney list=uablacklist
+add address=90.156.201.78 comment=webmoney list=uablacklist
+add address=172.67.154.50 comment=webmoney list=uablacklist
+add address=212.118.48.0/21 comment=webmoney list=uablacklist
+add address=88.210.56.0/23 comment=webmoney list=uablacklist
+add address=90.156.201.32 comment=webmoney list=uablacklist
+add address=212.118.32.0/20 comment=webmoney list=uablacklist
+add address=195.177.205.0/24 comment=webmoney list=uablacklist
+add address=88.210.52.0/22 comment=webmoney list=uablacklist
+add address=89.222.152.0/21 comment=webmoney list=uablacklist
+add address=195.208.1.138 comment=webmoney list=uablacklist
+add address=172.67.70.202 comment=webmoney list=uablacklist
+add address=89.20.144.0/21 comment=webmoney list=uablacklist
+add address=185.76.252.0/22 comment=webmoney list=uablacklist
+add address=104.26.1.86 comment=webmoney list=uablacklist
+add address=185.196.68.45 comment=webmoney list=uablacklist
+add address=104.26.0.86 comment=webmoney list=uablacklist
+add address=54.38.167.251 comment=webmoney list=uablacklist
+add address=88.210.50.0/24 comment=webmoney list=uablacklist
+add address=85.192.48.0/21 comment=webmoney list=uablacklist
+add address=212.118.60.0/24 comment=webmoney list=uablacklist
+add address=91.200.28.0/22 comment=webmoney list=uablacklist
+add address=88.210.34.0/23 comment=webmoney list=uablacklist
+add address=194.88.208.0/23 comment=webmoney list=uablacklist
+add address=91.227.52.0/23 comment=webmoney list=uablacklist
+add address=89.184.68.152 comment=webmoney list=uablacklist
+add address=88.210.44.0/22 comment=webmoney list=uablacklist
+add address=62.122.170.171 comment=webmoney list=uablacklist
+add address=91.217.153.39 comment=webmoney list=uablacklist
+add address=178.172.255.39 comment=webmoney list=uablacklist
+add address=88.210.40.0/22 comment=webmoney list=uablacklist
+add address=91.228.155.53 comment=webmoney list=uablacklist
+add address=145.239.95.188 comment=webmoney list=uablacklist
+add address=192.88.99.0/24 comment=webmoney list=uablacklist
+add address=51.254.201.70 comment=webmoney list=uablacklist
+add address=104.21.4.150 comment=webmoney list=uablacklist
+add address=94.143.52.0/22 comment=webmoney list=uablacklist
+add address=90.156.201.109 comment=webmoney list=uablacklist
+add address=217.182.78.61 comment=webmoney list=uablacklist
+add address=95.142.192.0/20 comment=vk list=uablacklist
+add address=79.137.164.0/24 comment=vk list=uablacklist
+add address=185.29.130.0/24 comment=vk list=uablacklist
+add address=5.181.61.0/24 comment=vk list=uablacklist
+add address=87.240.128.0/18 comment=vk list=uablacklist
+add address=79.137.183.0/24 comment=vk list=uablacklist
+add address=185.32.248.0/22 comment=vk list=uablacklist
+add address=79.137.139.0/24 comment=vk list=uablacklist
+add address=95.213.0.0/17 comment=vk list=uablacklist
+add address=93.186.224.0/21 comment=vk list=uablacklist
+add address=195.211.22.0/24 comment=vk list=uablacklist
+add address=79.137.180.0/24 comment=vk list=uablacklist
+add address=93.186.232.0/21 comment=vk list=uablacklist
+add address=217.20.144.0/20 comment=mail.ru list=uablacklist
+add address=45.84.128.0/22 comment=mail.ru list=uablacklist
+add address=185.5.136.0/22 comment=mail.ru list=uablacklist
+add address=146.185.240.0/22 comment=mail.ru list=uablacklist
+add address=213.219.212.0/22 comment=mail.ru list=uablacklist
+add address=45.136.20.0/22 comment=mail.ru list=uablacklist
+add address=146.185.208.0/22 comment=mail.ru list=uablacklist
+add address=89.208.84.0/22 comment=mail.ru list=uablacklist
+add address=195.211.20.0/22 comment=mail.ru list=uablacklist
+add address=94.100.176.0/20 comment=mail.ru list=uablacklist
+add address=195.218.168.0/24 comment=mail.ru list=uablacklist
+add address=195.218.190.0/23 comment=mail.ru list=uablacklist
+add address=79.137.157.0/24 comment=mail.ru list=uablacklist
+add address=208.87.94.0/24 comment=mail.ru list=uablacklist
+add address=128.140.168.0/21 comment=mail.ru list=uablacklist
+add address=89.208.228.0/22 comment=mail.ru list=uablacklist
+add address=178.237.16.0/20 comment=mail.ru list=uablacklist
+add address=5.101.40.0/22 comment=mail.ru list=uablacklist
+add address=185.6.244.0/22 comment=mail.ru list=uablacklist
+add address=109.120.180.0/22 comment=mail.ru list=uablacklist
+add address=5.61.232.0/21 comment=mail.ru list=uablacklist
+add address=95.163.208.0/21 comment=mail.ru list=uablacklist
+add address=109.120.188.0/22 comment=mail.ru list=uablacklist
+add address=185.16.148.0/22 comment=mail.ru list=uablacklist
+add address=208.87.93.0/24 comment=mail.ru list=uablacklist
+add address=185.86.144.0/22 comment=mail.ru list=uablacklist
+add address=195.211.128.0/22 comment=mail.ru list=uablacklist
+add address=85.192.32.0/22 comment=mail.ru list=uablacklist
+add address=87.239.104.0/21 comment=mail.ru list=uablacklist
+add address=185.187.63.0/24 comment=mail.ru list=uablacklist
+add address=185.226.52.0/22 comment=mail.ru list=uablacklist
+add address=37.139.32.0/22 comment=mail.ru list=uablacklist
+add address=178.22.88.0/21 comment=mail.ru list=uablacklist
+add address=193.203.40.0/22 comment=mail.ru list=uablacklist
+add address=95.163.216.0/22 comment=mail.ru list=uablacklist
+add address=89.208.208.0/22 comment=mail.ru list=uablacklist
+add address=185.241.192.0/22 comment=mail.ru list=uablacklist
+add address=84.23.52.0/22 comment=mail.ru list=uablacklist
+add address=217.174.188.0/22 comment=mail.ru list=uablacklist
+add address=217.69.128.0/20 comment=mail.ru list=uablacklist
+add address=89.208.216.0/23 comment=mail.ru list=uablacklist
+add address=79.137.174.0/23 comment=mail.ru list=uablacklist
+add address=185.16.244.0/22 comment=mail.ru list=uablacklist
+add address=5.188.140.0/22 comment=mail.ru list=uablacklist
+add address=5.61.16.0/21 comment=mail.ru list=uablacklist
+add address=188.93.56.0/21 comment=mail.ru list=uablacklist
+add address=95.163.180.0/22 comment=mail.ru list=uablacklist
+add address=185.100.104.0/22 comment=mail.ru list=uablacklist
+add address=194.186.63.0/24 comment=mail.ru list=uablacklist
+add address=95.163.248.0/21 comment=mail.ru list=uablacklist
+add address=89.208.196.0/22 comment=mail.ru list=uablacklist
+add address=79.137.240.0/21 comment=mail.ru list=uablacklist
+add address=89.208.220.0/22 comment=mail.ru list=uablacklist
+add address=95.163.32.0/19 comment=mail.ru list=uablacklist
+add address=37.139.40.0/22 comment=mail.ru list=uablacklist
+add address=185.16.8.0/22 comment=mail.ru list=uablacklist
+add address=62.217.160.0/20 comment=mail.ru list=uablacklist
+add address=79.137.142.0/24 comment=mail.ru list=uablacklist
+add address=5.181.60.0/22 comment=mail.ru list=uablacklist
+add address=185.130.112.0/22 comment=mail.ru list=uablacklist
+add address=208.87.95.0/24 comment=mail.ru list=uablacklist
+add address=94.139.244.0/22 comment=mail.ru list=uablacklist
+add address=185.54.220.0/24 comment=kaspersky list=uablacklist
+add address=185.54.223.0/24 comment=kaspersky list=uablacklist
+add address=185.54.222.0/24 comment=kaspersky list=uablacklist
+add address=185.85.15.0/24 comment=kaspersky list=uablacklist
+add address=185.85.14.0/24 comment=kaspersky list=uablacklist
+add address=91.103.64.0/21 comment=kaspersky list=uablacklist
+add address=185.85.11.0/24 comment=kaspersky list=uablacklist
+add address=103.167.170.0/23 comment=kaspersky list=uablacklist
+add address=185.85.12.0/24 comment=kaspersky list=uablacklist
+add address=82.202.184.0/23 comment=kaspersky list=uablacklist
+add address=185.54.221.0/24 comment=kaspersky list=uablacklist
+add address=93.159.224.0/21 comment=kaspersky list=uablacklist
+add address=185.85.10.0/24 comment=kaspersky list=uablacklist
+add address=77.74.176.0/21 comment=kaspersky list=uablacklist
+add address=194.85.20.0/24 comment=drweb list=uablacklist
+add address=195.88.252.0/23 comment=drweb list=uablacklist
+add address=178.248.232.183 comment=drweb list=uablacklist
+add address=194.58.112.174 comment=yandex list=uablacklist
+add address=87.250.224.0/19 comment=yandex list=uablacklist
+add address=185.32.184.0/23 comment=yandex list=uablacklist
+add address=77.75.152.0/21 comment=yandex list=uablacklist
+add address=185.71.76.0/22 comment=yandex list=uablacklist
+add address=178.154.128.0/19 comment=yandex list=uablacklist
+add address=90.156.177.0/24 comment=yandex list=uablacklist
+add address=77.87.192.18 comment=yandex list=uablacklist
+add address=80.239.201.76 comment=yandex list=uablacklist
+add address=5.45.192.0/18 comment=yandex list=uablacklist
+add address=5.255.192.0/18 comment=yandex list=uablacklist
+add address=209.99.40.222 comment=yandex list=uablacklist
+add address=109.235.160.0/21 comment=yandex list=uablacklist
+add address=149.5.244.47 comment=yandex list=uablacklist
+add address=91.239.233.254 comment=yandex list=uablacklist
+add address=100.43.64.0/19 comment=yandex list=uablacklist
+add address=199.21.96.0/22 comment=yandex list=uablacklist
+add address=141.8.128.0/18 comment=yandex list=uablacklist
+add address=178.154.160.0/19 comment=yandex list=uablacklist
+add address=77.88.0.0/18 comment=yandex list=uablacklist
+add address=213.180.192.0/19 comment=yandex list=uablacklist
+add address=185.32.187.0/24 comment=yandex list=uablacklist
+add address=37.140.128.0/18 comment=yandex list=uablacklist
+add address=37.9.64.0/18 comment=yandex list=uablacklist
+add address=199.36.240.0/22 comment=yandex list=uablacklist
+add address=84.252.160.0/19 comment=yandex list=uablacklist
+add address=185.32.186.0/24 comment=yandex list=uablacklist
+add address=95.108.128.0/17 comment=yandex list=uablacklist
+add address=93.158.128.0/18 comment=yandex list=uablacklist
+add address=90.156.178.0/24 comment=yandex list=uablacklist
+add address=90.156.176.0/24 comment=yandex list=uablacklist
+add address=89.108.90.170 comment=\
+    "Vidkryte aktsionerne tovarystvo \"Pershyj kanal. Vsesvitnja merezha\"" \
+    list=uablacklist
+add address=89.108.123.53 comment=\
+    "Vidkryte aktsionerne tovarystvo \"Pershyj kanal. Vsesvitnja merezha\"" \
+    list=uablacklist
+add address=178.248.233.188 comment=\
+    "Aktsionerne tovarystvo \"Pershyj kanal\"" list=uablacklist
+add address=212.110.158.160 comment=\
+    "Avtonomna nekomertsijna orhanizatsija \"Teleradiokompanija \"Krym\"" \
+    list=uablacklist
+add address=151.236.80.10 comment=5_tv list=uablacklist
+add address=94.23.103.5 comment=ArgoCasino list=uablacklist
+add address=195.3.246.75 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=95.173.145.58 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=194.226.26.19 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.50 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=95.173.128.111 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.208 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=37.230.252.84 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.110.158.41 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=194.67.71.61 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=193.47.33.140 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.200 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=136.243.66.123 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=178.21.13.3 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=213.59.160.45 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=194.58.88.119 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.9 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=81.177.103.94 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=188.114.96.7 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=95.173.157.61 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=81.177.140.32 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=104.21.92.68 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=2.63.150.66 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.204 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=82.202.189.119 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=45.80.69.75 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=195.208.1.111 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.110.158.43 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=82.202.224.195 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.207 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=82.202.160.193 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=77.222.40.16 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=31.31.198.193 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.110.158.44 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=188.114.97.7 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=89.108.126.124 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.110.158.42 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=95.173.157.181 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=193.148.44.189 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.195 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.203 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=109.236.89.250 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=81.177.49.6 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=31.31.198.73 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=185.183.174.222 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.8 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=172.67.187.162 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=80.245.112.15 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=109.200.142.64 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=78.155.219.132 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=193.47.166.188 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=79.133.87.8 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=82.202.189.118 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=185.183.174.218 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=45.130.41.14 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.196 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=172.67.168.119 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=46.243.177.103 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=31.31.198.211 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.49 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=212.164.129.199 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=104.21.46.114 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=104.21.70.249 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=172.67.141.4 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=95.173.157.48 comment="Aks'onov Serhij Valerijovych" list=\
+    uablacklist
+add address=62.109.2.236 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.31.196.135 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.178.208.146 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=93.157.9.254 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.49.144 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.72.130 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=188.120.242.133 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.168.202 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.26.122.57 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.16.5 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.63.193.103 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.86.175 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.31.196.82 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=188.130.254.8 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.28.24.115 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.65.218 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.53.96.178 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.31.197 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.54.45 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.58.102 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.165.162 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=62.109.4.173 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.218.165 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.26.15.20 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.114.137.26 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.88.86 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.79.12 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=144.76.159.217 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.75.80 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.53.96.249 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.229.235.197 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=188.130.254.158 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=178.154.246.145 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.26.14.20 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.174.83 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.168.175 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.217.145 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=77.222.62.134 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=88.212.251.4 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=188.130.254.14 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=178.35.240.89 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.223.74 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.53.96.24 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.28.108.188 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.71.67.49 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.179.166 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=193.109.247.20 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=45.130.41.7 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.9.147.200 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.58.6 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.178.208.137 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.78.191 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.104.248.60 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=87.236.16.171 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=87.236.16.249 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.53.96.124 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.75.83 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=46.4.89.218 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.26.7.194 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=51.250.24.24 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.195.27.241 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.49.189 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=178.154.232.178 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.58.15 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.26.6.194 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.157.5 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=109.254.249.114 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=37.140.192.112 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.40.202 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.58.78 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=188.127.239.149 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.178.208.158 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.197.144 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=109.254.13.162 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.133.58.100 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=87.236.16.17 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=45.88.107.38 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=45.130.41.4 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=93.157.9.180 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=5.200.52.28 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.114.138.220 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.223.150 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=151.139.128.11 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.114.138.242 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=46.30.40.98 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=154.36.140.114 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.104.45.89 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=178.33.183.157 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=37.140.192.239 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=31.31.196.208 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=5.101.127.9 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.46.171 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.52.92 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.136.160 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.28.108.74 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=172.67.193.105 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=87.236.16.112 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=193.238.75.217 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.9.147.250 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=92.53.118.140 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=212.66.32.66 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=178.35.228.47 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=87.236.16.230 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.178.208.185 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=185.114.136.60 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=93.157.9.182 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=104.21.59.78 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=212.66.37.43 comment="Pushylin Denys Volodymyrovych" list=\
+    uablacklist
+add address=2.57.185.100 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.198 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=87.236.16.9 comment="Pasichnyk Leonid Ivanovych" list=uablacklist
+add address=193.228.160.49 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=91.218.19.28 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=104.21.11.147 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.53 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.162.153 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.162.187 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=185.12.127.58 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=213.159.210.14 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=104.21.13.201 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=172.67.190.102 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=172.67.175.32 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=104.21.36.80 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=178.208.83.18 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=172.67.166.89 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=91.223.118.6 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=142.250.186.97 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=212.8.247.66 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=104.21.56.6 comment="Pasichnyk Leonid Ivanovych" list=uablacklist
+add address=185.26.122.54 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.40 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.161.92 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=195.214.214.106 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=185.30.16.145 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.46 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=91.223.118.250 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=31.31.196.166 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.60 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=104.21.56.97 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=198.54.117.244 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=172.67.157.84 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=92.53.98.191 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=92.63.100.150 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.51 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=195.211.223.14 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=84.201.189.90 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=193.228.160.57 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=172.67.183.190 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=91.214.81.148 comment="Pasichnyk Leonid Ivanovych" list=\
+    uablacklist
+add address=186.2.163.116 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    Informatsijne ahentstvo \"Anna-n'jus\"" list=uablacklist
+add address=92.119.112.135 comment="Andryeyenko Anatolij Oleksandrovych" \
+    list=uablacklist
+add address=165.232.41.68 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=172.67.151.147 comment="Tovarystvo z obmezhenoju vidpovidal'nistju\
+    \_\"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=185.154.54.11 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=94.198.55.160 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=31.31.198.136 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=87.236.16.63 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=195.208.0.107 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=185.93.110.75 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=104.21.64.144 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Federal'ne ahentstvo novyn\"" list=uablacklist
+add address=99.83.175.80 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"SKEPTYK\"" list=uablacklist
+add address=199.59.242.150 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"SKEPTYK\"" list=uablacklist
+add address=162.159.130.36 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.198 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=185.165.123.70 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.163 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.150 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.92 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.166 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.105 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.43 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=162.159.133.36 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.202 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.50 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.237 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=79.142.17.142 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.125 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.220 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=87.236.19.238 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=91.232.230.64 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=185.146.1.121 comment="Aktsionerne tovarystvo \"KIVI\"" list=\
+    uablacklist
+add address=104.16.13.16 comment=PartyCasino list=uablacklist
+add address=104.16.12.16 comment=PartyCasino list=uablacklist
+add address=108.165.216.82 comment=casino.redkings list=uablacklist
+add address=108.165.216.174 comment=casino.redkings list=uablacklist
+add address=186.2.163.235 comment="Zakryte aktsionerne tovarystvo \"Redaktsija\
+    \_hazety \"Moskovs'kyj komsomolets'\"" list=uablacklist
+add address=178.248.233.136 comment="Federal'ne derzhavne unitarne pidpryyemst\
+    vo \"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=178.248.233.26 comment="Federal'ne derzhavne unitarne pidpryyemstv\
+    o \"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=178.248.233.32 comment="Federal'ne derzhavne unitarne pidpryyemstv\
+    o \"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=178.248.233.60 comment="Federal'ne derzhavne unitarne pidpryyemstv\
+    o \"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=178.248.232.60 comment="Federal'ne derzhavne unitarne pidpryyemstv\
+    o \"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=195.93.247.69 comment="Federal'ne derzhavne unitarne pidpryyemstvo\
+    \_\"Mizhnarodne informatsijne ahentstvo \"Rosija s'ohodni\"" list=\
+    uablacklist
+add address=23.111.206.128 comment="Tovarystvo z obmezhenoju vidpovidal'nistju\
+    \_\"Informatsijna platforma Krympres\"" list=uablacklist
+add address=82.148.20.65 comment="Telekanaly \"RTR-Planeta\", informatsijnyj k\
+    anal \"Rosija-24\", jaki vkhodjat' do struktury Federal'noho derzhavnoho u\
+    nitarnoho pidpryyemstva \"Vserosijs'ka derzhavna televizijna i radiomovna \
+    kompanija\"" list=uablacklist
+add address=80.247.32.208 comment="Telekanaly \"RTR-Planeta\", informatsijnyj \
+    kanal \"Rosija-24\", jaki vkhodjat' do struktury Federal'noho derzhavnoho \
+    unitarnoho pidpryyemstva \"Vserosijs'ka derzhavna televizijna i radiomovna\
+    \_kompanija\"" list=uablacklist
+add address=172.67.208.242 comment="Zakharchenko Oleksandr Volodymyrovych" \
+    list=uablacklist
+add address=209.126.84.110 comment="Zakharchenko Oleksandr Volodymyrovych" \
+    list=uablacklist
+add address=104.21.58.219 comment="Zakharchenko Oleksandr Volodymyrovych" \
+    list=uablacklist
+add address=185.114.138.221 comment="Zakharchenko Oleksandr Volodymyrovych" \
+    list=uablacklist
+add address=185.53.177.11 comment="Zakharchenko Oleksandr Volodymyrovych" \
+    list=uablacklist
+add address=195.210.46.39 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ERA-MEDIA\"" list=\
+    uablacklist
+add address=89.184.74.30 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ERA-MEDIA\"" list=\
+    uablacklist
+add address=176.126.165.71 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ERA-MEDIA\"" list=\
+    uablacklist
+add address=103.224.212.222 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ERA-MEDIA\"" list=\
+    uablacklist
+add address=172.67.160.12 comment=finbet.bet list=uablacklist
+add address=104.21.9.132 comment=finbet.bet list=uablacklist
+add address=104.26.0.193 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=5.188.118.68 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=172.67.3.106 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=188.114.97.17 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=104.21.3.36 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=104.20.74.219 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=188.114.96.17 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=104.26.1.193 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=172.67.73.42 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=172.67.130.43 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=104.20.73.219 comment="Tolstoj Petro Olehovych" list=uablacklist
+add address=81.19.72.2 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=81.19.72.5 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=81.19.72.3 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=81.19.72.1 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=81.19.72.4 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=81.19.72.0 comment="Aktsionerne tovarystvo \"Hazeta.Ru\"" list=\
+    uablacklist
+add address=109.200.135.13 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Teleradiokompanija ITV\"" \
+    list=uablacklist
+add address=151.248.113.157 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Teleradiokompanija ITV\"" \
+    list=uablacklist
+add address=54.36.225.96 comment=goldfishka68 list=uablacklist
+add address=104.21.13.44 comment="Derzhavna avtonomna ustanova mista Sevastopo\
+    lja \"Sevastopol'skaja teleradyokompanyja\"" list=uablacklist
+add address=195.208.1.100 comment="Derzhavna avtonomna ustanova mista Sevastop\
+    olja \"Sevastopol'skaja teleradyokompanyja\"" list=uablacklist
+add address=172.67.132.151 comment="Derzhavna avtonomna ustanova mista Sevasto\
+    polja \"Sevastopol'skaja teleradyokompanyja\"" list=uablacklist
+add address=82.202.163.4 comment="TOV \"Novinfo\"" list=uablacklist
+add address=94.198.50.57 comment="TOV \"Novinfo\"" list=uablacklist
+add address=152.89.219.221 comment="TOV \"Novinfo\"" list=uablacklist
+add address=94.198.55.45 comment="TOV \"Novinfo\"" list=uablacklist
+add address=94.198.50.178 comment="TOV \"Novinfo\"" list=uablacklist
+add address=185.60.135.10 comment="TOV \"Novinfo\"" list=uablacklist
+add address=87.236.16.113 comment="Aktsionerne tovarystvo \"Inlajn hrup\"" \
+    list=uablacklist
+add address=193.232.152.244 comment="Aktsionerne tovarystvo \"Inlajn hrup\"" \
+    list=uablacklist
+add address=162.144.155.218 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Data Internet\"" list=\
+    uablacklist
+add address=185.178.208.4 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"Mul'tymedijnyj informatsijnyj tsentr \"Izvyestija\"" list=uablacklist
+add address=109.235.165.222 comment="Tovarystvo z obmezhenoju vidpovidal'nistj\
+    u Nebankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=185.71.78.17 comment="Tovarystvo z obmezhenoju vidpovidal'nistju N\
+    ebankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=185.4.64.72 comment="Tovarystvo z obmezhenoju vidpovidal'nistju Ne\
+    bankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=185.215.4.0 comment="Tovarystvo z obmezhenoju vidpovidal'nistju Ne\
+    bankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=109.235.165.9 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    Nebankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=185.71.78.222 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    Nebankivs'ka kredytna orhanizatsija \"JuMani\"" list=uablacklist
+add address=195.208.1.107 comment=\
+    "Asotsiatsija blahodijnoyi dopomohy \"Vzayemodopomoha\"" list=uablacklist
+add address=37.140.192.206 comment="Kartsev Hennadij Oleksandrovych" list=\
+    uablacklist
+add address=178.248.235.122 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Lenta.Ru\"" list=\
+    uablacklist
+add address=188.120.237.198 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Lajt-prynt\"" list=\
+    uablacklist
+add address=103.224.182.208 comment="Starovojtov Volodymyr Anatolijovych" \
+    list=uablacklist
+add address=195.42.165.36 comment="Aktsionerne tovarystvo \"MOSKVA MEDIA\"" \
+    list=uablacklist
+add address=93.174.73.98 comment="Aktsionerne tovarystvo \"MOSKVA MEDIA\"" \
+    list=uablacklist
+add address=195.42.165.44 comment="Aktsionerne tovarystvo \"MOSKVA MEDIA\"" \
+    list=uablacklist
+add address=195.42.165.35 comment="Aktsionerne tovarystvo \"MOSKVA MEDIA\"" \
+    list=uablacklist
+add address=95.213.182.142 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Mehasoft\"" list=\
+    uablacklist
+add address=81.177.143.251 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=172.67.149.226 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=93.125.18.41 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=31.31.196.56 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=195.42.163.240 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=178.210.78.71 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=104.21.88.8 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=81.177.174.9 comment=\
+    "Aktsionerne tovarystvo \"Hrupa kompanij Nateks\"" list=uablacklist
+add address=66.212.246.166 comment=gameassists list=uablacklist
+add address=104.16.58.47 comment=partypoker list=uablacklist
+add address=104.16.57.47 comment=partypoker list=uablacklist
+add address=188.124.54.203 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Nashe Radio\"" list=\
+    uablacklist
+add address=94.198.53.49 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Narodni novyny\"" list=\
+    uablacklist
+add address=89.108.110.103 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Narodni novyny\"" list=\
+    uablacklist
+add address=185.253.32.104 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Narodni novyny\"" list=\
+    uablacklist
+add address=188.127.250.84 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Narodni novyny\"" list=\
+    uablacklist
+add address=195.24.64.246 comment=\
+    "Aktsionerne tovarystvo \"Natsional'na media hrupa\"" list=uablacklist
+add address=104.21.88.156 comment=\
+    "Minenkova Anastasija Oleksandrivna ta Chernjak Andrij Ivanovych" list=\
+    uablacklist
+add address=172.67.185.199 comment=\
+    "Minenkova Anastasija Oleksandrivna ta Chernjak Andrij Ivanovych" list=\
+    uablacklist
+add address=185.129.100.135 comment=ntv list=uablacklist
+add address=178.170.171.23 comment=ntvplus list=uablacklist
+add address=75.2.115.196 comment="Pershykov Jurij Oleksandrovych" list=\
+    uablacklist
+add address=195.64.185.10 comment="Tovarystvo z obmezhenoju vidpovidal'nistju \
+    \"INFORMATsIJNE AHENSTVO \"ONLI N'JuZ\"" list=uablacklist
+add address=5.178.80.46 comment=otr list=uablacklist
+add address=65.9.63.18 comment=play-www.777 list=uablacklist
+add address=65.9.63.48 comment=play-www.777 list=uablacklist
+add address=65.9.63.37 comment=play-www.777 list=uablacklist
+add address=65.9.63.113 comment=play-www.777 list=uablacklist
+add address=94.198.50.226 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Novinfo\"" list=uablacklist
+add address=188.127.226.136 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Novinfo\"" list=uablacklist
+add address=99.86.4.59 comment=primedice list=uablacklist
+add address=99.86.4.125 comment=primedice list=uablacklist
+add address=99.86.4.67 comment=primedice list=uablacklist
+add address=99.86.4.23 comment=primedice list=uablacklist
+add address=109.200.130.38 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Promedia\"" list=\
+    uablacklist
+add address=178.154.208.179 comment=radiovera list=uablacklist
+add address=80.68.253.7 comment=\
+    "Aktsionerne tovarystvo \"Rosbizneskonsaltynh\"" list=uablacklist
+add address=178.248.234.119 comment=\
+    "Aktsionerne tovarystvo \"Rosbizneskonsaltynh\"" list=uablacklist
+add address=185.72.229.7 comment=\
+    "Aktsionerne tovarystvo \"Rosbizneskonsaltynh\"" list=uablacklist
+add address=185.178.208.3 comment=ren list=uablacklist
+add address=82.202.162.43 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=185.253.32.105 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=89.108.110.252 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=188.127.226.94 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=89.108.110.190 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=94.198.50.32 comment="TOV \"Federal'ne ahentstvo novyn\"" list=\
+    uablacklist
+add address=195.93.246.234 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Interselekt\"" list=\
+    uablacklist
+add address=186.2.163.31 comment=\
+    "Avtonomna nekomertsijna orhanizatsija \"TV-Novyny\"" list=uablacklist
+add address=176.123.49.42 comment="Federal'ne derzhavne unitarne pidpryyemstvo\
+    \_\"Vserosijs'ka derzhavna televizijna i radiomovna kompanija\"" list=\
+    uablacklist
+add address=80.247.32.206 comment="Federal'ne derzhavne unitarne pidpryyemstvo\
+    \_\"Vserosijs'ka derzhavna televizijna i radiomovna kompanija\"" list=\
+    uablacklist
+add address=178.236.136.126 comment="Avtonomna nekomertsijna orhanizatsija \"V\
+    il'na elektronna entsyklopedija \"Dovidnyk Patriota\"" list=uablacklist
+add address=185.215.4.126 comment="Sharij Anatolij Anatolijovych" list=\
+    uablacklist
+add address=5.188.198.149 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.207 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.90 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=5.188.198.131 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=5.188.198.130 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=5.188.198.148 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.206 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.197 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.72 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.74 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.76 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.86 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.205 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.199 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=5.188.198.147 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=185.162.95.88 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=5.188.198.132 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=82.148.14.198 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"ZMI2\"" list=uablacklist
+add address=95.213.155.114 comment="Fond vyvchennja istorychnoyi perspektyvy" \
+    list=uablacklist
+add address=88.212.206.75 comment=\
+    "Avtonomna nekomertsijna orhanizatsija  \"Internet-Presa\"" list=\
+    uablacklist
+add address=82.202.190.240 comment="Federal'ne derzhavne unitarne pidpryyemstv\
+    o \"Informatsijne telehrafne ahentstvo Rosiyi (ITAR-TASS)\"" list=\
+    uablacklist
+add address=95.181.203.201 comment="Aktsionerne tovarystvo \"TV Tsentr\"" \
+    list=uablacklist
+add address=80.93.49.35 comment="Aktsionerne tovarystvo \"TV Tsentr\"" list=\
+    uablacklist
+add address=62.210.98.13 comment="Neprybutkova orhanizatsija \"Ofitsijnyj repr\
+    ezentatsijnyj tsentr Donets'koyi narodnoyi respubliky u Frantsiyi\"" \
+    list=uablacklist
+add address=104.16.6.49 comment="Neprybutkova orhanizatsija \"Ofitsijnyj repre\
+    zentatsijnyj tsentr Donets'koyi narodnoyi respubliky u Frantsiyi\"" list=\
+    uablacklist
+add address=195.24.68.21 comment="Neprybutkova orhanizatsija \"Ofitsijnyj repr\
+    ezentatsijnyj tsentr Donets'koyi narodnoyi respubliky u Frantsiyi\"" \
+    list=uablacklist
+add address=217.70.180.131 comment="Neprybutkova orhanizatsija \"Ofitsijnyj re\
+    prezentatsijnyj tsentr Donets'koyi narodnoyi respubliky u Frantsiyi\"" \
+    list=uablacklist
+add address=104.16.7.49 comment="Neprybutkova orhanizatsija \"Ofitsijnyj repre\
+    zentatsijnyj tsentr Donets'koyi narodnoyi respubliky u Frantsiyi\"" list=\
+    uablacklist
+add address=193.232.151.138 comment=tnt list=uablacklist
+add address=178.248.234.76 comment=tvzvezda list=uablacklist
+add address=109.248.237.34 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju  \"Utro.Ru\"" list=\
+    uablacklist
+add address=109.248.237.35 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju  \"Utro.Ru\"" list=\
+    uablacklist
+add address=188.124.39.36 comment=\
+    "Aktsionerne tovarystvo \"Biznes N'jus Media\"" list=uablacklist
+add address=185.91.54.139 comment=\
+    "Aktsionerne tovarystvo \"Biznes N'jus Media\"" list=uablacklist
+add address=176.99.7.29 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Versija\"" list=uablacklist
+add address=92.53.98.198 comment="Aktsionerne tovarystvo \"TRK-3\"" list=\
+    uablacklist
+add address=185.26.122.79 comment="Kholoimov Oleksandr Oleksandrovych" list=\
+    uablacklist
+add address=104.21.69.98 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Media Kontent\"" list=\
+    uablacklist
+add address=172.67.206.251 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Media Kontent\"" list=\
+    uablacklist
+add address=87.226.155.212 comment=\
+    "Publichne aktsionerne tovarystvo \"Rostelekom\"" list=uablacklist
+add address=34.255.25.195 comment=21Casino list=uablacklist
+add address=54.72.153.120 comment=21Casino list=uablacklist
+add address=54.77.62.41 comment=21Casino list=uablacklist
+add address=143.204.215.24 comment=24kcasino list=uablacklist
+add address=143.204.215.68 comment=24kcasino list=uablacklist
+add address=143.204.215.11 comment=24kcasino list=uablacklist
+add address=143.204.215.74 comment=24kcasino list=uablacklist
+add address=104.18.19.26 comment=betchain list=uablacklist
+add address=104.18.18.26 comment=betchain list=uablacklist
+add address=104.18.18.166 comment=bitcoincasino list=uablacklist
+add address=104.18.19.166 comment=bitcoincasino list=uablacklist
+add address=157.245.26.202 comment=Casinotoken list=uablacklist
+add address=104.22.48.165 comment=cloudbet list=uablacklist
+add address=172.67.27.172 comment=cloudbet list=uablacklist
+add address=104.22.49.165 comment=cloudbet list=uablacklist
+add address=104.18.22.206 comment=euslot list=uablacklist
+add address=104.18.23.206 comment=euslot list=uablacklist
+add address=104.18.2.179 comment=fastpay-casino list=uablacklist
+add address=104.18.3.179 comment=fastpay-casino list=uablacklist
+add address=84.50.110.180 comment=grandx list=uablacklist
+add address=178.248.235.63 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Hrupa AjBi Servis\"" list=\
+    uablacklist
+add address=104.26.14.78 comment=ilucki list=uablacklist
+add address=172.67.70.111 comment=ilucki list=uablacklist
+add address=104.26.15.78 comment=ilucki list=uablacklist
+add address=104.18.7.99 comment=joocasino list=uablacklist
+add address=104.18.6.99 comment=joocasino list=uablacklist
+add address=104.18.23.194 comment=konungcasino list=uablacklist
+add address=104.18.22.194 comment=konungcasino list=uablacklist
+add address=194.84.83.151 comment="TOV \"Labirynt.Ru\"" list=uablacklist
+add address=194.84.120.183 comment="TOV \"Labirynt.Ru\"" list=uablacklist
+add address=193.26.19.101 comment="TOV \"LitRes\"" list=uablacklist
+add address=193.26.19.14 comment="TOV \"LitRes\"" list=uablacklist
+add address=193.26.19.99 comment="TOV \"LitRes\"" list=uablacklist
+add address=193.26.19.16 comment="TOV \"LitRes\"" list=uablacklist
+add address=99.86.4.6 comment=loyalcasino list=uablacklist
+add address=99.86.4.99 comment=loyalcasino list=uablacklist
+add address=99.86.4.46 comment=loyalcasino list=uablacklist
+add address=99.86.4.8 comment=loyalcasino list=uablacklist
+add address=104.18.18.225 comment=N1Casino list=uablacklist
+add address=104.18.19.225 comment=N1Casino list=uablacklist
+add address=45.60.40.164 comment="TOV \"Reksoft\"" list=uablacklist
+add address=104.18.8.161 comment=paradisecasino list=uablacklist
+add address=104.18.9.161 comment=paradisecasino list=uablacklist
+add address=104.18.31.244 comment=Pinnacle list=uablacklist
+add address=104.18.30.244 comment=Pinnacle list=uablacklist
+add address=103.224.182.242 comment=redstarcasino20 list=uablacklist
+add address=185.138.253.1 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.138.254.40 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.138.252.1 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.138.253.40 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.138.252.40 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.138.254.1 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=185.62.200.33 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Vajldberriz\"" list=\
+    uablacklist
+add address=45.147.161.74 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Wildberries\"" list=\
+    uablacklist
+add address=91.205.164.53 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Studija \"Jalta TV\"" list=\
+    uablacklist
+add address=45.80.68.220 comment=\
+    "Tovarystvo z obmezhenoju vidpovidal'nistju \"Nashe zavtra\"" list=\
+    uablacklist
+add address=31.6.96.156 list=uablacklist
+/ip firewall nat
+add action=same chain=srcnat comment="ALL_FAKE 66" dst-address-list=AllowFake \
+    same-not-by-dst=no src-address=10.10.50.0/24 src-address-list=DropFake \
+    to-addresses=185.253.216.66
+add action=same chain=srcnat comment=Nat_Berkovtsy same-not-by-dst=no \
+    src-address=172.20.1.0/24 to-addresses=185.253.216.66
+add action=dst-nat chain=dstnat disabled=yes dst-address=185.253.216.65 \
+    dst-port=2323 protocol=tcp to-addresses=10.1.0.2 to-ports=23
+add action=dst-nat chain=dstnat comment=mikch disabled=yes dst-address=\
+    185.253.216.65 dst-port=2341 protocol=tcp to-addresses=10.41.254.2 \
+    to-ports=8291
+add action=dst-nat chain=dstnat comment=Mikrotik disabled=yes dst-address=\
+    185.253.216.65 dst-port=8291 protocol=tcp to-addresses=10.50.252.2 \
+    to-ports=8881
+/ip firewall raw
+add action=drop chain=prerouting comment=BlockSiteInUkraine disabled=yes \
+    src-address-list=uablacklist
+/ip firewall service-port
+set ftp disabled=yes
+set tftp disabled=yes
+set irc disabled=yes
+set h323 disabled=yes
+set sip disabled=yes
+set udplite disabled=yes
+set dccp disabled=yes
+set sctp disabled=yes
+/ip route
+add comment=G disabled=yes distance=1 dst-address=8.8.8.8/32 gateway=\
+    10.21.1.2
+add comment=M disabled=yes distance=1 dst-address=159.148.147.204/32 gateway=\
+    10.21.1.2
+add comment=M disabled=yes distance=1 dst-address=159.148.172.226/32 gateway=\
+    10.21.1.2
+add comment=M disabled=yes distance=1 dst-address=159.148.172.251/32 gateway=\
+    10.21.1.2
+/ip service
+set telnet disabled=yes port=2323
+set ftp disabled=yes
+set www address=176.36.86.10/32,185.190.150.8/32,185.190.150.77/32 port=82
+set ssh address=185.190.150.4/32,176.36.86.10/32
+set api address="185.190.150.5/32,185.190.150.7/32,185.190.150.8/32,185.190.15\
+    0.10/32,185.190.150.25/32" port=55055
+set winbox port=8887
+set api-ssl disabled=yes
+/ppp secret
+add disabled=yes local-address=10.21.1.1 name=L9 password=service profile=\
+    default-encryption remote-address=10.21.1.2 service=l2tp
+add local-address=172.20.1.201 name=grin password=grin1306 profile=\
+    default-encryption remote-address=172.20.1.200
+/radius
+add accounting-port=1812 address=185.253.216.2 comment=MASTER secret=secret \
+    service=dhcp
+add accounting-port=1812 address=185.190.150.7 comment=SLAVE secret=secret \
+    service=dhcp
+/routing bfd interface
+set [ find default=yes ] disabled=yes
+add interface=vlan2585_Sofiya_2
+add interface=vlan2584_Sofiya_3
+add interface=vlan801_Sofiya_1
+/routing bgp network
+add network=185.253.216.0/24 synchronize=no
+add network=185.190.150.0/24 synchronize=no
+/routing bgp peer
+add hold-time=1m30s in-filter=bgp_primary_in instance=GoldenNet \
+    keepalive-time=30s name=Grey_BGNET nexthop-choice=force-self out-filter=\
+    bgp_primary_out remote-address=10.49.254.88 remote-as=48648 \
+    remove-private-as=yes ttl=default
+add in-filter=bgp_secondary_in instance=GoldenNet name=UA-IX_Skyvision \
+    nexthop-choice=force-self out-filter=bgp_secondary_out remote-address=\
+    83.142.232.217 remote-as=20516 remove-private-as=yes ttl=default
+add default-originate=always in-filter=Sofiya_in instance=GoldenNet name=\
+    To_Sofiya_2 nexthop-choice=force-self out-filter=Sofiya_out \
+    remote-address=185.253.216.226 remote-as=210092 use-bfd=yes
+add default-originate=always in-filter=Sofiya_in instance=GoldenNet name=\
+    To_Sofiya_3 nexthop-choice=force-self out-filter=Sofiya_out \
+    remote-address=185.253.216.228 remote-as=210092 use-bfd=yes
+add default-originate=always in-filter=Sofiya_in instance=GoldenNet name=\
+    To_Sofiya_1 nexthop-choice=force-self out-filter=Sofiya_out \
+    remote-address=185.253.216.236 remote-as=210092 use-bfd=yes
+/routing filter
+add action=accept chain=our_networks prefix=185.253.216.0/24 \
+    set-bgp-communities=21092:200,21092:1
+add action=accept chain=our_networks prefix=185.190.150.0/24 \
+    set-bgp-communities=21092:200,21092:1
+add action=accept chain=bgp_primary_in prefix=0.0.0.0/0 set-bgp-communities=\
+    "" set-bgp-local-pref=200 set-bgp-weight=200
+add action=accept chain=bgp_primary_out match-chain=our_networks
+add action=reject chain=bgp_primary_out
+add action=accept chain=bgp_secondary_in prefix=0.0.0.0/0 set-bgp-local-pref=\
+    150 set-bgp-weight=100
+add action=accept chain=bgp_secondary_out match-chain=our_networks
+add action=discard chain=bgp_secondary_out
+add action=accept chain=ospf-out prefix=0.0.0.0/0
+add action=accept chain=ospf-in prefix=185.253.216.0/26
+add action=accept chain=ospf-in prefix=185.253.216.80/28
+add action=accept chain=ospf-in prefix=185.253.216.96/27
+add action=accept chain=ospf-in prefix=185.253.216.128/26
+add action=accept chain=ospf-in prefix=185.253.216.192/27
+add action=accept chain=ospf-in prefix=185.253.216.208/30
+add action=accept chain=ospf-in prefix=185.253.216.230
+add action=accept chain=ospf-in prefix=185.253.216.232
+add action=accept chain=ospf-in prefix=185.253.216.234
+add action=accept chain=ospf-in prefix=10.40.254.0/30
+add action=accept chain=ospf-in prefix=10.5.1.0/24
+add action=accept chain=ospf-in prefix=10.3.1.0/28
+add action=reject chain=ospf-in
+add action=accept chain=Sofiya_out prefix=0.0.0.0/0
+add action=discard chain=Sofiya_out
+add action=accept chain=Sofiya_in prefix=185.190.150.0/24
+add action=accept chain=Sofiya_in prefix=185.253.216.0/27
+add action=accept chain=Sofiya_in prefix=185.253.216.32/27
+add action=accept chain=Sofiya_in prefix=185.253.216.64/28
+add action=discard chain=Sofiya_in
+/routing ospf interface
+add interface=ChajkaOspf-2374 network-type=nbma
+add cost=100 disabled=yes interface=ChaykaOspf1203 network-type=nbma
+add interface=LobanovskogoOspf-2229 network-type=nbma
+add cost=100 interface=LobanovskogoOspf-2380 network-type=nbma
+add interface=UGOTun1362 network-type=nbma
+/routing ospf nbma-neighbor
+add address=10.40.254.2 priority=1
+add address=185.253.216.230
+add address=185.253.216.234 priority=1
+add address=185.253.216.232 priority=1
+/routing ospf network
+add area=backbone network=10.40.254.0/30
+add area=backbone network=185.253.216.230/32
+add area=backbone network=185.253.216.234/32
+add area=backbone network=185.253.216.232/32
+/snmp
+set contact=asusgrin@gmail.com enabled=yes location=L9 trap-community=billing \
+    trap-version=3
+/system clock
+set time-zone-name=Europe/Kiev
+/system identity
+set name=Golden-Leontovicha
+/system logging
+set 0 topics=info,!account
+set 1 topics=error,!dhcp
+add disabled=yes topics=radius
+add disabled=yes topics=ospf
+add disabled=yes topics=event
+/system package update
+set channel=long-term
+/system script
+add comment=UA_BLACK_LIST dont-require-permissions=no name=script1 owner=grin \
+    policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+    source=":local apiPrefix \"https://uablacklist.net/subnets_mikrotik_\"\r\
+    \n:local tempFile \"uablacklist.txt\"\r\
+    \n:local listName \"uablacklist\"\r\
+    \n\r\
+    \n/log info \"removing existing '\$listName'...\"\r\
+    \n:put \"removing existing '\$listName'...\"\r\
+    \n/ip firewall address-list remove [/ip firewall address-list find list=\$\
+    listName]\r\
+    \n\r\
+    \n# mikrotik can't load >4KB file inside a variable, so backend contains f\
+    ile pieces which we download and parse one by one\r\
+    \n:local i 0\r\
+    \n:local isEnd false\r\
+    \n:do {\r\
+    \n    :local apiPath \"\$apiPrefix\$i.txt\"\r\
+    \n    /log info \"fetching UA blacklist registry piece (\$apiPath)...\"\r\
+    \n    :put \"fetching UA blacklist registry piece (\$apiPath)...\"\r\
+    \n    :local contentLen 0\r\
+    \n    :local content \"\"\r\
+    \n    :do {\r\
+    \n        /tool fetch url=\$apiPath dst-path=\$tempFile\r\
+    \n        :set content [/file get [/file find name=\$tempFile] contents]\r\
+    \n        :set contentLen [:len \$content]\r\
+    \n    } on-error={\r\
+    \n        /log info \"no more pieces\"; \r\
+    \n        :put \"no more pieces\"\r\
+    \n        :set isEnd true\r\
+    \n    }\r\
+    \n    :local lineEnd 0\r\
+    \n    :local line \"\"\r\
+    \n    :local lastEnd 0\r\
+    \n    :local company \"\"\r\
+    \n    :while (\$lastEnd < \$contentLen) do {\r\
+    \n        :set lineEnd [:find \$content \"\\n\" \$lastEnd ]\r\
+    \n        :set line [:pick \$content \$lastEnd \$lineEnd]\r\
+    \n        :set lastEnd (\$lineEnd+1)\r\
+    \n        :local entry [:pick \$line 0 (\$lineEnd-1)]\r\
+    \n        :if ([:pick \$line 0 1] != \"#\") do={\r\
+    \n            :if ([:len \$entry ] > 0) do={\r\
+    \n                /log info \"add '\$entry' subnet of '\$company' to list \
+    '\$listName'...\";\r\
+    \n                :put \"add '\$entry' subnet of '\$company' to list '\$li\
+    stName'...\";\r\
+    \n                :do {\r\
+    \n                    /ip firewall address-list add list=\$listName addres\
+    s=\$entry comment=\$company\r\
+    \n                } on-error={\r\
+    \n                    /log info \"failed to add '\$entry' subnet of '\$com\
+    pany' to list '\$listName', probably, it's duplication error.\"; \r\
+    \n                    :put \"failed to add '\$entry' subnet of '\$company'\
+    \_to list '\$listName', probably, it's duplication error.\"\r\
+    \n                }\r\
+    \n            }\r\
+    \n        } else={\r\
+    \n            :set company [:pick \$line 2 (\$lineEnd) ]\r\
+    \n        }\r\
+    \n    }\r\
+    \n    :set i (i+1)\r\
+    \n} while (!\$isEnd)"

@@ -1,0 +1,295 @@
+# nov/29/2022 18:34:40 by RouterOS 6.47.10
+# software id = TC74-DH0K
+#
+# model = RB4011iGS+
+# serial number = D4440C2BCA5D
+/interface bridge
+add ingress-filtering=yes name=bridge-vlan pvid=1203 vlan-filtering=yes
+add name=loopback
+/interface vlan
+add interface=sfp-sfpplus1 name=ChajkaExt902 vlan-id=902
+add interface=ether1 name=ChajkaOspf2374 vlan-id=2374
+add interface=sfp-sfpplus1 name=ChajkaSw900 vlan-id=900
+add interface=bridge-vlan name=ChaykaOspf1203 vlan-id=1203
+add interface=bridge-vlan name=ChaykaVideo1204 vlan-id=1204
+/interface ethernet switch port
+set 0 default-vlan-id=0
+set 1 default-vlan-id=0
+set 2 default-vlan-id=0
+set 3 default-vlan-id=0
+set 4 default-vlan-id=0
+set 5 default-vlan-id=0
+set 6 default-vlan-id=0
+set 7 default-vlan-id=0
+set 8 default-vlan-id=0
+set 9 default-vlan-id=0
+set 10 default-vlan-id=0
+set 11 default-vlan-id=0
+/interface list
+add name=AllowNeigbors
+/ip pool
+add name=ChajkaExt902 ranges=10.10.51.2-10.10.51.254
+/ip dhcp-server
+add address-pool=ChajkaExt902 conflict-detection=no disabled=no interface=\
+    ChajkaExt902 lease-time=30m name=ChajkaExt902 use-radius=yes
+/queue simple
+add comment=1136 name=172.22.1.10 target=172.22.1.10/32
+add comment=4808 name=172.22.1.12 target=172.22.1.12/32
+add comment=2715 max-limit=50M/50M name=185.253.216.86 target=\
+    185.253.216.86/32
+add comment=2714 max-limit=100M/100M name=172.22.1.2 target=172.22.1.2/32
+add comment=5046 max-limit=100M/100M name=172.22.1.8 target=172.22.1.8/32
+add comment=5051 max-limit=50M/50M name=185.253.216.88 target=\
+    185.253.216.88/32
+add comment=4952 name=172.22.1.13 target=172.22.1.13/32
+add comment=3206 max-limit=100M/100M name=185.253.216.87 target=\
+    185.253.216.87/32
+add comment=6090 max-limit=100M/100M name=172.22.1.15 target=172.22.1.15/32
+add comment=3677 max-limit=30M/30M name=172.22.1.6 target=172.22.1.6/32
+add comment=5986 max-limit=30M/30M name=172.22.1.11 target=172.22.1.11/32
+/routing ospf instance
+set [ find default=yes ] name=OspfUplinkLob router-id=0.0.0.5
+/snmp community
+set [ find default=yes ] disabled=yes
+add addresses="185.190.150.25/32,185.190.150.4/32,185.190.150.7/32,185.190.150\
+    .8/32,185.190.150.10/32,185.190.150.18/32,10.15.1.1/32,176.36.86.10/32,30.\
+    30.0.0/24" name=billing
+/interface bridge port
+add bridge=bridge-vlan interface=sfp-sfpplus1 pvid=1204
+add bridge=bridge-vlan ingress-filtering=yes interface=ether2 pvid=1203
+/ip neighbor discovery-settings
+set discover-interface-list=all
+/interface bridge vlan
+add bridge=bridge-vlan tagged=bridge-vlan,ether2,sfp-sfpplus1 vlan-ids=\
+    1203,1204
+/interface l2tp-server server
+set allow-fast-path=yes authentication=mschap2 enabled=yes
+/interface list member
+add interface=ChajkaOspf2374 list=AllowNeigbors
+add interface=ChaykaOspf1203 list=AllowNeigbors
+add list=AllowNeigbors
+/interface pptp-server server
+set authentication=mschap2
+/ip address
+add address=185.253.216.81/28 interface=ChajkaExt902 network=185.253.216.80
+add address=10.5.1.1/24 interface=ChajkaSw900 network=10.5.1.0
+add address=10.10.51.1/24 interface=ChajkaExt902 network=10.10.51.0
+add address=185.253.216.82/28 interface=ChajkaExt902 network=185.253.216.80
+add address=172.22.1.1/24 interface=ChajkaExt902 network=172.22.1.0
+add address=0.0.0.5 interface=loopback network=0.0.0.5
+add address=192.168.75.130/24 disabled=yes interface=ChaykaVideo1204 network=\
+    192.168.75.0
+add address=185.253.216.234 interface=ChajkaOspf2374 network=185.253.216.233
+/ip dhcp-server lease
+add address=185.253.216.83 client-id=1:10:fe:ed:41:58:c1 comment=ControlPower \
+    mac-address=10:FE:ED:41:58:C1 server=ChajkaExt902
+add address=185.253.216.85 client-id=1:4c:5e:c:3b:84:b comment=ChajkaVideo \
+    mac-address=4C:5E:0C:3B:84:0B server=ChajkaExt902
+add address=172.22.1.10 comment="Anatoliy Petrovich" mac-address=\
+    08:55:31:E3:3C:C3 server=ChajkaExt902
+add address=172.22.1.8 client-id=1:dc:2c:6e:a:18:85 lease-time=12h \
+    mac-address=DC:2C:6E:0A:18:85 server=ChajkaExt902
+add address=172.22.1.12 client-id=1:40:ee:15:9:f8:91 lease-time=2h \
+    mac-address=40:EE:15:09:F8:91 server=ChajkaExt902
+add address=172.22.1.2 client-id=1:74:da:88:ed:86:99 lease-time=12h \
+    mac-address=74:DA:88:ED:86:99 server=ChajkaExt902
+/ip dhcp-server network
+add address=10.10.51.0/24 gateway=10.10.51.1
+add address=172.22.1.0/24 gateway=172.22.1.1
+add address=185.253.216.80/28 gateway=185.253.216.81
+/ip dns
+set servers=8.8.8.8,1.1.1.1
+/ip dns static
+add address=159.148.172.226 disabled=yes name=upgrade.mikrotik.com
+/ip firewall address-list
+add address=185.190.150.8 list=ppp-allow-host
+add address=185.190.150.7 list=ppp-allow-host
+add address=176.36.86.10 list=ppp-allow-host
+add address=185.190.150.77 list=ppp-allow-host
+add address=10.10.51.0/24 list=DropFake
+add address=104.27.180.217 list=AllowFake
+add address=18.202.42.249 list=AllowFake
+add address=34.248.18.83 list=AllowFake
+add address=18.190.150.7 list=AllowFake
+/ip firewall filter
+add action=drop chain=input comment=RESET_PPP_ALL_HOSTS dst-port=1701 \
+    protocol=udp src-address-list=!ppp-allow-host
+add action=drop chain=input comment=dns dst-port=53 protocol=tcp
+add action=drop chain=input comment=dns dst-port=53 protocol=udp
+add action=accept chain=forward comment=\
+    "allow already established connections" connection-state=established
+add action=accept chain=forward comment="allow related connections" \
+    connection-state=related
+add action=drop chain=forward comment="drop invalid connections" \
+    connection-state=invalid disabled=yes
+/ip firewall nat
+add action=same chain=srcnat comment="ALL_FAKE 81" dst-address-list=AllowFake \
+    same-not-by-dst=no src-address-list=DropFake to-addresses=185.253.216.81
+add action=same chain=srcnat same-not-by-dst=no src-address=172.22.1.0/24 \
+    to-addresses=185.253.216.81
+add action=dst-nat chain=dstnat dst-address=185.253.216.81 dst-port=8888 \
+    protocol=tcp to-addresses=172.22.1.250 to-ports=8291
+add action=dst-nat chain=dstnat comment=MIKRESTORAN dst-address=\
+    185.253.216.81 dst-port=8889 protocol=tcp to-addresses=172.22.1.7 \
+    to-ports=8291
+add action=dst-nat chain=dstnat dst-address=185.253.216.81 dst-port=37790 \
+    protocol=tcp to-addresses=172.22.1.10 to-ports=37777
+/ip firewall service-port
+set ftp disabled=yes
+set tftp disabled=yes
+set irc disabled=yes
+set h323 disabled=yes
+set sip disabled=yes
+set udplite disabled=yes
+set dccp disabled=yes
+set sctp disabled=yes
+/ip route
+add comment=M disabled=yes distance=1 dst-address=1.1.1.1/32 gateway=\
+    10.15.2.2
+add comment=NTP disabled=yes distance=1 dst-address=91.198.10.1/32 gateway=\
+    10.15.2.2
+add comment=M disabled=yes distance=1 dst-address=159.148.147.201/32 gateway=\
+    10.15.2.2
+add comment=M disabled=yes distance=1 dst-address=159.148.147.204/32 gateway=\
+    10.15.2.2
+add comment=M disabled=yes distance=1 dst-address=159.148.172.226/32 gateway=\
+    10.15.2.2
+add comment=M disabled=yes distance=1 dst-address=159.148.172.251/32 gateway=\
+    10.15.2.2
+add comment=NTP disabled=yes distance=1 dst-address=162.159.200.1/32 gateway=\
+    10.15.2.2
+add disabled=yes distance=1 dst-address=185.190.150.7/32 gateway=10.15.2.2
+/ip service
+set telnet disabled=yes
+set ftp disabled=yes
+set www address=\
+    176.36.86.10/32,185.190.150.77/32,185.190.150.8/32,185.190.150.10/32 \
+    port=82
+set ssh address=185.190.150.4/32
+set api address="185.190.150.7/32,185.190.150.8/32,185.190.150.10/32,185.190.1\
+    50.25/32,176.36.86.10/32,192.168.5.1/32,10.15.2.2/32,10.15.2.1/32" port=\
+    55055
+set api-ssl disabled=yes
+/ppp secret
+add local-address=192.168.85.1 name=grin password=grin1306 remote-address=\
+    192.168.85.2
+add local-address=192.168.85.1 name=kibass password=kibass remote-address=\
+    192.168.85.112 service=pptp
+add local-address=10.15.2.1 name=ChaBilling password=service profile=\
+    default-encryption remote-address=10.15.2.2 service=l2tp
+/radius
+add accounting-port=1812 address=185.253.216.98 comment=SLAVE secret=secret \
+    service=dhcp
+add accounting-port=1812 address=185.190.150.7 comment=MASTER secret=secret \
+    service=dhcp
+/routing filter
+add action=accept chain=ospf-in prefix=0.0.0.0/0
+add action=discard chain=ospf-in
+add action=accept chain=ospf-out prefix=185.253.216.80/28
+add action=accept chain=ospf-out prefix=185.253.216.234
+add action=accept chain=ospf-out prefix=10.50.254.0/30
+add action=accept chain=ospf-out prefix=10.5.1.0/24
+add action=discard chain=ospf-out
+/routing ospf interface
+add interface=ChajkaExt902 network-type=nbma
+add interface=ChajkaOspf2374 network-type=nbma
+add cost=100 disabled=yes interface=ChaykaOspf1203 network-type=nbma
+add interface=ChajkaSw900 network-type=nbma
+/routing ospf nbma-neighbor
+add address=185.253.216.233
+/routing ospf network
+add area=backbone network=185.253.216.80/28
+add area=backbone network=185.253.216.233/32
+add area=backbone network=10.5.1.0/24
+/snmp
+set contact=asusgrin@gmail.com enabled=yes location=Chayka trap-community=\
+    billing trap-version=2
+/system clock
+set time-zone-name=Europe/Kiev
+/system clock manual
+set dst-delta=+02:00 time-zone=+02:00
+/system identity
+set name=Golden-Chajka
+/system logging
+add disabled=yes topics=dhcp
+add disabled=yes topics=async
+add disabled=yes topics=ospf
+add disabled=yes topics=radius
+/system ntp client
+set enabled=yes mode=broadcast primary-ntp=91.198.10.1 secondary-ntp=\
+    162.159.200.1
+/system ntp server
+set enabled=yes multicast=yes
+/system package update
+set channel=long-term
+/system scheduler
+add interval=2w1d name=backup on-event="/system script run backup" policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+    start-date=nov/24/2020 start-time=05:00:00
+/system script
+add comment=BackUp dont-require-permissions=no name=backup owner=grin policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=":\
+    log info \"Starting Backup Script...\";\r\
+    \n:local sysname [/system identity get name];\r\
+    \n:local sysver [/system package get system version];\r\
+    \n:log info \"Flushing DNS cache...\";\r\
+    \n/ip dns cache flush;\r\
+    \n:delay 2;\r\
+    \n:log info \"Deleting last Backups...\";\r\
+    \n:foreach i in=[/file find] do={:if ([:typeof [:find [/file get \$i name]\
+    \_\\\r\
+    \n\"\$sysname-backup-\"]]!=\"nil\") do={/file remove \$i}};\r\
+    \n:delay 2;\r\
+    \n:local smtpserv [:resolve \"smtp.gmail.com\"];\r\
+    \n:local Eaccount \"mailgoldennet@gmail.com\";\r\
+    \n:local pass \"golden1306!\";\r\
+    \n:local backupfile (\"\$sysname-backup-\" . \\\r\
+    \n[:pick [/system clock get date] 7 11] . [:pick [/system \\\r\
+    \nclock get date] 0 3] . [:pick [/system clock get date] 4 6] . \".backup\
+    \");\r\
+    \n:log info \"Creating new Full Backup file...\";\r\
+    \n/system backup save name=\$backupfile;\r\
+    \n:delay 2;\r\
+    \n:log info \"Sending Full Backup file via E-mail...\";\r\
+    \n/tool e-mail send from=\"<\$Eaccount>\" to=\$Eaccount server=\$smtpserv \
+    \\\r\
+    \nport=587 user=\$Eaccount password=\$pass start-tls=yes file=\$backupfile\
+    \_\\\r\
+    \nsubject=(\"\$sysname Full Backup (\" . [/system clock get date] . \")\")\
+    \_\\\r\
+    \nbody=(\"\$sysname Core full Backup file see in attachment.\\nRouterOS ve\
+    rsion: \\\r\
+    \n\$sysver\\nTime and Date stamp: \" . [/system clock get time] . \" \" . \
+    \\\r\
+    \n[/system clock get date]);\r\
+    \n:delay 5;\r\
+    \n:local exportfile (\"\$sysname-backup-\" . \\\r\
+    \n[:pick [/system clock get date] 7 11] . [:pick [/system \\\r\
+    \nclock get date] 0 3] . [:pick [/system clock get date] 4 6] . \".rsc\");\
+    \r\
+    \n:log info \"Creating new Setup Script file...\";\r\
+    \n/export verbose file=\$exportfile;\r\
+    \n:delay 2;\r\
+    \n:log info \"Sending  Setup Script file via E-mail...\";\r\
+    \n/tool e-mail send from=\"<\$Eaccount>\" to=\$Eaccount server=\$smtpserv \
+    \\\r\
+    \nport=587 user=\$Eaccount password=\$pass start-tls=yes file=\$exportfile\
+    \_\\\r\
+    \nsubject=(\"\$sysname Setup Script Backup (\" . [/system clock get date] \
+    . \\\r\
+    \n\")\") body=(\"\$sysname Core Setup Script file see in attachment.\\nRou\
+    terOS \\\r\
+    \nversion: \$sysver\\nTime and Date stamp: \" . [/system clock get time] .\
+    \_\" \\\r\
+    \n\" . [/system clock get date]);\r\
+    \n:delay 5;\r\
+    \n:log info \"All System Backups emailed successfully.\\nBackuping complet\
+    ed.\";\r\
+    \n"
+add dont-require-permissions=no name=MakeStatic owner=grin policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=":\
+    for i from=2 to=254 do={\r\
+    \n/ip dhcp-server lease make-static [/ip dhcp-server lease find where addr\
+    ess=\"172.22.1.\$i\"];}"
+/tool e-mail
+set address=smtp.gmail.com password=golden1306! user=mailgoldennet@gmail.com

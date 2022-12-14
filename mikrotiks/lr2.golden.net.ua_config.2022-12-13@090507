@@ -1,0 +1,345 @@
+# dec/12/2022 03:06:58 by RouterOS 6.47.10
+# software id = NMSK-S0KU
+#
+# model = CCR1009-7G-1C-1S+
+# serial number = 914F09E48C71
+/interface bridge
+add name=loopback
+/interface ethernet
+set [ find default-name=ether1 ] speed=100Mbps
+set [ find default-name=ether2 ] speed=100Mbps
+set [ find default-name=ether3 ] speed=100Mbps
+set [ find default-name=ether4 ] speed=100Mbps
+set [ find default-name=ether5 ] speed=100Mbps
+set [ find default-name=ether6 ] speed=100Mbps
+set [ find default-name=ether7 ] speed=100Mbps
+set [ find default-name=sfp-sfpplus1 ] advertise=\
+    10M-full,100M-full,1000M-full auto-negotiation=no full-duplex=no \
+    rx-flow-control=auto speed=1Gbps tx-flow-control=auto
+/interface l2tp-client
+add allow=mschap2 allow-fast-path=yes connect-to=185.190.150.8 disabled=no \
+    name=l2tp-out-billing password=service user=LoBilling
+/interface vlan
+add interface=combo1 name=Eurocity_2337 vlan-id=2337
+add comment=In_Kyivlink_Uplink interface=sfp-sfpplus1 name=Ospf-L9-Uplink2229 \
+    vlan-id=2229
+add comment=In_Eurolan_Uplink interface=combo1 name=Ospf-L9-Uplink2380 \
+    vlan-id=2380
+add arp=reply-only interface=combo1 name=VLExt350 vlan-id=350
+add interface=combo1 name=Vl550sw vlan-id=550
+/interface list
+add name=wans
+add name=lans
+add name=AllowNeighbors
+/ip dhcp-server
+add disabled=no interface=ether3 lease-time=5m name=dhcp1
+/ip pool
+add name=VLExt350 ranges=10.10.52.2-10.10.52.254
+/ip dhcp-server
+add add-arp=yes address-pool=VLExt350 bootp-support=dynamic disabled=no \
+    interface=VLExt350 lease-time=35m name=VLExt350 use-radius=yes
+/ppp profile
+add change-tcp-mss=yes local-address=10.17.1.1 name=l2tp-profile \
+    remote-address=10.17.1.2 use-encryption=yes
+/queue simple
+add comment=2954 max-limit=55M/55M name=185.253.216.69 target=\
+    185.253.216.69/32
+add comment=2766 max-limit=105M/105M name=172.20.1.2 target=172.20.1.2/32
+add comment=4058 max-limit=100M/100M name=185.253.216.67 target=\
+    185.253.216.67/32
+add comment=560601 max-limit=500M/500M name=185.253.216.100 target=\
+    185.253.216.100/32
+add comment=560601 max-limit=500M/500M name=185.253.216.101 target=\
+    185.253.216.101/32
+add comment=560601 max-limit=500M/500M name=185.253.216.102 target=\
+    185.253.216.102/32
+add comment=560601 max-limit=500M/500M name=185.253.216.103 target=\
+    185.253.216.103/32
+add comment=3108 max-limit=100M/100M name=185.253.216.104 target=\
+    185.253.216.104/32
+add comment=3356 max-limit=50M/50M name=185.253.216.105 target=\
+    185.253.216.105/32
+add comment=56101 name=185.253.216.106 target=185.253.216.106/32
+add comment=560504 max-limit=100M/100M name=185.253.216.108 target=\
+    185.253.216.108/32
+add comment=560604 max-limit=100M/100M name=185.253.216.109 target=\
+    185.253.216.109/32
+add comment=6087 max-limit=50M/50M name=185.253.216.111 target=\
+    185.253.216.111/32
+add comment=6078 max-limit=100M/100M name=185.253.216.110 target=\
+    185.253.216.110/32
+add comment=56111 max-limit=50M/50M name=185.253.216.107 target=\
+    185.253.216.107/32
+add comment=6231 max-limit=100M/100M name=185.253.216.112 target=\
+    185.253.216.112/32
+/routing bgp instance
+set default disabled=yes
+/routing ospf instance
+set [ find default=yes ] name=Ospf-in-L9 router-id=0.0.0.7
+/snmp community
+add addresses="185.190.150.7/32,185.190.150.4/32,185.190.150.8/32,176.36.86.10\
+    /32,185.190.150.18/32,185.190.150.25/32,80.73.9.12/32,80.73.4.194/32,37.57\
+    .212.0/29" authentication-password=billing encryption-password=billing \
+    name=billing
+/system logging action
+set 3 remote=185.190.150.19 remote-port=1514
+/user group
+set full policy="local,telnet,ssh,ftp,reboot,read,write,policy,test,winbox,pas\
+    sword,web,sniff,sensitive,api,romon,dude,tikapp"
+/ip neighbor discovery-settings
+set discover-interface-list=AllowNeighbors
+/interface l2tp-server server
+set allow-fast-path=yes authentication=mschap2 default-profile=l2tp-profile
+/interface list member
+add interface=Ospf-L9-Uplink2229 list=wans
+add interface=Eurocity_2337 list=wans
+add interface=ether3 list=lans
+add interface=ether4 list=lans
+add interface=Ospf-L9-Uplink2229 list=AllowNeighbors
+add interface=Ospf-L9-Uplink2380 list=AllowNeighbors
+add interface=Eurocity_2337 list=AllowNeighbors
+add interface=l2tp-out-billing list=AllowNeighbors
+/ip address
+add address=172.25.1.1/24 interface=ether3 network=172.25.1.0
+add address=185.253.216.1/26 disabled=yes interface=VLExt350 network=\
+    185.253.216.0
+add address=10.3.1.1/28 interface=Vl550sw network=10.3.1.0
+add address=10.10.52.1/24 interface=VLExt350 network=10.10.52.0
+add address=0.0.0.7 interface=loopback network=0.0.0.7
+add address=10.0.0.2/30 interface=Eurocity_2337 network=10.0.0.0
+add address=185.253.216.230 interface=Ospf-L9-Uplink2380 network=\
+    185.253.216.229
+add address=185.253.216.97/27 interface=VLExt350 network=185.253.216.96
+add address=185.253.216.232 interface=Ospf-L9-Uplink2229 network=\
+    185.253.216.231
+/ip arp
+add address=185.253.216.102 comment=560601 interface=VLExt350 mac-address=\
+    38:3F:10:06:6B:D6
+add address=185.253.216.98 comment=Radius-Server interface=VLExt350 \
+    mac-address=70:85:C2:79:6D:47
+/ip dhcp-client
+add add-default-route=no disabled=no interface=ether1
+/ip dhcp-server lease
+add address=185.253.216.98 comment=Radius-Ser4ver mac-address=\
+    70:85:C2:79:6D:47 server=VLExt350
+add address=185.253.216.99 client-id=1:10:fe:ed:41:1c:db comment=\
+    Control_Power lease-time=2m mac-address=10:FE:ED:41:1C:DB server=VLExt350
+/ip dhcp-server network
+add address=10.10.52.0/24 gateway=10.10.52.1
+add address=185.253.216.0/26 gateway=185.253.216.1
+add address=185.253.216.96/27 gateway=185.253.216.97
+/ip dns
+set servers=8.8.8.8,1.1.1.1
+/ip firewall address-list
+add address=golden.net.ua list=AllowFake
+add address=10.10.50.0/24 list=DropFake
+add address=habr.com list=AllowFake
+add address=10.10.52.0/24 list=DropFake
+add address=176.36.86.10 list=AllowPing
+add address=185.190.150.77 list=AllowPing
+add address=185.190.150.8 list=AllowPing
+add address=185.190.150.7 list=AllowPing
+add address=next.privat24.ua list=AllowFake
+add address=176.36.86.10 list=AllowWB
+add address=37.17.247.23 list=AllowWB
+add address=185.190.150.10 list=AllowWB
+add address=185.190.150.77 list=AllowWB
+add address=185.190.150.7 list=AllowWB
+add address=185.190.150.8 list=AllowWB
+add address=185.190.149.134 list=AllowWB
+add address=172.25.1.0/24 list=AllowWB
+add address=188.231.213.134 list=AllowWB
+add address=185.190.150.19 list=AllowWB
+add address=185.190.150.19 list=AllowPing
+add address=185.253.216.0/24 list=AllowWB
+add address=185.253.216.0/24 list=AllowPing
+add address=185.190.150.20 list=AllowWB
+add address=185.190.150.20 list=AllowPing
+add address=yandex.ua list=BlockSiteInUkraine
+add address=yandex.ru list=BlockSiteInUkraine
+add address=kinopoisk.ru list=BlockSiteInUkraine
+add address=mail.ru list=BlockSiteInUkraine
+add address=ok.ru list=BlockSiteInUkraine
+add address=vk.com list=BlockSiteInUkraine
+add address=ya.ru list=BlockSiteInUkraine
+add address=122.228.249.2 list=BlockSiteInUkraine
+add address=122.228.70.54 list=BlockSiteInUkraine
+add address=185.190.150.25 list=AllowWB
+add address=185.190.150.5 list=AllowWB
+add address=185.190.150.4 list=AllowWB
+/ip firewall filter
+add action=accept chain=input comment=AllowPing protocol=icmp \
+    src-address-list=AllowPing
+add action=drop chain=input comment=DropPing disabled=yes protocol=icmp
+add action=drop chain=forward comment=Fake disabled=yes dst-address-list=\
+    !AllowFake src-address-list=DropFake
+add action=drop chain=input comment=dns dst-port=53 protocol=tcp
+add action=drop chain=input comment=dns dst-port=53 protocol=udp
+add action=drop chain=input dst-port=2000 protocol=udp
+add action=accept chain=forward comment=\
+    "allow already established connections" connection-state=established \
+    disabled=yes
+add action=accept chain=forward comment="allow related connections" \
+    connection-state=related disabled=yes
+add action=drop chain=forward comment="drop invalid connections" \
+    connection-state=invalid disabled=yes
+add action=drop chain=input comment=DropScanPort dst-port=\
+    22,82,8887,55055,1701 protocol=tcp src-address-list=!AllowWB
+/ip firewall nat
+add action=same chain=srcnat comment="ALL_FAKE 1" dst-address-list=AllowFake \
+    same-not-by-dst=no src-address-list=DropFake to-addresses=185.253.216.99
+add action=same chain=srcnat comment="Berkovzi 67" disabled=yes \
+    same-not-by-dst=no src-address=172.20.1.0/24 to-addresses=185.253.216.1
+add action=src-nat chain=srcnat comment=1 out-interface-list=wans \
+    src-address=172.25.1.0/24 to-addresses=185.253.216.99
+add action=src-nat chain=srcnat comment=for-ftp-update disabled=yes \
+    dst-address=185.190.150.8 dst-port=69 protocol=udp src-address=10.3.1.11 \
+    to-addresses=185.253.216.3 to-ports=69
+add action=dst-nat chain=dstnat disabled=yes dst-address=185.253.216.97 \
+    dst-port=8085 protocol=tcp to-addresses=10.10.52.242 to-ports=80
+/ip firewall raw
+add action=drop chain=prerouting comment=BlockSiteInUkraine disabled=yes \
+    src-address-list=BlockSiteInUkraine
+/ip firewall service-port
+set ftp disabled=yes
+set tftp disabled=yes
+set irc disabled=yes
+set h323 disabled=yes
+set sip disabled=yes
+set pptp disabled=yes
+set udplite disabled=yes
+set dccp disabled=yes
+set sctp disabled=yes
+/ip service
+set telnet address=176.36.86.10/32 disabled=yes
+set ftp disabled=yes
+set www disabled=yes port=82
+set ssh address=185.190.150.4/32
+set api address="185.190.150.5/32,185.190.150.7/32,185.190.150.8/32,185.190.15\
+    0.10/32,185.190.150.25/32" port=55055
+set winbox port=8887
+set api-ssl address=185.190.150.7/32,185.190.150.8/32,192.168.5.1/32 \
+    disabled=yes port=55056
+/ppp secret
+add local-address=192.168.0.55 name=grin password=grin1306 remote-address=\
+    192.168.0.57
+add disabled=yes local-address=185.190.150.11 name=grin2 password=grin1306! \
+    remote-address=185.190.150.10 service=pptp
+add name=l2tp password=l2tp1306 profile=l2tp-profile service=l2tp
+/radius
+add accounting-port=1812 address=185.253.216.98 comment=SLAVE secret=secret \
+    service=dhcp
+add accounting-port=1812 address=185.190.150.7 comment=MASTER secret=secret \
+    service=dhcp
+/routing filter
+add action=accept chain=ospf-in prefix=0.0.0.0/0
+add action=discard chain=ospf-in
+add action=accept chain=ospf-out prefix=185.253.216.96/27
+add action=accept chain=ospf-out prefix=185.253.216.230
+add action=accept chain=ospf-out prefix=185.253.216.232
+add action=accept chain=ospf-out prefix=10.3.1.0/28
+add action=discard chain=ospf-out
+/routing ospf interface
+add interface=Ospf-L9-Uplink2229 network-type=nbma
+add interface=VLExt350 network-type=nbma
+add cost=100 interface=Ospf-L9-Uplink2380 network-type=nbma
+add interface=Vl550sw network-type=nbma
+/routing ospf nbma-neighbor
+add address=185.253.216.229 priority=1
+add address=185.253.216.231
+/routing ospf network
+add area=backbone network=185.253.216.229/32
+add area=backbone network=185.253.216.96/27
+add area=backbone network=185.253.216.231/32
+add area=backbone network=10.3.1.0/28
+/snmp
+set contact=asusgrin@gmail.com enabled=yes location=\
+    "Lobanovskogo [50.41827561187586, 30.476287013508713]" trap-community=\
+    billing trap-version=2
+/system clock
+set time-zone-name=Europe/Kiev
+/system clock manual
+set dst-delta=+02:00 time-zone=+02:00
+/system identity
+set name=Golden-Lobanovskogo
+/system logging
+set 0 disabled=yes
+add disabled=yes topics=system
+add disabled=yes topics=bgp
+add action=remote disabled=yes topics=dhcp
+add action=remote disabled=yes topics=dns
+add action=remote disabled=yes topics=radius
+add disabled=yes topics=l2tp
+add disabled=yes topics=snmp
+/system ntp client
+set enabled=yes primary-ntp=194.54.80.29 secondary-ntp=91.236.251.29
+/system ntp server
+set enabled=yes multicast=yes
+/system package update
+set channel=long-term
+/system scheduler
+add interval=4d name=backup on-event="/system script run backup" policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+    start-date=apr/27/2019 start-time=03:30:00
+/system script
+add comment=BackUp dont-require-permissions=no name=backup owner=grin policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=":\
+    log info \"Starting Backup Script...\";\r\
+    \n:local sysname [/system identity get name];\r\
+    \n:local sysver [/system package get system version];\r\
+    \n:log info \"Flushing DNS cache...\";\r\
+    \n/ip dns cache flush;\r\
+    \n:delay 2;\r\
+    \n:log info \"Deleting last Backups...\";\r\
+    \n:foreach i in=[/file find] do={:if ([:typeof [:find [/file get \$i name]\
+    \_\\\r\
+    \n\"\$sysname-backup-\"]]!=\"nil\") do={/file remove \$i}};\r\
+    \n:delay 2;\r\
+    \n:local smtpserv [:resolve \"smtp.gmail.com\"];\r\
+    \n:local Eaccount \"mailgoldennet@gmail.com\";\r\
+    \n:local pass \"golden1306!\";\r\
+    \n:local backupfile (\"\$sysname-backup-\" . \\\r\
+    \n[:pick [/system clock get date] 7 11] . [:pick [/system \\\r\
+    \nclock get date] 0 3] . [:pick [/system clock get date] 4 6] . \".backup\
+    \");\r\
+    \n:log info \"Creating new Full Backup file...\";\r\
+    \n/system backup save name=\$backupfile;\r\
+    \n:delay 2;\r\
+    \n:log info \"Sending Full Backup file via E-mail...\";\r\
+    \n/tool e-mail send from=\"<\$Eaccount>\" to=\$Eaccount server=\$smtpserv \
+    \\\r\
+    \nport=587 user=\$Eaccount password=\$pass start-tls=yes file=\$backupfile\
+    \_\\\r\
+    \nsubject=(\"\$sysname Full Backup (\" . [/system clock get date] . \")\")\
+    \_\\\r\
+    \nbody=(\"\$sysname Core full Backup file see in attachment.\\nRouterOS ve\
+    rsion: \\\r\
+    \n\$sysver\\nTime and Date stamp: \" . [/system clock get time] . \" \" . \
+    \\\r\
+    \n[/system clock get date]);\r\
+    \n:delay 5;\r\
+    \n:local exportfile (\"\$sysname-backup-\" . \\\r\
+    \n[:pick [/system clock get date] 7 11] . [:pick [/system \\\r\
+    \nclock get date] 0 3] . [:pick [/system clock get date] 4 6] . \".rsc\");\
+    \r\
+    \n:log info \"Creating new Setup Script file...\";\r\
+    \n/export verbose file=\$exportfile;\r\
+    \n:delay 2;\r\
+    \n:log info \"Sending  Setup Script file via E-mail...\";\r\
+    \n/tool e-mail send from=\"<\$Eaccount>\" to=\$Eaccount server=\$smtpserv \
+    \\\r\
+    \nport=587 user=\$Eaccount password=\$pass start-tls=yes file=\$exportfile\
+    \_\\\r\
+    \nsubject=(\"\$sysname Setup Script Backup (\" . [/system clock get date] \
+    . \\\r\
+    \n\")\") body=(\"\$sysname Core Setup Script file see in attachment.\\nRou\
+    terOS \\\r\
+    \nversion: \$sysver\\nTime and Date stamp: \" . [/system clock get time] .\
+    \_\" \\\r\
+    \n\" . [/system clock get date]);\r\
+    \n:delay 5;\r\
+    \n:log info \"All System Backups emailed successfully.\\nBackuping complet\
+    ed.\";\r\
+    \n"
+/tool e-mail
+set address=smtp.gmail.com password=golden1306! user=mailgoldennet@gmail.com
